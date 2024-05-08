@@ -10,12 +10,9 @@
     "url": "https://styly.cc/"
   },
   "dependencies": {
-    "com.unity.textmeshpro": "3.0.7",
-    "com.unity.visualscripting": "1.9.4",
-    "com.unity.inputsystem": "1.8.2",
-    "com.unity.xr.arfoundation": "5.1.4",
     "com.unity.xr.interaction.toolkit": "3.0.3",
-    "com.unity.xr.hands": "1.4.1"
+    "com.unity.xr.hands": "1.4.1",
+    "com.unity.polyspatial.visionos": "1.2.3"
   },
   "samples": []
 }
