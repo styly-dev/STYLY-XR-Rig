@@ -95,6 +95,10 @@ crashlytics-build.properties
 /ProjectSettings/BurstAotSettings_Android.json
 /ProjectSettings/BurstAotSettings_iOS.json
 
+#Samples
+/[Aa]ssets/Samples
+/[Aa]ssets/Samples.meta
+
 # Others
 **/.DS_Store
 .idea
