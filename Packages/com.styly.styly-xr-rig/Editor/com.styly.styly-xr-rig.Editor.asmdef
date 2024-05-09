@@ -2,7 +2,9 @@
     "name": "com.styly.styly-xr-rig.Editor",
     "rootNamespace": "",
     "references": [],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

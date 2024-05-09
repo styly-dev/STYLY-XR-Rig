@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/STYLY-XR-Rig.unity
+    guid: 56ebf1756160049938ea6f9dff9577f7
   m_configObjects:
     UnityEditor.XR.VisionOS.VisionOSSettings: {fileID: 11400000, guid: 500be65e8570e4fcc9833831578c1e7c,
       type: 2}
