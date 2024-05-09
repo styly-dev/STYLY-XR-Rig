@@ -1,11 +1,9 @@
 {
-    "name": "com.styly.styly-xr-rig.Editor",
+    "name": "com.styly.styly-xr-rig",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
-    "excludePlatforms": [
-        "Editor"
-    ],
+    "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
