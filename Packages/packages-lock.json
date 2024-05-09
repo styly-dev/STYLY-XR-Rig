@@ -7,7 +7,10 @@
       "dependencies": {
         "com.unity.xr.interaction.toolkit": "3.0.3",
         "com.unity.xr.hands": "1.4.1",
-        "com.unity.polyspatial.visionos": "1.2.3"
+        "com.unity.polyspatial": "1.2.3",
+        "com.unity.polyspatial.visionos": "1.2.3",
+        "com.unity.polyspatial.xr": "1.2.3",
+        "com.unity.xr.visionos": "1.2.3"
       }
     },
     "com.unity.burst": {
@@ -109,14 +112,14 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.2.1",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.polyspatial": {
       "version": "1.2.3",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
@@ -146,7 +149,7 @@
     },
     "com.unity.polyspatial.xr": {
       "version": "1.2.3",
-      "depth": 2,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
@@ -220,7 +223,7 @@
     },
     "com.unity.textmeshpro": {
       "version": "3.0.7",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
