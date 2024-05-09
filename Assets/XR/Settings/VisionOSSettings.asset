@@ -13,11 +13,9 @@ MonoBehaviour:
   m_Name: VisionOSSettings
   m_EditorClassIdentifier: 
   m_AppMode: 1
-  m_HandsTrackingUsageDescription: Hand Tracking data will be used for interactive
-    contents
-  m_WorldSensingUsageDescription: Sensing information will be used for interactive
-    contents
-  m_RuntimeSettings: {fileID: 11400000, guid: 97329790cf0394e0480ab77e2a1fc634, type: 2}
+  m_HandsTrackingUsageDescription: Data will be used for interactive contents
+  m_WorldSensingUsageDescription: Data will be used for interactive contents
+  m_RuntimeSettings: {fileID: 11400000, guid: d087f40a1a5a349be839623996ea14b7, type: 2}
   m_UpperLimbVisibility: 1
   m_FoveatedRendering: 1
   m_IL2CPPLargeExeWorkaround: 0
