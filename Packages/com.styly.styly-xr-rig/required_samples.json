@@ -1,0 +1,20 @@
+{
+  "samples": [
+    {
+      "PackageName": "com.unity.xr.hands",
+      "SampleName": "HandVisualizer"
+    },
+    {
+      "PackageName": "com.unity.xr.interaction.toolkit",
+      "SampleName": "Hands Interaction Demo"
+    },
+    {
+      "PackageName": "com.unity.xr.interaction.toolkit",
+      "SampleName": "Starter Assets"
+    },
+    {
+      "PackageName": "com.unity.xr.interaction.toolkit",
+      "SampleName": "visionOS"
+    }
+  ]
+}
