@@ -5,6 +5,7 @@ STYLY-XR-Rig is intended to help creators and STYLY developers to make experienc
 # How the Rig is made
 This section is written for maintenance purose of this repository.
 
+## Required samples installation (automatticaly)
 Required packages and package samples are automatically installed into /Assets/Samples directory after you install this package or open the development project.
 The required samples are listed in `required_samples.json`
 
@@ -12,5 +13,22 @@ The required samples are listed in `required_samples.json`
 - `XR Interaction Toolkit/x.x.x/Hands Interaction Demo`
 - `XR Interaction Toolkit/x.x.x/Starter Assets`
 - `XR Interaction Toolkit/x.x.x/visionOS`
+
+## STYLY-XR-Rig structure
+Copy `XR Origin Hands (XR Rig)` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/`
+
+Create empty prefab `_Added` as a child of `XR Origin Hands (XR Rig)`  
+
+Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
+- `Primary Interaction Group`
+- `Secondary Interaction Group Variant` 
+
+Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
+- XRInteractionManager.cs
+- ARSessionCreator.cs
+- ARTrackedImageManagerAttacher.cs
+- ARMeshManagerAttacher.cs
+
+Add `VolumeCamera`
 
 
