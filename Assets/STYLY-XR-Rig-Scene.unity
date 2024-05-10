@@ -131,20 +131,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1165444545405783517, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
-        type: 3}
-      propertyPath: m_ShowVolumeCameraEventsFoldout
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2103871280629875384, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
         type: 3}
       propertyPath: m_Name
       value: STYLY XR Rig
-      objectReference: {fileID: 0}
-    - target: {fileID: 3292515102546653165, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
-        type: 3}
-      propertyPath: UseBoundedModeForVisionOs
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8442145289296441027, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
         type: 3}
