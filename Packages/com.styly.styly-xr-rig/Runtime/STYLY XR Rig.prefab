@@ -182,6 +182,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8830657286343155000}
   - component: {fileID: 1165444545405783517}
+  - component: {fileID: 6964551642119809902}
   m_Layer: 2
   m_Name: VolumeCameras
   m_TagString: Untagged
@@ -223,10 +224,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   OpenWindowOnLoad: 1
-  m_ShowVolumeCameraEventsFoldout: 1
+  m_ShowVolumeCameraEventsFoldout: 0
   OnWindowEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &6964551642119809902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6254506086535168938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54f3aed44664c4134ac68d6ce4dd45a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CameraOffset: {fileID: 143033778749394359}
 --- !u!1001 &640322452973887622
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -348,6 +362,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 3609552655011665833}
   m_SourcePrefab: {fileID: 100100000, guid: d6878e1999eb4b44a9f5a263af86c185, type: 3}
+--- !u!1 &143033778749394359 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 657184242161839409, guid: d6878e1999eb4b44a9f5a263af86c185,
+    type: 3}
+  m_PrefabInstance: {fileID: 640322452973887622}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &143033778800038292 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 657184242118504722, guid: d6878e1999eb4b44a9f5a263af86c185,
