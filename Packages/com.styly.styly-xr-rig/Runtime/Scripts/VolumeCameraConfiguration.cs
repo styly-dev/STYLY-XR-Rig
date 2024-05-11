@@ -3,30 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.PolySpatial;
 
-public class VolumeCameraConfiguration : MonoBehaviour
+namespace Styly.XRRig
 {
-
-    public bool UseBoundedModeForVisionOs = false;
-    public VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
-    public VolumeCameraWindowConfiguration UnBoundedVolumeCamera = null;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public class VolumeCameraConfiguration : MonoBehaviour
     {
-        SetVolumeCameraConfiguration(UseBoundedModeForVisionOs);
-    }
+        public bool UseBoundedModeForVisionOs = false;
+        public VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
+        public VolumeCameraWindowConfiguration UnBoundedVolumeCamera = null;
 
-    void SetVolumeCameraConfiguration(bool useBoundedMode)
-    {
-        VolumeCamera volumeCamera = this.GetComponentInChildren<VolumeCamera>(true);
-        if (useBoundedMode)
+        // Start is called before the first frame update
+        void Start()
         {
-            volumeCamera.WindowConfiguration = BoundedVolumeCamera;
+            SetVolumeCameraConfiguration(UseBoundedModeForVisionOs);
         }
-        else
+
+        void SetVolumeCameraConfiguration(bool useBoundedMode)
         {
-            volumeCamera.WindowConfiguration = UnBoundedVolumeCamera;
+            VolumeCamera volumeCamera = this.GetComponentInChildren<VolumeCamera>(true);
+            if (useBoundedMode)
+            {
+                volumeCamera.WindowConfiguration = BoundedVolumeCamera;
+            }
+            else
+            {
+                volumeCamera.WindowConfiguration = UnBoundedVolumeCamera;
+            }
         }
     }
 }
