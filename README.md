@@ -24,11 +24,13 @@ Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Too
 - `Secondary Interaction Group Variant` 
 
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
-- XRInteractionManager.cs
-- ARSessionCreator.cs
-- ARTrackedImageManagerAttacher.cs
-- ARMeshManagerAttacher.cs
+- `XRInteractionManager.cs`
+- `ARSessionCreator.cs`
+- `ARTrackedImageManagerAttacher.cs`
+- `ARMeshManagerAttacher.cs` with `AR Occlusion Mesh` prefab as default mesh prefab
 
-Add `VolumeCamera`
+Create `VolumeCamera` and attach
+- `VolumeCamera.cs`
+- `MoveVolumeCameraToUnderCameraOffset.cs` and set `CameraOffset`
 
 
