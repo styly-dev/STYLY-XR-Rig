@@ -80,7 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3eb85024d9e48048e4c26bab4eabad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseBoundedModeForVisionOs: 1
+  UseBoundedModeForVisionOs: 0
   BoundedVolumeCamera: {fileID: 11400000, guid: c9ed470b3c2874103983523e07d2528a,
     type: 2}
   UnBoundedVolumeCamera: {fileID: 11400000, guid: a0c3012ff03ff403d863e558d3950400,
