@@ -136,6 +136,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: STYLY XR Rig
       objectReference: {fileID: 0}
+    - target: {fileID: 5978015345231095957, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
+        type: 3}
+      propertyPath: DefaultMeshPrefab
+      value: 
+      objectReference: {fileID: 4412881209192166468, guid: ae53a22b4a0984a318fd68f659cdce10,
+        type: 3}
     - target: {fileID: 8442145289296441027, guid: 2f952482bf1d64a0a9fab4329f7e11b2,
         type: 3}
       propertyPath: m_LocalPosition.x
