@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace Styly.XRRig
 {
-    public class MoveVolumeCameraToUnderCameraOffser : MonoBehaviour
+    public class MoveVolumeCameraToUnderCameraOffset : MonoBehaviour
     {
         [SerializeField]
         private GameObject CameraOffset;
         
         void Start()
         {
-            MoveVolumeCameraToUnderCameraOffserFunction();
+            MoveVolumeCameraToUnderCameraOffsetFunction();
         }
 
-        void MoveVolumeCameraToUnderCameraOffserFunction(){
+        void MoveVolumeCameraToUnderCameraOffsetFunction(){
             this.gameObject.transform.parent = CameraOffset.transform;
         }
 
