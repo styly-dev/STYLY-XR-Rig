@@ -99,6 +99,7 @@ GameObject:
   - component: {fileID: 9085781704485500190}
   - component: {fileID: 5978015345231095957}
   - component: {fileID: 6145330057662554287}
+  - component: {fileID: 6043300437317458495}
   m_Layer: 2
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -171,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08aadfe0ad9dc4d97b50641e2d75df5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultMeshPrefab: {fileID: 4412881209192166468, guid: 2ede153a867a743b4a45beb3082bbfe4,
+  DefaultMeshPrefab: {fileID: 4412881209192166468, guid: ae53a22b4a0984a318fd68f659cdce10,
     type: 3}
 --- !u!114 &6145330057662554287
 MonoBehaviour:
@@ -189,6 +190,19 @@ MonoBehaviour:
   RightHandVisual: {fileID: 8748746825996443638}
   LeftPinchVisual: {fileID: 7526275827307617784}
   RightPinchVisual: {fileID: 4308427275057030153}
+--- !u!114 &6043300437317458495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588742402760449869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80a34c007cd814418a18251bff639e9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MainCamera: {fileID: 143033778800038292}
 --- !u!1 &6254506086535168938
 GameObject:
   m_ObjectHideFlags: 0
