@@ -1,6 +1,10 @@
 # STYLY-XR-Rig
 
-STYLY-XR-Rig is intended to help creators and STYLY developers to make experiences on multi platforms including Vision Pro. 
+STYLY-XR-Rig is intended to help creators and STYLY developers to make experiences on multi platforms including Vision Pro.   
+
+STYLY-XR-Rig is designed to work for XR Interaction Toolkit with multiple environment
+- Vision Pro
+- OpenXR Devices
 
 # How the Rig is made
 This section is written for maintenance purose of this repository.
@@ -28,6 +32,8 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 - `ARSessionCreator.cs`
 - `ARTrackedImageManagerAttacher.cs`
 - `ARMeshManagerAttacher.cs` with `AR Occlusion Mesh` prefab as default mesh prefab
+- `HideHandMeshOnVisionOs.cs`
+- `EnableOpenXrPassthrough.cs`
 
 Create `VolumeCamera` and attach
 - `VolumeCamera.cs`
