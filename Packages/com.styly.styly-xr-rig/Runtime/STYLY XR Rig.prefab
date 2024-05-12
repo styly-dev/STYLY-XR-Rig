@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 6145330057662554287}
   - component: {fileID: 6043300437317458495}
   - component: {fileID: 7548351958326142113}
+  - component: {fileID: 145589673139703659}
   m_Layer: 2
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -221,6 +222,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CameraOffset: {fileID: 143033778749394359}
+--- !u!114 &145589673139703659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588742402760449869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2cdb514caaae4fbf91ce85bf688f8f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  locomotionObject: {fileID: 5063171896089207918}
 --- !u!1 &6254506086535168938
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,7 +410,7 @@ PrefabInstance:
     - target: {fileID: 5667465548851856616, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6018838917197495621, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
@@ -481,6 +495,12 @@ Transform:
 --- !u!1 &4308427275057030153 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3686330604155552911, guid: d6878e1999eb4b44a9f5a263af86c185,
+    type: 3}
+  m_PrefabInstance: {fileID: 640322452973887622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5063171896089207918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5667465548851856616, guid: d6878e1999eb4b44a9f5a263af86c185,
     type: 3}
   m_PrefabInstance: {fileID: 640322452973887622}
   m_PrefabAsset: {fileID: 0}
