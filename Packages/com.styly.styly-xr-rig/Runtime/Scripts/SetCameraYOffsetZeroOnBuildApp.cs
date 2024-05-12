@@ -9,7 +9,7 @@ namespace Styly.XRRig
         [SerializeField]
         private GameObject CameraOffset;
 
-        void Start()
+        void Awake()
         {
             // Skip if running in the editor
             if (Application.isEditor) { return; }
