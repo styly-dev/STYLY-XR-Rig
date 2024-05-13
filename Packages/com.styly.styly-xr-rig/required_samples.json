@@ -5,6 +5,10 @@
       "SampleName": "HandVisualizer"
     },
     {
+      "PackageName": "com.unity.xr.hands",
+      "SampleName": "Gestures"
+    },
+    {
       "PackageName": "com.unity.xr.interaction.toolkit",
       "SampleName": "Hands Interaction Demo"
     },
