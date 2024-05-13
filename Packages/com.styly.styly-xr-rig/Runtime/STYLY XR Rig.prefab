@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: 6043300437317458495}
   - component: {fileID: 7548351958326142113}
   - component: {fileID: 145589673139703659}
+  - component: {fileID: 7468790834435921827}
   m_Layer: 2
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -235,6 +236,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   locomotionObject: {fileID: 5063171896089207918}
+--- !u!114 &7468790834435921827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588742402760449869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63530cc0d0c95440d8ddf2ccf4941384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  XrRigCamera: {fileID: 143033778800038290}
+  XrRigAudioListener: {fileID: 0}
 --- !u!1 &6254506086535168938
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,6 +448,12 @@ PrefabInstance:
 --- !u!1 &143033778749394359 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 657184242161839409, guid: d6878e1999eb4b44a9f5a263af86c185,
+    type: 3}
+  m_PrefabInstance: {fileID: 640322452973887622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!20 &143033778800038290 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
     type: 3}
   m_PrefabInstance: {fileID: 640322452973887622}
   m_PrefabAsset: {fileID: 0}
