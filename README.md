@@ -39,6 +39,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 - `EnableOpenXrPassthrough.cs`
 - `SetCameraYOffsetZeroOnBuildApp.cs`
 - `DisableLocomotion.cs`
+- `DisableAnotherMainCameraAndAudioListener.cs`
 
 Create `VolumeCamera` and attach
 - `VolumeCamera.cs`
