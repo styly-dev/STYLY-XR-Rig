@@ -63,6 +63,9 @@ namespace Styly.XRRig
         /// </summary>
         void OnValidate()
         {
+            // Null check
+            if(BoundedGuideFrame == null || CameraOffset == null){return;}
+
             if (UseBoundedModeForVisionOs)
             {
                 // Set to Bounded configuration
