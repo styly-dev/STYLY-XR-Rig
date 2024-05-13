@@ -6,6 +6,13 @@ STYLY-XR-Rig is designed to work for XR Interaction Toolkit with multiple enviro
 - Vision Pro
 - OpenXR Devices
 
+# How to add STYLY-XR-Rig
+
+Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in the `XR` section.  
+  
+![How To Add STYLY XR Rig](https://github.com/styly-dev/STYLY-XR-Rig/assets/387880/e84dde8e-8000-48ec-b5bf-4492d9e6db97)
+
+
 # How the Rig is made
 This section is written for maintenance purose of this repository.
 
