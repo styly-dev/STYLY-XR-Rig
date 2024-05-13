@@ -25,18 +25,24 @@ Create empty prefab `_Added` as a child of `XR Origin Hands (XR Rig)`
 
 Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
 - `Primary Interaction Group`
-- `Secondary Interaction Group Variant` 
+- `Secondary Interaction Group Variant`
+
+Add Bounded guide as children of `_Added`
+- `Bounded Guide Frame`
 
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 - `XRInteractionManager.cs`
 - `ARSessionCreator.cs`
 - `ARTrackedImageManagerAttacher.cs`
-- `ARMeshManagerAttacher.cs` with `AR Occlusion Mesh` prefab as default mesh prefab
+- `ARMeshManagerAttacher.cs`
 - `HideHandMeshOnVisionOs.cs`
 - `EnableOpenXrPassthrough.cs`
+- `SetCameraYOffsetZeroOnBuildApp.cs`
+- `DisableLocomotion.cs`
 
 Create `VolumeCamera` and attach
 - `VolumeCamera.cs`
-- `MoveVolumeCameraToUnderCameraOffset.cs` and set `CameraOffset`
+- `MoveVolumeCameraToUnderCameraOffset.cs`
+
 
 
