@@ -27,7 +27,7 @@ Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Too
 - `Primary Interaction Group`
 - `Secondary Interaction Group Variant`
 
-Add Bounded guide as children of `_Added`
+Add Bounded guide as a child of `_Added`
 - `Bounded Guide Frame`
 
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
@@ -41,7 +41,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 - `DisableLocomotion.cs`
 - `DisableAnotherMainCameraAndAudioListener.cs`
 
-Create `VolumeCamera` and attach
+Create empty prefab `VolumeCamera` as a child of `_Added` and attach scripts
 - `VolumeCamera.cs`
 - `MoveVolumeCameraToUnderCameraOffset.cs`
 
