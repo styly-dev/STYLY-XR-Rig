@@ -44,7 +44,7 @@
     },
     "com.unity.editorcoroutines": {
       "version": "1.0.0",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -113,7 +113,7 @@
     },
     "com.unity.nuget.newtonsoft-json": {
       "version": "3.2.1",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
@@ -150,7 +150,7 @@
     },
     "com.unity.polyspatial.xr": {
       "version": "1.2.3",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.nuget.newtonsoft-json": "3.0.2",
@@ -224,7 +224,7 @@
     },
     "com.unity.textmeshpro": {
       "version": "3.0.7",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
@@ -264,7 +264,7 @@
     },
     "com.unity.xr.arfoundation": {
       "version": "5.1.4",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.editorcoroutines": "1.0.0",
@@ -282,7 +282,7 @@
     },
     "com.unity.xr.core-utils": {
       "version": "2.3.0",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.xr": "1.0.0"
@@ -320,7 +320,7 @@
     },
     "com.unity.xr.legacyinputhelpers": {
       "version": "2.1.10",
-      "depth": 2,
+      "depth": 3,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.vr": "1.0.0",
@@ -330,7 +330,7 @@
     },
     "com.unity.xr.management": {
       "version": "4.4.0",
-      "depth": 1,
+      "depth": 2,
       "source": "registry",
       "dependencies": {
         "com.unity.modules.subsystems": "1.0.0",
@@ -342,7 +342,7 @@
     },
     "com.unity.xr.visionos": {
       "version": "1.2.3",
-      "depth": 0,
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.core-utils": "2.3.0",
