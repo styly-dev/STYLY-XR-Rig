@@ -2,9 +2,8 @@
 
 STYLY-XR-Rig is intended to help creators and STYLY developers to make experiences on multi platforms including Vision Pro.   
 
-STYLY-XR-Rig is designed to work for XR Interaction Toolkit with multiple environment
-- Vision Pro
-- OpenXR Devices
+This XR Rig is currently used only in [STYLY for Vision Pro](https://apps.apple.com/us/app/styly-for-vision-pro/id6475184828) (not in other STYLY App for other HMDs)  
+
 
 # How to add STYLY-XR-Rig
 
