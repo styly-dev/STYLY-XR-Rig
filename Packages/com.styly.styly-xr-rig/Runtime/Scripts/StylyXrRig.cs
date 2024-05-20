@@ -5,7 +5,7 @@ using Unity.PolySpatial;
 
 namespace Styly.XRRig
 {
-    public class VolumeCameraConfiguration : MonoBehaviour
+    public class StylyXrRig : MonoBehaviour
     {
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
