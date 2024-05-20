@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseBoundedModeForVisionOs: 1
-  VolumeCamera: {fileID: 0}
+  VolumeCamera: {fileID: 6690611638921440955}
   BoundedVolumeCamera: {fileID: 11400000, guid: c9ed470b3c2874103983523e07d2528a,
     type: 2}
   UnBoundedVolumeCamera: {fileID: 11400000, guid: a0c3012ff03ff403d863e558d3950400,
@@ -130,6 +130,12 @@ GameObject:
 --- !u!4 &1597457237467351243 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2218496723442559053, guid: d6878e1999eb4b44a9f5a263af86c185,
+    type: 3}
+  m_PrefabInstance: {fileID: 640322452973887622}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6690611638921440955 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6069500132657106493, guid: d6878e1999eb4b44a9f5a263af86c185,
     type: 3}
   m_PrefabInstance: {fileID: 640322452973887622}
   m_PrefabAsset: {fileID: 0}
