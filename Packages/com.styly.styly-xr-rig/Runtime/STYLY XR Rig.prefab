@@ -249,8 +249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63530cc0d0c95440d8ddf2ccf4941384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  XrRigCamera: {fileID: 8897300249115192811}
-  XrRigAudioListener: {fileID: 8897300249115192809}
 --- !u!114 &26936299586253610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -326,6 +324,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8442145289296441027}
     m_Modifications:
+    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_BackGroundColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 657184242161839408, guid: d6878e1999eb4b44a9f5a263af86c185,
         type: 3}
       propertyPath: m_LocalPosition.y
@@ -430,18 +448,6 @@ Transform:
 --- !u!1 &8897300249073037774 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 657184242161839409, guid: d6878e1999eb4b44a9f5a263af86c185,
-    type: 3}
-  m_PrefabInstance: {fileID: 8243635681943117055}
-  m_PrefabAsset: {fileID: 0}
---- !u!81 &8897300249115192809 stripped
-AudioListener:
-  m_CorrespondingSourceObject: {fileID: 657184242118504726, guid: d6878e1999eb4b44a9f5a263af86c185,
-    type: 3}
-  m_PrefabInstance: {fileID: 8243635681943117055}
-  m_PrefabAsset: {fileID: 0}
---- !u!20 &8897300249115192811 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 657184242118504724, guid: d6878e1999eb4b44a9f5a263af86c185,
     type: 3}
   m_PrefabInstance: {fileID: 8243635681943117055}
   m_PrefabAsset: {fileID: 0}
