@@ -86,8 +86,11 @@ namespace Styly.XRRig
         {
             if (UseBoundedModeForVisionOs)
             {
+                // --- Bounded Mode ---
+
+                // Draw Bounded Guide Frame Gizmo always at 0,0,0
                 Gizmos.color = BoundedGuideFrameGizmoColor;
-                Gizmos.DrawWireCube(transform.position, BoundedGuideFrameGizmoSize);
+                Gizmos.DrawWireCube(new Vector3(0,0,0), DefaultBoundedGuideFrameGizmoSize);
             }
         }
 # endif
