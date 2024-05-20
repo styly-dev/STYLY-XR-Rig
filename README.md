@@ -46,6 +46,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 - `SetCameraYOffsetZeroOnBuildApp.cs`
 - `DisableLocomotion.cs`
 - `DisableAnotherMainCameraAndAudioListener.cs`
+- `ARPlaneManagerAttacher.cs`
 
 Create empty prefab `VolumeCamera` as a child of `_Added` and attach scripts
 - `VolumeCamera.cs`
