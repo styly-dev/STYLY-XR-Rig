@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
@@ -5,12 +6,9 @@ namespace Styly.XRRig
 {
     public class EnableOpenXrPassthrough : MonoBehaviour
     {
-        [SerializeField]
-        private GameObject MainCamera;
-
         void Start()
         {
-            // Skip if Vision OS
+            // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
 
             // Enable Passthrough
@@ -19,6 +17,9 @@ namespace Styly.XRRig
 
         public void EnablePassthrough()
         {
+            // Find Main Camera of STYKY-XR-Rig
+            var STYLYXRRig = GameObject.FindObjectOfType<Styly.XRRig.StylyXrRig>();
+            var MainCamera = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"))?.gameObject;
             // Set Main Camera parameteres
             MainCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             // Set Main Camera Background to black with 0 alpha
