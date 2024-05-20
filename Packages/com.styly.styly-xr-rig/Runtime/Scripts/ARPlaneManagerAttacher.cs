@@ -26,6 +26,8 @@ public class ARPlaneManagerAttacher : MonoBehaviour
             arPlaneManager.enabled = false;
             // Set default Plane Prefab of the ARPlaneManager component
             arPlaneManager.planePrefab = PlanePrefab;
+            // Debug log
+            Debug.Log("ARPlaneManager is attached to XROrigin");
         }
     }
 

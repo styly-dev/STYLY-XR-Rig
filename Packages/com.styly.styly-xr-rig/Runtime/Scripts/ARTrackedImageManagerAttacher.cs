@@ -27,6 +27,7 @@ namespace Styly.XRRig
                 ARTrackedImageManager arTrackedImageManager = xrOrigin.gameObject.AddComponent<ARTrackedImageManager>();
                 // Disable the ARTrackedImageManager component
                 arTrackedImageManager.enabled = false;
+                // Debug log
                 Debug.Log("ARTrackedImageManager is attached to XROrigin");
             }
         }

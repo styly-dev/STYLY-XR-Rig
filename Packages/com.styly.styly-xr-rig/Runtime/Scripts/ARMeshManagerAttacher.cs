@@ -34,6 +34,7 @@ namespace Styly.XRRig
                 arMeshManagerAttacherManager.meshPrefab = DefaultMeshPrefab;
                 // Disable the ARMeshManager component
                 arMeshManagerAttacherManager.enabled = false;
+                // Debug log
                 Debug.Log("ARMeshManager is attached to XROrigin");
             }
         }

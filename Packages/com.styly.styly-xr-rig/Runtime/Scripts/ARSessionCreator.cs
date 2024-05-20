@@ -29,6 +29,8 @@ namespace Styly.XRRig
             ARSession arSession = arSessionGameObject.AddComponent<ARSession>();
             // Make the ARSession GameObject DoNotDestroyOnLoad
             DontDestroyOnLoad(arSessionGameObject);
+            // Debug log
+            Debug.Log("ARSession is created and DoNotDestroyOnLoad");
         }
     }
 

@@ -24,6 +24,7 @@ namespace Styly.XRRig
         void SetCameraOffsetY_Zero()
         {
             CameraOffset.transform.localPosition = new Vector3(CameraOffset.transform.localPosition.x, 0, CameraOffset.transform.localPosition.z);
+            Debug.Log("Set Camera Offset Y to Zero");
         }
     }
 }

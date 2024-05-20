@@ -29,6 +29,8 @@ namespace Styly.XRRig
             MainCamera.AddComponent<ARCameraManager>();
             // Add AR Camera Background
             MainCamera.AddComponent<ARCameraBackground>();
+            // Debug log
+            Debug.Log("OpenXR Passthrough is setup");
         }
     }
 }

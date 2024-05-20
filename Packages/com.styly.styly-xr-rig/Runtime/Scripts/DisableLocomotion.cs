@@ -10,5 +10,6 @@ public class DisableLocomotion : MonoBehaviour
     void Start()
     {
         locomotionObject.SetActive(false);
+        Debug.Log("Locomotion is disabled");
     }
 }

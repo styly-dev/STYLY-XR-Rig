@@ -24,6 +24,7 @@ public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
             if (camera != XrRigCamera && camera.CompareTag("MainCamera"))
             {
                 camera.enabled = false;
+                Debug.Log("Another MainCamera is disabled");
             }
         }
     }
@@ -36,6 +37,7 @@ public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
             if (audioListener != XrRigAudioListener)
             {
                 audioListener.enabled = false;
+                Debug.Log("Another AudioListener is disabled");
             }
         }
     }
