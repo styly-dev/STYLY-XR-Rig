@@ -105,6 +105,7 @@ GameObject:
   - component: {fileID: 7548351958326142113}
   - component: {fileID: 145589673139703659}
   - component: {fileID: 7468790834435921827}
+  - component: {fileID: 1099366421666235501}
   m_Layer: 2
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -248,6 +249,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   XrRigCamera: {fileID: 143033778800038290}
   XrRigAudioListener: {fileID: 0}
+--- !u!114 &1099366421666235501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5588742402760449869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c988648cd1804f249ae9990cc3afe06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlanePrefab: {fileID: 8642887536137668721, guid: 7f62eb169e49b4ac78ac454c0d182686,
+    type: 3}
 --- !u!1 &6254506086535168938
 GameObject:
   m_ObjectHideFlags: 0
