@@ -1,19 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
 {
-    [SerializeField]
     private Camera XrRigCamera = null;
-    [SerializeField]
     private AudioListener XrRigAudioListener = null;
 
-    void Start()
-    {   
+    void Awake()
+    {
+        // Find MainCamera and AudioListener attached to the STYLY-XR-Rig.
+        FindMainCameraAndAudioListenerOfXrRig();
+
         // Disable all MainCameras and AudioListeners except the one attached to the XRRig.
         DisableMainCamerasExcludingXrRigCamera();
         DisableAudioListenersExcludingXrRigAudioListener();
+    }
+
+    void FindMainCameraAndAudioListenerOfXrRig()
+    {
+        var STYLYXRRig = GameObject.FindObjectOfType<Styly.XRRig.StylyXrRig>();
+        XrRigCamera = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"));
+        XrRigAudioListener = STYLYXRRig.transform.GetComponentInChildren<AudioListener>();
     }
 
     void DisableMainCamerasExcludingXrRigCamera()
@@ -24,6 +31,7 @@ public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
             if (camera != XrRigCamera && camera.CompareTag("MainCamera"))
             {
                 camera.enabled = false;
+                Debug.Log("Another MainCamera is disabled");
             }
         }
     }
@@ -36,6 +44,7 @@ public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
             if (audioListener != XrRigAudioListener)
             {
                 audioListener.enabled = false;
+                Debug.Log("Another AudioListener is disabled");
             }
         }
     }

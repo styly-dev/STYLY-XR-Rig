@@ -27,30 +27,44 @@ The required samples are listed in `required_samples.json`
 ## STYLY-XR-Rig structure
 Copy `XR Origin Hands (XR Rig)` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/`
 
-Create empty prefab `_Added` as a child of `XR Origin Hands (XR Rig)`  
+Create empty prefab `_Added`
 
 Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
 - `Primary Interaction Group`
 - `Secondary Interaction Group Variant`
 
-Add Bounded guide as a child of `_Added`
-- `Bounded Guide Frame`
-
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
-- `XRInteractionManager.cs`
-- `ARSessionCreator.cs`
-- `ARTrackedImageManagerAttacher.cs`
-- `ARMeshManagerAttacher.cs`
-- `HideHandMeshOnVisionOs.cs`
-- `EnableOpenXrPassthrough.cs`
-- `SetCameraYOffsetZeroOnBuildApp.cs`
-- `DisableLocomotion.cs`
-- `DisableAnotherMainCameraAndAudioListener.cs`
-- `ARPlaneManagerAttacher.cs`
+
+- Scripts from XR Interaction Toolkit  
+  - `Packages/com.unity.xr.interaction.toolkit/Runtime/Interaction/XRInteractionManager.cs`
+
+- Scripts from /Runtime/Scripts  
+  - `ARMeshManagerAttacher.cs`
+  - `ARPlaneManagerAttacher.cs`
+  - `ARSessionCreator.cs`
+  - `ARTrackedImageManagerAttacher.cs`
+  - `DisableAnotherMainCameraAndAudioListener.cs`
+  - `DisableLocomotion.cs`
+  - `DisableOnBuildApp.cs`
+  - `EnableOpenXrPassthrough.cs`
+  - `SetCameraYOffsetZeroOnBuildApp.cs`
+  - `HideHandMeshOnVisionOs.cs`
+    - `Left Hand Visual`  
+XR Origin Hands (XR Rig)  
+└Camera Offset  
+　└Left Hand  
+　　└Left Hand Interaction Visual  
+　　　└LeftHand  
+
+    - `Left Pinch Visual`  
+XR Origin Hands (XR Rig)  
+└Camera Offset  
+　└Left Hand  
+　　└Pinch Point Stabilized  
+　　　└Pinch Visual  
 
 Create empty prefab `VolumeCamera` as a child of `_Added` and attach scripts
-- `VolumeCamera.cs`
-- `MoveVolumeCameraToUnderCameraOffset.cs`
+- `VolumeCamera.cs` Set dimensions to (1,1,1)
 
 
 

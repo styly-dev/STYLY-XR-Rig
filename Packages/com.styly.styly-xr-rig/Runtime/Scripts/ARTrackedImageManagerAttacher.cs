@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
 
 namespace Styly.XRRig
 {
@@ -13,7 +12,7 @@ namespace Styly.XRRig
     /// </summary>
     public class ARTrackedImageManagerAttacher : MonoBehaviour
     {
-        void Start()
+        void Awake()
         {
             AttachARTrackedImageManagerToXrOrigin();
         }
@@ -25,8 +24,21 @@ namespace Styly.XRRig
             {
                 // Add the ARTrackedImageManager component to the GameObject
                 ARTrackedImageManager arTrackedImageManager = xrOrigin.gameObject.AddComponent<ARTrackedImageManager>();
+
+                // // Set up default parameters
+                arTrackedImageManager.referenceLibrary = ScriptableObject.CreateInstance<XRReferenceImageLibrary>();
+                arTrackedImageManager.requestedMaxNumberOfMovingImages = 1;
+
+                // // For Debugging
+                // // Display a small cube on the tracked image
+                // GameObject trackedImageCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                // trackedImageCube.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                // arTrackedImageManager.trackedImagePrefab = trackedImageCube;
+
                 // Disable the ARTrackedImageManager component
                 arTrackedImageManager.enabled = false;
+
+                // Debug log
                 Debug.Log("ARTrackedImageManager is attached to XROrigin");
             }
         }

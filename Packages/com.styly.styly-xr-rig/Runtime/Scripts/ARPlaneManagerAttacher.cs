@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
 public class ARPlaneManagerAttacher : MonoBehaviour
 {
-
     [SerializeField]
     GameObject PlanePrefab;
 
-    void Start()
+    void Awake()
     {
         AttachARPlaneManagerToXrOrigin();
     }
@@ -26,10 +23,8 @@ public class ARPlaneManagerAttacher : MonoBehaviour
             arPlaneManager.enabled = false;
             // Set default Plane Prefab of the ARPlaneManager component
             arPlaneManager.planePrefab = PlanePrefab;
+            // Debug log
+            Debug.Log("ARPlaneManager is attached to XROrigin");
         }
     }
-
-
-
-
 }

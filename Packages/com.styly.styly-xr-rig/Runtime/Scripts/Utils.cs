@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Styly.XRRig
 {
     public class Utils
-
-
     {
         /// <summary>
         /// Return true if current OS is VisionOS.
@@ -23,8 +19,5 @@ namespace Styly.XRRig
             return false;
 #endif
         }
-
-
     }
 }
-
