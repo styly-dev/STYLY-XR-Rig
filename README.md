@@ -34,24 +34,29 @@ Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Too
 - `Secondary Interaction Group Variant`
 
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
-- `ARMeshManagerAttacher.cs`
-- `ARPlaneManagerAttacher.cs`
-- `ARSessionCreator.cs`
-- `ARTrackedImageManagerAttacher.cs`
-- `DisableAnotherMainCameraAndAudioListener.cs`
-- `DisableLocomotion.cs`
-- `DisableOnBuildApp.cs`
-- `EnableOpenXrPassthrough.cs`
-- `SetCameraYOffsetZeroOnBuildApp.cs`
-- `HideHandMeshOnVisionOs.cs`
-  - `Left Hand Visual`  
+
+- Scripts from XR Interaction Toolkit  
+  - `Packages/com.unity.xr.interaction.toolkit/Runtime/Interaction/XRInteractionManager.cs`
+
+- Scripts from /Runtime/Scripts  
+  - `ARMeshManagerAttacher.cs`
+  - `ARPlaneManagerAttacher.cs`
+  - `ARSessionCreator.cs`
+  - `ARTrackedImageManagerAttacher.cs`
+  - `DisableAnotherMainCameraAndAudioListener.cs`
+  - `DisableLocomotion.cs`
+  - `DisableOnBuildApp.cs`
+  - `EnableOpenXrPassthrough.cs`
+  - `SetCameraYOffsetZeroOnBuildApp.cs`
+  - `HideHandMeshOnVisionOs.cs`
+    - `Left Hand Visual`  
 XR Origin Hands (XR Rig)  
 └Camera Offset  
 　└Left Hand  
 　　└Left Hand Interaction Visual  
 　　　└LeftHand  
 
-  - `Left Pinch Visual`  
+    - `Left Pinch Visual`  
 XR Origin Hands (XR Rig)  
 └Camera Offset  
 　└Left Hand  
@@ -59,7 +64,7 @@ XR Origin Hands (XR Rig)
 　　　└Pinch Visual  
 
 Create empty prefab `VolumeCamera` as a child of `_Added` and attach scripts
-- `VolumeCamera.cs` 
+- `VolumeCamera.cs` Set dimensions to (1,1,1)
 
 
 
