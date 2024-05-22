@@ -22,17 +22,18 @@ namespace Styly.XRRig
             XROrigin xrOrigin = FindObjectOfType<XROrigin>();
             if (xrOrigin != null)
             {
-                // Create a cube to track the image with the size of 0.01, 0.01, 0.01
-                GameObject trackedImageCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                trackedImageCube.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-
                 // Add the ARTrackedImageManager component to the GameObject
                 ARTrackedImageManager arTrackedImageManager = xrOrigin.gameObject.AddComponent<ARTrackedImageManager>();
 
                 // // Set up default parameters
                 arTrackedImageManager.referenceLibrary = ScriptableObject.CreateInstance<XRReferenceImageLibrary>();
                 arTrackedImageManager.requestedMaxNumberOfMovingImages = 1;
-                arTrackedImageManager.trackedImagePrefab = trackedImageCube;
+
+                // // For Debugging
+                // // Display a small cube on the tracked image
+                // GameObject trackedImageCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                // trackedImageCube.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
+                // arTrackedImageManager.trackedImagePrefab = trackedImageCube;
 
                 // Disable the ARTrackedImageManager component
                 arTrackedImageManager.enabled = false;
