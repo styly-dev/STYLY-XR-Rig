@@ -4,7 +4,6 @@ using UnityEngine.XR.ARFoundation;
 
 public class ARPlaneManagerAttacher : MonoBehaviour
 {
-
     [SerializeField]
     GameObject PlanePrefab;
 
@@ -28,8 +27,4 @@ public class ARPlaneManagerAttacher : MonoBehaviour
             Debug.Log("ARPlaneManager is attached to XROrigin");
         }
     }
-
-
-
-
 }

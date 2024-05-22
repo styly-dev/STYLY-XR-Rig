@@ -4,7 +4,6 @@ namespace Styly.XRRig
 {
     public class HideHandMeshOnVisionOs : MonoBehaviour
     {
-
         [SerializeField]
         private GameObject LeftHandVisual;
         [SerializeField]
@@ -14,7 +13,6 @@ namespace Styly.XRRig
         private GameObject LeftPinchVisual;
         [SerializeField]
         private GameObject RightPinchVisual;
-
 
         void Awake()
         {
