@@ -6,7 +6,7 @@ namespace Styly.XRRig
 {
     public class EnableOpenXrPassthrough : MonoBehaviour
     {
-        void Start()
+        void Awake()
         {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }

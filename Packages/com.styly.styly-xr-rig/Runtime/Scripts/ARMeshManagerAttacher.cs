@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.XR.CoreUtils;
 using UnityEngine.XR.ARFoundation;
@@ -15,7 +13,7 @@ namespace Styly.XRRig
         // Default mesh prefab to attach ARMeshManager
         public MeshFilter DefaultMeshPrefab;
 
-        void Start()
+        void Awake()
         {
             AttachARMeshManagerToXrOrigin();
         }

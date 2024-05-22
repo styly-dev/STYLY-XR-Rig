@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.PolySpatial;
 
@@ -25,7 +23,7 @@ namespace Styly.XRRig
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             // Set volume camera configuration
             SetVolumeCameraConfiguration();

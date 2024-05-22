@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,7 +6,7 @@ public class DisableAnotherMainCameraAndAudioListener : MonoBehaviour
     private Camera XrRigCamera = null;
     private AudioListener XrRigAudioListener = null;
 
-    void Start()
+    void Awake()
     {
         // Find MainCamera and AudioListener attached to the STYLY-XR-Rig.
         FindMainCameraAndAudioListenerOfXrRig();

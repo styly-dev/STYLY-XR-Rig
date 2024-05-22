@@ -16,7 +16,7 @@ namespace Styly.XRRig
         private GameObject RightPinchVisual;
 
 
-        void Start()
+        void Awake()
         {
             RemoveMeshOfSkinnedMeshRenderer(LeftHandVisual);
             RemoveMeshOfSkinnedMeshRenderer(RightHandVisual);

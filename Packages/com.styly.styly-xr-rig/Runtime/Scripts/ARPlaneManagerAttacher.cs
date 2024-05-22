@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
@@ -10,7 +8,7 @@ public class ARPlaneManagerAttacher : MonoBehaviour
     [SerializeField]
     GameObject PlanePrefab;
 
-    void Start()
+    void Awake()
     {
         AttachARPlaneManagerToXrOrigin();
     }

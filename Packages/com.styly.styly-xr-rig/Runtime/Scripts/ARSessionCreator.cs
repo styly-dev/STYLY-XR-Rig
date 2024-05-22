@@ -8,29 +8,24 @@ namespace Styly.XRRig
     /// </summary>
     public class ARSessionCreator : MonoBehaviour
     {
-        private void Start()
+        private void Awake()
         {
-            // If ARSession does not exist, create ARSession
-            if (!IsARSessionExist())
-            {
-                CreateARSession();
-            }
-        }
-
-        bool IsARSessionExist()
-        {
-            return FindObjectOfType<ARSession>() != null;
+            CreateARSession();
         }
 
         void CreateARSession()
         {
-            // Create AR Session GameObject and attach ARSession component
-            GameObject arSessionGameObject = new("ARSession");
-            ARSession arSession = arSessionGameObject.AddComponent<ARSession>();
-            // Make the ARSession GameObject DoNotDestroyOnLoad
-            DontDestroyOnLoad(arSessionGameObject);
-            // Debug log
-            Debug.Log("ARSession is created and DoNotDestroyOnLoad");
+            // If ARSession is not found in the scene
+            if (FindObjectOfType<ARSession>() == null)
+            {
+                // Create AR Session GameObject and attach ARSession component
+                GameObject arSessionGameObject = new("ARSession");
+                ARSession arSession = arSessionGameObject.AddComponent<ARSession>();
+                // Make the ARSession GameObject DoNotDestroyOnLoad
+                DontDestroyOnLoad(arSessionGameObject);
+                // Debug log
+                Debug.Log("ARSession is created and DoNotDestroyOnLoad");
+            }
         }
     }
 
