@@ -30,6 +30,11 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
   - Locomotion features are disabled because STYLY-XR-Rig is created for Spatial computing / Mixed Reality development
   - Other main-cameras and audio-listeners will be automatically disabled if exist in the scene
 
+# Requirements
+- Unity 2022.3 or higher
+- Unity Pro license
+  - This XR-Rig is open source, however it depends on several Unity packages including PolySpatial which is only provided for Unity Pro developers.
+
 # How the Rig is made
 This section is written for maintenance purpose of this repository.
 
