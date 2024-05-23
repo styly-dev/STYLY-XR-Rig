@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DisableLocomotion : MonoBehaviour
@@ -7,8 +5,9 @@ public class DisableLocomotion : MonoBehaviour
     [SerializeField]
     private GameObject locomotionObject;
 
-    void Start()
+    void Awake()
     {
         locomotionObject.SetActive(false);
+        Debug.Log("Locomotion is disabled");
     }
 }

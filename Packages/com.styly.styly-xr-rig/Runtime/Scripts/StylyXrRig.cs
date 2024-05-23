@@ -1,42 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.PolySpatial;
 
 namespace Styly.XRRig
 {
-    public class VolumeCameraConfiguration : MonoBehaviour
+    public class StylyXrRig : MonoBehaviour
     {
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
+        [SerializeField]
+        private GameObject VolumeCamera = null;
         [SerializeField]
         private VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
         [SerializeField]
         private VolumeCameraWindowConfiguration UnBoundedVolumeCamera = null;
         [SerializeField]
-        private GameObject BoundedGuideFrame = null;
-        [SerializeField]
         private GameObject CameraOffset = null;
         [SerializeField]
         private float CameraHeightInEditor = 1.3f;
 
+        // Parameters of Bounded Guide Frame Gizmo
+        private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
+        private Color BoundedGuideFrameGizmoColor = Color.yellow;
+
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             // Set volume camera configuration
-            SetVolumeCameraConfiguration(UseBoundedModeForVisionOs);
-
-            // Disable GuideFrame on build app
-            DisableGuideFrameOnBuildApp();
+            SetVolumeCameraConfiguration();
+            // Set the position of volume camera to (0,0,0) when Bounded mode
+            SetBoundedVolumeCameraPositionToZero();
         }
 
         /// <summary>
         /// Set volume camera configuration to VolumeCamera
         /// </summary>
-        void SetVolumeCameraConfiguration(bool useBoundedMode)
+        void SetVolumeCameraConfiguration()
         {
             VolumeCamera volumeCamera = this.GetComponentInChildren<VolumeCamera>(true);
-            if (useBoundedMode)
+            if (UseBoundedModeForVisionOs)
             {
                 volumeCamera.WindowConfiguration = BoundedVolumeCamera;
             }
@@ -45,15 +46,15 @@ namespace Styly.XRRig
                 volumeCamera.WindowConfiguration = UnBoundedVolumeCamera;
             }
         }
-
+        
         /// <summary>
-        /// Disable GuideFrame on build app. Only disable in Editor mode.
+        /// Set the position of the Bounded volume camera to (0,0,0).
         /// </summary>
-        void DisableGuideFrameOnBuildApp()
+        void SetBoundedVolumeCameraPositionToZero()
         {
-            if (!Application.isEditor)
-            {
-                BoundedGuideFrame.SetActive(false);
+            if(UseBoundedModeForVisionOs){
+                VolumeCamera.transform.position = Vector3.zero;
+                Debug.Log("Set Bounded Volume Camera Position to (0,0,0)");
             }
         }
 
@@ -64,20 +65,11 @@ namespace Styly.XRRig
         void OnValidate()
         {
             // Null check
-            if(BoundedGuideFrame == null || CameraOffset == null){return;}
+            if (CameraOffset == null) { return; }
 
             if (UseBoundedModeForVisionOs)
             {
-                // Set to Bounded configuration
-                if (BoundedGuideFrame.activeSelf == false)
-                {
-                    // Enable BoundedGuideFrame
-                    BoundedGuideFrame.SetActive(true);
-                    // Changet the size of BoundedGuideFrame to the size of BoundedVolumeCamera
-                    BoundedGuideFrame.transform.localScale = BoundedVolumeCamera.Dimensions;
-                    // Print log
-                    Debug.Log("Display BoundedGuideFrame: On");
-                }
+                // --- Bounded Mode ---
 
                 // Set the camera offset to zero
                 var newCameraOffSet = new Vector3(CameraOffset.transform.localPosition.x, 0, CameraOffset.transform.localPosition.z);
@@ -89,14 +81,10 @@ namespace Styly.XRRig
             }
             else
             {
-                // Set to UnBounded configuration
-                if (BoundedGuideFrame.activeSelf == true)
-                {
-                    // Disable BoundedGuideFrame
-                    BoundedGuideFrame.SetActive(false);
-                    // Print log
-                    Debug.Log("Display BoundedGuideFrame: Off");
-                }
+                // --- Unbounded Mode ---
+
+                // Update the Bounded Guide Frame Gizmo size
+                DefaultBoundedGuideFrameGizmoSize = BoundedVolumeCamera.Dimensions;
 
                 // Set the camera offset to CameraHeightInEditor
                 var newCameraOffSet = new Vector3(CameraOffset.transform.localPosition.x, CameraHeightInEditor, CameraOffset.transform.localPosition.z);
@@ -105,6 +93,21 @@ namespace Styly.XRRig
                     CameraOffset.transform.localPosition = newCameraOffSet;
                     Debug.Log("Changed CameraOffset: " + CameraOffset.transform.localPosition);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Draw Bounded Guide Frame Gizmo
+        /// </summary>
+        void OnDrawGizmos()
+        {
+            if (UseBoundedModeForVisionOs)
+            {
+                // --- Bounded Mode ---
+
+                // Draw Bounded Guide Frame Gizmo always at 0,0,0
+                Gizmos.color = BoundedGuideFrameGizmoColor;
+                Gizmos.DrawWireCube(new Vector3(0,0,0), DefaultBoundedGuideFrameGizmoSize);
             }
         }
 # endif
