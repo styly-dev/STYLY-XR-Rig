@@ -28,7 +28,7 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
   - AR Session will be automatically created if not exist
 - Others
   - Locomotion features are disabled because STYLY-XR-Rig is created for Spatial computing / Mixed Reality development
-  - Other main-cameras and audi-listeners will be automatically disabled if exist in the scene
+  - Other main-cameras and audio-listeners will be automatically disabled if exist in the scene
 
 # How the Rig is made
 This section is written for maintenance purpose of this repository.
