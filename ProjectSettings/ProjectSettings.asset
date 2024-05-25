@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
-  productName: STYLY-XR-Rig2
+  companyName: STYLY
+  productName: STYLYXRRig
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -94,7 +94,7 @@ PlayerSettings:
   useFlipModelSwapchain: 1
   resizableWindow: 0
   useMacAppStoreValidation: 0
-  macAppStoreCategory: public.app-category.games
+  macAppStoreCategory: 
   gpuSkinning: 1
   xboxPIXTextureCapture: 0
   xboxEnableAvatar: 0
@@ -140,7 +140,10 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 0.1.0
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 4666621513362683701, guid: cec0ad7c433bd4648b5a3eee8dbc78ce, type: 2}
+  - {fileID: -122737241939995776, guid: 77886761441a74accb8ef8d3f9ee77c4, type: 2}
+  - {fileID: 11400000, guid: 229fe648b57f346458f27b74ef9a4685, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -161,10 +164,10 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.styly.styly-xr-rig
-    Standalone: com.styly.styly-xr-rig
-    VisionOS: com.styly.styly-xr-rig
-    iPhone: com.styly.styly-xr-rig
+    Android: com.styly.stylyxrrig
+    Standalone: com.styly.stylyxrrig
+    VisionOS: com.styly.stylyxrrig
+    iPhone: com.styly.stylyxrrig
   buildNumber:
     Standalone: 0
     VisionOS: 0
@@ -262,7 +265,7 @@ PlayerSettings:
   useCustomGradlePropertiesTemplate: 0
   useCustomGradleSettingsTemplate: 0
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 2
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
@@ -814,10 +817,14 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Android: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
+    Standalone: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
+    Windows Store Apps: USE_INPUT_SYSTEM_POSE_CONTROL;USE_STICK_CONTROL_THUMBSTICKS
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration: {}
   il2cppCodeGeneration: {}
   managedStrippingLevel:
