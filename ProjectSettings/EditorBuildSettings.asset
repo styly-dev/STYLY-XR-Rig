@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/VolumeDemo.unity
-    guid: f8dac43642fcf437b9bd0239b89eb6db
-  - enabled: 1
     path: Assets/STYLY-XR-Rig-Scene.unity
     guid: 56ebf1756160049938ea6f9dff9577f7
   m_configObjects:
