@@ -14,6 +14,7 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 - visionOS support
   - Bounded guide gizmo for visionOS Bounded mode
   - Compatible with intractable objects with XR Interaction toolkit (XRI)
+  - VisionOSHoverEffect will be automatically attached to Interactable GameObject
 - OpenXR Mixed Reality support
   - Video pass through will be enabled on OpenXR environment
 - Unity Editor development support
@@ -62,6 +63,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
   - `Packages/com.unity.xr.interaction.toolkit/Runtime/Interaction/XRInteractionManager.cs`
 
 - Scripts from /Runtime/Scripts  
+  - `AddVisionOSHoverEffect.cs`
   - `ARMeshManagerAttacher.cs`
   - `ARPlaneManagerAttacher.cs`
   - `ARSessionCreator.cs`

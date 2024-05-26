@@ -2,6 +2,9 @@ using UnityEngine;
 
 namespace Styly.XRRig
 {
+    /// <summary>
+    /// Hide hand mesh on VisionOS
+    /// </summary>
     public class HideHandMeshOnVisionOs : MonoBehaviour
     {
         [SerializeField]
