@@ -4,6 +4,9 @@ using UnityEngine.XR.ARFoundation;
 
 namespace Styly.XRRig
 {
+    /// <summary>
+    /// Enable OpenXR Passthrough
+    /// </summary>
     public class EnableOpenXrPassthrough : MonoBehaviour
     {
         void Awake()

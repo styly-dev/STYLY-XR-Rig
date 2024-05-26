@@ -2,6 +2,10 @@ using UnityEngine;
 
 namespace Styly.XRRig
 {
+    /// <summary>
+    /// Set the camera offset to zero on build app
+    /// In the editor, the camera offset is set to CameraHeightInEditor.
+    /// </summary>
     public class SetCameraYOffsetZeroOnBuildApp : MonoBehaviour
     {
         [SerializeField]
