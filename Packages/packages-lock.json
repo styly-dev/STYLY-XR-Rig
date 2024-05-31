@@ -12,7 +12,10 @@
         "com.unity.polyspatial.xr": "1.2.3",
         "com.unity.xr.visionos": "1.2.3",
         "com.unity.xr.arfoundation": "5.1.4",
-        "com.unity.visualscripting": "1.9.4"
+        "com.unity.visualscripting": "1.9.4",
+        "com.unity.xr.management": "4.4.1",
+        "com.unity.xr.openxr": "1.11.0",
+        "com.unity.xr.meta-openxr": "1.0.1"
       }
     },
     "com.unity.burst": {
@@ -356,7 +359,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.4.0",
+      "version": "4.4.1",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -378,8 +381,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.10.0",
-      "depth": 0,
+      "version": "1.11.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.management": "4.4.0",
@@ -391,7 +394,7 @@
     },
     "com.unity.xr.visionos": {
       "version": "1.2.3",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.xr.core-utils": "2.3.0",
