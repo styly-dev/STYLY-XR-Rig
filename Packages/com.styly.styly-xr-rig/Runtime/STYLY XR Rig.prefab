@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: 4018878675691340855}
   - component: {fileID: 8350917714724710710}
   - component: {fileID: 309208983074670755}
+  - component: {fileID: 7184311532543098986}
   m_Layer: 0
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -295,6 +296,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 674a777cc5ed646c6a1cbebf6d81f34b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7184311532543098986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664475746926423262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878d180b460f94f719b9e5425e7d292f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anchorPrefab: {fileID: 0}
 --- !u!1 &8840584769326606986
 GameObject:
   m_ObjectHideFlags: 0
