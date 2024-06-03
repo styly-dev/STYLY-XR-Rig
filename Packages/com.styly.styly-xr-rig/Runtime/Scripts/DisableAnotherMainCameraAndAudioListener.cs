@@ -36,6 +36,7 @@ namespace Styly.XRRig
                 if (camera != XrRigCamera && camera.CompareTag("MainCamera"))
                 {
                     camera.enabled = false;
+                    camera.gameObject.SetActive(false);
                     Debug.Log("Another MainCamera is disabled");
                 }
             }
