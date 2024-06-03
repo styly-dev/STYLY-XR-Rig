@@ -9,11 +9,15 @@ EditorBuildSettings:
     path: Assets/STYLY-XR-Rig-Scene.unity
     guid: 56ebf1756160049938ea6f9dff9577f7
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: a77dc6b66c8e62748b04e5a578155ed2,
+      type: 2}
     UnityEditor.XR.VisionOS.VisionOSSettings: {fileID: 11400000, guid: 500be65e8570e4fcc9833831578c1e7c,
       type: 2}
     com.unity.polyspatial.xr.xr_settings: {fileID: 11400000, guid: e9f3b4f4cb1f840d0bb2433ea49924a9,
       type: 2}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 229fe648b57f346458f27b74ef9a4685,
       type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 77886761441a74accb8ef8d3f9ee77c4,
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 0675fa6e048c4465c8e2826bf983ef4a,
+      type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: cec0ad7c433bd4648b5a3eee8dbc78ce,
       type: 2}

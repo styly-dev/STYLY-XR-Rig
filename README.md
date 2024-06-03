@@ -14,6 +14,7 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 - visionOS support
   - Bounded guide gizmo for visionOS Bounded mode
   - Compatible with intractable objects with XR Interaction toolkit (XRI)
+  - VisionOSHoverEffect will be automatically attached to Interactable GameObject
 - OpenXR Mixed Reality support
   - Video pass through will be enabled on OpenXR environment
 - Unity Editor development support
@@ -28,7 +29,12 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
   - AR Session will be automatically created if not exist
 - Others
   - Locomotion features are disabled because STYLY-XR-Rig is created for Spatial computing / Mixed Reality development
-  - Other main-cameras and audi-listeners will be automatically disabled if exist in the scene
+  - Other main-cameras and audio-listeners will be automatically disabled if exist in the scene
+
+# Requirements
+- Unity 2022.3 or higher
+- Unity Pro license
+  - This XR-Rig is open source, however it depends on several Unity packages including PolySpatial which is only provided for Unity Pro developers.
 
 # How the Rig is made
 This section is written for maintenance purpose of this repository.
@@ -57,6 +63,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
   - `Packages/com.unity.xr.interaction.toolkit/Runtime/Interaction/XRInteractionManager.cs`
 
 - Scripts from /Runtime/Scripts  
+  - `AddVisionOSHoverEffect.cs`
   - `ARMeshManagerAttacher.cs`
   - `ARPlaneManagerAttacher.cs`
   - `ARSessionCreator.cs`

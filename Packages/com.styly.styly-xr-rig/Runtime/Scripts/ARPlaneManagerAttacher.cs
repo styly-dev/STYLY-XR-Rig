@@ -2,29 +2,35 @@ using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 
-public class ARPlaneManagerAttacher : MonoBehaviour
+namespace Styly.XRRig
 {
-    [SerializeField]
-    GameObject PlanePrefab;
-
-    void Awake()
+    /// <summary>
+    /// Attach ARPlaneManager to XROrigin
+    /// </summary>
+    public class ARPlaneManagerAttacher : MonoBehaviour
     {
-        AttachARPlaneManagerToXrOrigin();
-    }
+        [SerializeField]
+        GameObject PlanePrefab;
 
-    void AttachARPlaneManagerToXrOrigin()
-    {
-        XROrigin xrOrigin = FindObjectOfType<XROrigin>();
-        if (xrOrigin != null)
+        void Awake()
         {
-            // Add the ARPlaneManager component to the GameObject
-            ARPlaneManager arPlaneManager = xrOrigin.gameObject.AddComponent<ARPlaneManager>();
-            // Disable the ARPlaneManager component
-            arPlaneManager.enabled = false;
-            // Set default Plane Prefab of the ARPlaneManager component
-            arPlaneManager.planePrefab = PlanePrefab;
-            // Debug log
-            Debug.Log("ARPlaneManager is attached to XROrigin");
+            AttachARPlaneManagerToXrOrigin();
+        }
+
+        void AttachARPlaneManagerToXrOrigin()
+        {
+            XROrigin xrOrigin = FindObjectOfType<XROrigin>();
+            if (xrOrigin != null)
+            {
+                // Add the ARPlaneManager component to the GameObject
+                ARPlaneManager arPlaneManager = xrOrigin.gameObject.AddComponent<ARPlaneManager>();
+                // Disable the ARPlaneManager component
+                arPlaneManager.enabled = false;
+                // Set default Plane Prefab of the ARPlaneManager component
+                arPlaneManager.planePrefab = PlanePrefab;
+                // Debug log
+                Debug.Log("ARPlaneManager is attached to XROrigin");
+            }
         }
     }
 }

@@ -1,7 +1,13 @@
 {
     "name": "com.styly.styly-xr-rig.Editor",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:e40ba710768534012815d3193fa296cb",
+        "GUID:f9fe0089ec81f4079af78eb2287a6163",
+        "GUID:ae3d1603ce9534ff5a9eb62408568574",
+        "GUID:4847341ff46394e83bb78fbd0652937e",
+        "GUID:8efef0e48627b4af5a28950b21575514"
+    ],
     "includePlatforms": [
         "Editor"
     ],

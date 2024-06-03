@@ -1,13 +1,19 @@
 using UnityEngine;
 
-public class DisableLocomotion : MonoBehaviour
+namespace Styly.XRRig
 {
-    [SerializeField]
-    private GameObject locomotionObject;
-
-    void Awake()
+    /// <summary>
+    /// Disable Locomotion
+    /// </summary>
+    public class DisableLocomotion : MonoBehaviour
     {
-        locomotionObject.SetActive(false);
-        Debug.Log("Locomotion is disabled");
+        [SerializeField]
+        private GameObject locomotionObject;
+
+        void Awake()
+        {
+            locomotionObject.SetActive(false);
+            Debug.Log("Locomotion is disabled");
+        }
     }
 }
