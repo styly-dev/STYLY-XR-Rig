@@ -27,6 +27,7 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
   - AR Plane Manager
   - AR Tracked Image Manager
   - AR Session will be automatically created if not exist
+  - AR Anchor Manager (Directly attached to XR Origin and checked enabled)
 - Others
   - Locomotion features are disabled because STYLY-XR-Rig is created for Spatial computing / Mixed Reality development
   - Other main-cameras and audio-listeners will be automatically disabled if exist in the scene
@@ -49,11 +50,15 @@ The required samples are listed in `required_samples.json`
 - `XR Interaction Toolkit/x.x.x/visionOS`
 
 ## STYLY-XR-Rig structure
-Copy `XR Origin Hands (XR Rig)` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/`
+Create `XR Origin Hands (XR Rig) Variant` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/XR Origin Hands (XR Rig)` in `Packages/com.styly.styly-xr-rig/Runtime/Prefabs/XR Origin Hands (XR Rig) Variant.prefab`
+
+Create prefab instance of `XR Origin Hands (XR Rig) Variant` under STYLY-XR-Rig
+
+Add `ARAnchorManager.cs` to `XR Origin Hands (XR Rig) Variant` and set enabled. This manager script cannot be added at runtime.
 
 Create empty prefab `_Added`
 
-Copy two prefabs as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
+Add two prefabs instances as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
 - `Primary Interaction Group`
 - `Secondary Interaction Group Variant`
 
