@@ -266,6 +266,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ac9c5166c3b941f1a4575ab289fd398, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AROcclusionMaterial: {fileID: 2100000, guid: a5eec29e1b7e1409d9ac8fd776b00e29, type: 2}
   LeftHandVisual: {fileID: 4242297495488026004}
   RightHandVisual: {fileID: 3647344302354496912}
   LeftPinchVisual: {fileID: 2559875610524385182}
