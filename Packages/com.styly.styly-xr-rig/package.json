@@ -1,8 +1,8 @@
 {
   "name": "com.styly.styly-xr-rig",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "displayName": "STYLY XR Rig",
-  "unity": "2022.3",
+  "unity": "6000.0",
   "description": "STYLY XR Rig",
   "author": {
     "name": "STYLY, Inc.",
@@ -10,17 +10,17 @@
     "url": "https://styly.cc/"
   },
   "dependencies": {
-    "com.unity.xr.interaction.toolkit": "3.0.3",
-    "com.unity.xr.hands": "1.4.1",
-    "com.unity.polyspatial": "1.2.3",
-    "com.unity.polyspatial.visionos": "1.2.3",
-    "com.unity.polyspatial.xr": "1.2.3",
-    "com.unity.xr.visionos": "1.2.3",
-    "com.unity.xr.arfoundation": "5.1.4",
-    "com.unity.visualscripting": "1.9.4",
-    "com.unity.xr.management": "4.4.1",
-    "com.unity.xr.openxr": "1.11.0",
-    "com.unity.xr.meta-openxr": "1.0.1"
+    "com.unity.xr.interaction.toolkit": "3.0.8",
+    "com.unity.xr.hands": "1.5.0",
+    "com.unity.polyspatial": "2.2.4",
+    "com.unity.polyspatial.visionos": "2.2.4",
+    "com.unity.polyspatial.xr": "2.2.4",
+    "com.unity.xr.visionos": "2.2.4",
+    "com.unity.xr.arfoundation": "6.0.3",
+    "com.unity.visualscripting": "1.9.6",
+    "com.unity.xr.management": "4.5.1",
+    "com.unity.xr.openxr": "1.14.0",
+    "com.unity.xr.meta-openxr": "1.14.0"
   },
   "samples": []
 }
