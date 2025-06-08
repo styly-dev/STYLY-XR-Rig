@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+#if UNITY_VISIONOS && USE_POLYSPATIAL
 using Unity.PolySpatial;
+#endif
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
@@ -12,11 +14,15 @@ namespace Styly.XRRig
     {
         void Start()
         {
+#if UNITY_VISIONOS && USE_POLYSPATIAL
             if (Utils.IsVisionOS())
             {
                 AttachHoverEffectToInteractableGameObjects();
             }
+#endif
         }
+
+#if UNITY_VISIONOS && USE_POLYSPATIAL
 
         /// <summary>
         /// Attach VisionOSHoverEffect to the interactable GameObjects
@@ -61,8 +67,6 @@ namespace Styly.XRRig
 
             return interactableGameObjects.ToArray();
         }
-
-
-
+#endif
     }
 }
