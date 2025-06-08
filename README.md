@@ -12,9 +12,9 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 
 # Features
 - visionOS support
-  - Bounded guide gizmo for visionOS Bounded mode
+  - Bounded guide gizmo for visionOS Bounded mode (requires PolySpatial)
   - Compatible with intractable objects with XR Interaction toolkit (XRI)
-  - VisionOSHoverEffect will be automatically attached to Interactable GameObject
+  - VisionOSHoverEffect will be automatically attached to Interactable GameObject (requires PolySpatial)
 - OpenXR Mixed Reality support
   - Video pass through will be enabled on OpenXR environment
 - Unity Editor development support
@@ -34,8 +34,8 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 
 # Requirements
 - Unity 6000.0 or higher
-- Unity Pro license
-  - This XR-Rig is open source, however it depends on several Unity packages including PolySpatial which is only provided for Unity Pro developers.
+- Unity Pro license (optional, required only for PolySpatial features)
+  - This XR-Rig is open source and provides core XRI functionality without any additional dependencies. PolySpatial is an optional dependency that enables additional visionOS-specific features like VisionOSHoverEffect and volume camera configuration, but is only available for Unity Pro developers.
 
 # How the Rig is made
 This section is written for maintenance purpose of this repository.
