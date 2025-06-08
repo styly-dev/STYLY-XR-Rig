@@ -64,9 +64,6 @@ namespace Styly.XRRig
 
             return interactableGameObjects.ToArray();
         }
-
-
-
 #endif
     }
 }

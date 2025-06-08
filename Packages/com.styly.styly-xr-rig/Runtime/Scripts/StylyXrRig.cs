@@ -24,16 +24,8 @@ namespace Styly.XRRig
         // Parameters of Bounded Guide Frame Gizmo
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
-
-        // Start is called before the first frame update
-        void Awake()
-        {
-            // Set volume camera configuration
-            SetVolumeCameraConfiguration();
-            // Set the position of volume camera to (0,0,0) when Bounded mode
-            SetBoundedVolumeCameraPositionToZero();
-        }
-
+        
+        
         /// <summary>
         /// Set volume camera configuration to VolumeCamera
         /// </summary>
@@ -49,7 +41,7 @@ namespace Styly.XRRig
                 volumeCamera.WindowConfiguration = UnBoundedVolumeCamera;
             }
         }
-        
+
         /// <summary>
         /// Set the position of the Bounded volume camera to (0,0,0).
         /// </summary>
@@ -60,7 +52,7 @@ namespace Styly.XRRig
                 Debug.Log("Set Bounded Volume Camera Position to (0,0,0)");
             }
         }
-
+        
 #if UNITY_EDITOR
         /// <summary>
         /// When UseBoundedModeForVisionOs is changed in the editor, update some configurations.
@@ -113,7 +105,23 @@ namespace Styly.XRRig
                 Gizmos.DrawWireCube(new Vector3(0,0,0), DefaultBoundedGuideFrameGizmoSize);
             }
         }
+
 #endif
 #endif
+        private void AwakeForVisionOS()
+        {
+#if UNITY_VISIONOS && USE_POLYSPATIAL
+            // Set volume camera configuration
+            SetVolumeCameraConfiguration();
+            // Set the position of volume camera to (0,0,0) when Bounded mode
+            SetBoundedVolumeCameraPositionToZero();
+#endif
+        }
+        
+        // Start is called before the first frame update
+        void Awake()
+        {
+            AwakeForVisionOS();
+        }
     }
 }
