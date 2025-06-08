@@ -1,10 +1,13 @@
 using UnityEngine;
+#if UNITY_VISIONOS && USE_POLYSPATIAL
 using Unity.PolySpatial;
+#endif
 
 namespace Styly.XRRig
 {
     public class StylyXrRig : MonoBehaviour
     {
+#if UNITY_VISIONOS && USE_POLYSPATIAL
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
         [SerializeField]
@@ -110,6 +113,7 @@ namespace Styly.XRRig
                 Gizmos.DrawWireCube(new Vector3(0,0,0), DefaultBoundedGuideFrameGizmoSize);
             }
         }
-# endif
+#endif
+#endif
     }
 }
