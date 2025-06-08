@@ -12,7 +12,7 @@ This XR Rig is currently used only in [STYLY for Vision Pro](https://apps.apple.
 openupm add -f com.styly.styly-xr-rig
 ```
 
-## Opetion 2 (If you use [STYLY-Spatial-Layer-Plugin](https://github.com/styly-dev/STYLY-Spatial-Layer-Plugin))
+## Option 2 (If you use [STYLY-Spatial-Layer-Plugin](https://github.com/styly-dev/STYLY-Spatial-Layer-Plugin))
 Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in the `XR` section.  
   
 ![How To Add STYLY XR Rig](https://github.com/styly-dev/STYLY-XR-Rig/assets/387880/e84dde8e-8000-48ec-b5bf-4492d9e6db97)
