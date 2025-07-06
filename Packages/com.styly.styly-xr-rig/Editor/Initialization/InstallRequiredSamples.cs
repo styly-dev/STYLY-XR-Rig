@@ -63,13 +63,13 @@ namespace Styly.XRRig
         }
 
         [Serializable]
-        public class SamplePackageInfo
+        private class SamplePackageInfo
         {
             public Sample[] samples;
         }
 
         [Serializable]
-        public class Sample
+        private class Sample
         {
             public string PackageName;
             public string SampleName;
