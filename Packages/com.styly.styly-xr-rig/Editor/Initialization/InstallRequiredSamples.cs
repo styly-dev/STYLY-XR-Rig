@@ -32,10 +32,8 @@ namespace Styly.XRRig
             string jsonData = File.ReadAllText(RequiredSamplesJsonPath);
             SamplePackageInfo packageInfo = JsonUtility.FromJson<SamplePackageInfo>(jsonData);
             foreach (var sampleToInstall in packageInfo.samples)
-            {   
-                var packageName = sampleToInstall.PackageName;
-                var SampleName = sampleToInstall.SampleName;
-                InstallSample(packageName, SampleName);
+            {
+                InstallSample(sampleToInstall.PackageName, sampleToInstall.SampleName);
             }
         }
 
@@ -52,8 +50,8 @@ namespace Styly.XRRig
             {
                 if (sample.displayName == sampleName)
                 {
-                    // Install the sample if it is not imported
-                    if (!sample.isImported)
+                    // Install the sample if the latest version of the sample is not imported
+                    if (!sample.isImported || IsLatestSampleImported(sample, packageInfomation.version))
                     {
                         sample.Import(ImportOptions.OverridePreviousImports);
                         Debug.Log("Installed sample: " + sample.displayName + " (" + packageInfomation.displayName + " @ " + packageInfomation.version + ")");
@@ -73,6 +71,19 @@ namespace Styly.XRRig
         {
             public string PackageName;
             public string SampleName;
+        }
+
+        /// <summary>
+        /// Returns true if the sample is imported and its version folder matches the currently installed package version.
+        /// </summary>
+        private static bool IsLatestSampleImported(UnityEditor.PackageManager.UI.Sample sample, string currentPackageVersion)
+        {
+            if (!sample.isImported) return false;
+
+            // Expected import path: Assets/Samples/{packageName}/{version}/{sampleName}
+            var importedDirInfo = new DirectoryInfo(sample.importPath);
+            var versionFolder = importedDirInfo.Parent?.Name ?? string.Empty;
+            return versionFolder == currentPackageVersion;
         }
 
         /// <summary>
