@@ -10,9 +10,9 @@ using static UnityEditor.PackageManager.UI.Sample;
 /// This script is indtended to install samples which are required for some features of this package.
 /// The list of samples to install is described in required_samples.json.
 /// </summary>
-namespace Styly
+namespace Styly.XRRig
 {
-    public static class RequiredSampleInstaller
+    public static class InstallRequiredSamples
     {
         // Required samples information JSON file name
         static readonly string RequiredSamplesJson = "required_samples.json";
@@ -32,33 +32,44 @@ namespace Styly
             string jsonData = File.ReadAllText(RequiredSamplesJsonPath);
             SamplePackageInfo packageInfo = JsonUtility.FromJson<SamplePackageInfo>(jsonData);
             foreach (var sampleToInstall in packageInfo.samples)
-            {
+            {   
                 var packageName = sampleToInstall.PackageName;
-                var packageInfomation = GetPackageInfo(packageName);
-                var Samples = UnityEditor.PackageManager.UI.Sample.FindByPackage(packageName, packageInfomation.version);
-                foreach (var sample in Samples)
+                var SampleName = sampleToInstall.SampleName;
+                InstallSample(packageName, SampleName);
+            }
+        }
+
+        /// <summary>
+        /// Install a specific sample from a package
+        /// </summary>
+        /// <param name="packageName">Package name containing the sample</param>
+        /// <param name="sampleName">Sample name to install</param>
+        public static void InstallSample(string packageName, string sampleName)
+        {
+            var packageInfomation = GetPackageInfo(packageName);
+            var Samples = UnityEditor.PackageManager.UI.Sample.FindByPackage(packageName, packageInfomation.version);
+            foreach (var sample in Samples)
+            {
+                if (sample.displayName == sampleName)
                 {
-                    if (sample.displayName == sampleToInstall.SampleName)
+                    // Install the sample if it is not imported
+                    if (!sample.isImported)
                     {
-                        // Install the sample if it is not imported
-                        if (!sample.isImported)
-                        {
-                            sample.Import(ImportOptions.OverridePreviousImports);
-                            Debug.Log("Installed sample: " + sample.displayName + " (" + packageInfomation.displayName + " @ " + packageInfomation.version + ")");
-                        }
+                        sample.Import(ImportOptions.OverridePreviousImports);
+                        Debug.Log("Installed sample: " + sample.displayName + " (" + packageInfomation.displayName + " @ " + packageInfomation.version + ")");
                     }
                 }
             }
         }
 
         [Serializable]
-        private class SamplePackageInfo
+        public class SamplePackageInfo
         {
             public Sample[] samples;
         }
 
         [Serializable]
-        private class Sample
+        public class Sample
         {
             public string PackageName;
             public string SampleName;
