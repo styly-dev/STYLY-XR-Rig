@@ -15,10 +15,6 @@
     {
       "PackageName": "com.unity.xr.interaction.toolkit",
       "SampleName": "Starter Assets"
-    },
-    {
-      "PackageName": "com.unity.xr.interaction.toolkit",
-      "SampleName": "visionOS"
     }
   ]
 }
