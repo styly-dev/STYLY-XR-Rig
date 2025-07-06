@@ -12,7 +12,7 @@
   "dependencies": {
     "com.unity.xr.interaction.toolkit": "3.0.8",
     "com.unity.xr.hands": "1.5.1",
-    "com.unity.xr.arfoundation": "6.1.0",
+    "com.unity.xr.arfoundation": "6.1.1",
     "com.unity.visualscripting": "1.9.6",
     "com.unity.xr.management": "4.5.1"
   },
