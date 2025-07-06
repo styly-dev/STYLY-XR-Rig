@@ -19,7 +19,7 @@ namespace Styly.XRRig
 
         void AttachARPlaneManagerToXrOrigin()
         {
-            XROrigin xrOrigin = FindObjectOfType<XROrigin>();
+            XROrigin xrOrigin = FindFirstObjectByType<XROrigin>();
             if (xrOrigin != null)
             {
                 // Add the ARPlaneManager component to the GameObject
