@@ -3,7 +3,7 @@ using UnityEditor;
 
 namespace Styly.XRRig
 {
-    public class InstallAditionalSamples
+    public class InstallAdditionalSamples
     {
         [InitializeOnLoadMethod]
         private static void InstallSamples()
