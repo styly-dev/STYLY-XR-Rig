@@ -27,7 +27,7 @@ namespace Styly.XRRig
 
         void CreateVolumeCamera()
         {
-            VolumeCamera volumeCamera; ;
+            VolumeCamera volumeCamera;
 
             if (volumeCamera = FindFirstObjectByType<VolumeCamera>())
             {

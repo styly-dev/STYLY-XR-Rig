@@ -51,7 +51,7 @@ namespace Styly.XRRig
                 if (sample.displayName == sampleName)
                 {
                     // Install the sample if the latest version of the sample is not imported
-                    if (!sample.isImported || IsLatestSampleImported(sample, packageInfomation.version))
+                    if (!sample.isImported || !IsLatestSampleImported(sample, packageInfomation.version))
                     {
                         sample.Import(ImportOptions.OverridePreviousImports);
                         Debug.Log("Installed sample: " + sample.displayName + " (" + packageInfomation.displayName + " @ " + packageInfomation.version + ")");
