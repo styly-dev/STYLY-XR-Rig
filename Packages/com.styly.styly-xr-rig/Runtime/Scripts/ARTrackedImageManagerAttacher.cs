@@ -19,7 +19,7 @@ namespace Styly.XRRig
 
         void AttachARTrackedImageManagerToXrOrigin()
         {
-            XROrigin xrOrigin = FindObjectOfType<XROrigin>();
+            XROrigin xrOrigin = FindFirstObjectByType<XROrigin>();
             if (xrOrigin != null)
             {
                 // Add the ARTrackedImageManager component to the GameObject

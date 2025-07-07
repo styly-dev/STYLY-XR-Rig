@@ -10,7 +10,6 @@ namespace Styly.XRRig
 #if UNITY_VISIONOS && USE_POLYSPATIAL
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
-        [SerializeField]
         private GameObject VolumeCamera = null;
         [SerializeField]
         private VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
@@ -24,14 +23,34 @@ namespace Styly.XRRig
         // Parameters of Bounded Guide Frame Gizmo
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
-        
-        
+
+
+        void CreateVolumeCamera()
+        {
+            VolumeCamera volumeCamera; ;
+
+            if (volumeCamera = FindFirstObjectByType<VolumeCamera>())
+            {
+                VolumeCamera = volumeCamera.gameObject;
+                Debug.Log("Found existing VolumeCamera GameObject: " + VolumeCamera.name);
+            }
+            else
+            {
+                VolumeCamera = new GameObject("VolumeCamera");
+                VolumeCamera.transform.SetParent(this.transform, false);
+                volumeCamera = VolumeCamera.AddComponent<VolumeCamera>();
+                volumeCamera.Dimensions = new Vector3(1, 1, 1);
+                Debug.Log("Created VolumeCamera GameObject");
+            }
+        }
+
+
         /// <summary>
         /// Set volume camera configuration to VolumeCamera
         /// </summary>
         void SetVolumeCameraConfiguration()
         {
-            VolumeCamera volumeCamera = this.GetComponentInChildren<VolumeCamera>(true);
+            VolumeCamera volumeCamera = VolumeCamera.GetComponent<VolumeCamera>();
             if (UseBoundedModeForVisionOs)
             {
                 volumeCamera.WindowConfiguration = BoundedVolumeCamera;
@@ -47,12 +66,13 @@ namespace Styly.XRRig
         /// </summary>
         void SetBoundedVolumeCameraPositionToZero()
         {
-            if(UseBoundedModeForVisionOs){
+            if (UseBoundedModeForVisionOs)
+            {
                 VolumeCamera.transform.position = Vector3.zero;
                 Debug.Log("Set Bounded Volume Camera Position to (0,0,0)");
             }
         }
-        
+
 #if UNITY_EDITOR
         /// <summary>
         /// When UseBoundedModeForVisionOs is changed in the editor, update some configurations.
@@ -102,7 +122,7 @@ namespace Styly.XRRig
 
                 // Draw Bounded Guide Frame Gizmo always at 0,0,0
                 Gizmos.color = BoundedGuideFrameGizmoColor;
-                Gizmos.DrawWireCube(new Vector3(0,0,0), DefaultBoundedGuideFrameGizmoSize);
+                Gizmos.DrawWireCube(new Vector3(0, 0, 0), DefaultBoundedGuideFrameGizmoSize);
             }
         }
 
@@ -111,13 +131,15 @@ namespace Styly.XRRig
         private void AwakeForVisionOS()
         {
 #if UNITY_VISIONOS && USE_POLYSPATIAL
+            // Create VolumeCamera if it does not exist
+            CreateVolumeCamera();
             // Set volume camera configuration
             SetVolumeCameraConfiguration();
             // Set the position of volume camera to (0,0,0) when Bounded mode
             SetBoundedVolumeCameraPositionToZero();
 #endif
         }
-        
+
         // Start is called before the first frame update
         void Awake()
         {

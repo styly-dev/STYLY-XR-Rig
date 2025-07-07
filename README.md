@@ -21,7 +21,9 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 - visionOS support
   - Bounded guide gizmo for visionOS Bounded mode (requires PolySpatial)
   - Compatible with intractable objects with XR Interaction toolkit (XRI)
-  - VisionOSHoverEffect will be automatically attached to Interactable GameObject (requires PolySpatial)
+  - VisionOSHoverEffect will be automatically attached to Interactable GameObject (requires PolySpatial) 
+  - Volume camera will be automatically created
+  - Interaction Group will be automatically attached
 - OpenXR Mixed Reality support
   - Video pass through will be enabled on OpenXR environment
 - Unity Editor development support
@@ -64,11 +66,6 @@ Create prefab instance of `XR Origin Hands (XR Rig) Variant` under STYLY-XR-Rig
 Add `ARAnchorManager.cs` to `XR Origin Hands (XR Rig) Variant` and set enabled. This manager script cannot be added at runtime.
 
 Create empty prefab `_Added`
-
-Add two prefabs instances as children of `_Added` from `Assets/Samples/XR Interaction Toolkit/3.0.3/visionOS/Prefabs/Interactors`
-- `Primary Interaction Group`
-- `Secondary Interaction Group Variant`
-
 Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
 
 - Scripts from XR Interaction Toolkit  
@@ -84,6 +81,10 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
   - `DisableLocomotion.cs`
   - `EnableOpenXrPassthrough.cs`
   - `SetCameraYOffsetZeroOnBuildApp.cs`
+  - `InteractionGroupAttacher.cs`
+    - Set PrimaryInteractionGroup prefab from XRI visionOS sample
+    - Set SecondaryInteractionGroupVariant prefab from XRI visionOS sample
+    - Set _added GameObject inside STYLY XR Rig
   - `HideHandMeshOnVisionOs.cs`
     - `Left Hand Visual`  
 XR Origin Hands (XR Rig)  
@@ -99,5 +100,3 @@ XR Origin Hands (XR Rig)
 　　└Pinch Point Stabilized  
 　　　└Pinch Visual  
 
-Create empty prefab `VolumeCamera` as a child of `_Added` and attach scripts
-- `VolumeCamera.cs` Set dimensions to (1,1,1)
