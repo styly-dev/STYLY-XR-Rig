@@ -23,14 +23,14 @@ namespace Styly.XRRig
 
         void FindMainCameraAndAudioListenerOfXrRig()
         {
-            var STYLYXRRig = GameObject.FindObjectOfType<Styly.XRRig.StylyXrRig>();
+            var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
             XrRigCamera = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"));
             XrRigAudioListener = STYLYXRRig.transform.GetComponentInChildren<AudioListener>();
         }
 
         void DisableMainCamerasExcludingXrRigCamera()
         {
-            Camera[] cameras = FindObjectsOfType<Camera>();
+            Camera[] cameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
             foreach (Camera camera in cameras)
             {
                 if (camera != XrRigCamera && camera.CompareTag("MainCamera"))
@@ -44,7 +44,7 @@ namespace Styly.XRRig
 
         void DisableAudioListenersExcludingXrRigAudioListener()
         {
-            AudioListener[] audioListeners = FindObjectsOfType<AudioListener>();
+            AudioListener[] audioListeners = FindObjectsByType<AudioListener>(FindObjectsSortMode.None);
             foreach (AudioListener audioListener in audioListeners)
             {
                 if (audioListener != XrRigAudioListener)

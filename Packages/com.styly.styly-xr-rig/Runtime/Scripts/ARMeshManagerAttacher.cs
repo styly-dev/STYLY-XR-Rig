@@ -20,7 +20,7 @@ namespace Styly.XRRig
 
         void AttachARMeshManagerToXrOrigin()
         {
-            XROrigin xrOrigin = FindObjectOfType<XROrigin>();
+            XROrigin xrOrigin = FindFirstObjectByType<XROrigin>();
             if (xrOrigin != null)
             {
                 // Create new GameObject named "ARMeshManager" as a child of XROrigin

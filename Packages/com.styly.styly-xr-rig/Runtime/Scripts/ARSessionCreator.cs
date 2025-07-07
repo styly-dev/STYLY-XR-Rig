@@ -16,7 +16,7 @@ namespace Styly.XRRig
         void CreateARSession()
         {
             // If ARSession is not found in the scene
-            if (FindObjectOfType<ARSession>() == null)
+            if (FindFirstObjectByType<ARSession>() == null)
             {
                 // Create AR Session GameObject and attach ARSession component
                 GameObject arSessionGameObject = new("ARSession");

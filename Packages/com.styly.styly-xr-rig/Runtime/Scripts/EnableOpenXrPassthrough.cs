@@ -21,8 +21,8 @@ namespace Styly.XRRig
         public void EnablePassthrough()
         {
             // Find Main Camera of STYKY-XR-Rig
-            var STYLYXRRig = GameObject.FindObjectOfType<Styly.XRRig.StylyXrRig>();
-            var MainCamera = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"))?.gameObject;
+            var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
+            var MainCamera = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera")).gameObject;
             // Set Main Camera parameteres
             MainCamera.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
             // Set Main Camera Background to black with 0 alpha

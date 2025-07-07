@@ -17,6 +17,12 @@
     "precompiledReferences": [],
     "autoReferenced": false,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.polyspatial.visionos",
+            "expression": "",
+            "define": "USE_POLYSPATIAL"
+        }
+    ],
     "noEngineReferences": false
 }
