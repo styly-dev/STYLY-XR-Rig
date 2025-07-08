@@ -10,6 +10,7 @@
     "url": "https://styly.cc/"
   },
   "dependencies": {
+    "com.unity.xr.openxr": "1.8.2",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
     "com.unity.xr.interaction.toolkit": "3.0.8",
     "com.unity.xr.hands": "1.5.1",
