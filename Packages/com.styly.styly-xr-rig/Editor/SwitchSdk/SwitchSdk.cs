@@ -38,7 +38,11 @@ namespace Styly.XRRig.SdkSwitcher
             // PICO Supportの右の歯車ボタンを押しPICO Supportダイアログを開く
             // Feature Settingsから、 Hand Trackingにチェック
             // Hand Tracking SupportからControllers And Hands を選択
-            // => デフォルトでこの設定になっている
+            // 
+            // => 上記のisCameraSubsystemとは違い、FeatureのFieldではない
+            // データは Assets/Resources/PICOProjectSetting.asset に保存される
+            // => 参考:
+            // https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK/blob/3aa3e62bff41df618529eeb60ff02c29a515dafe/Editor/PICOFeatureEditor.cs#L43
 
         }
 
