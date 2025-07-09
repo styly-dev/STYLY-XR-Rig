@@ -181,6 +181,41 @@ namespace Styly.XRRig.SdkSwitcher
         }
 
         /// <summary>
+        /// Sets the value of a specific field in an OpenXR feature by its internal ID.
+        /// </summary>
+        /// /// <param name="buildTargetGroup">The build target group for which to set the field value.</param>
+        /// <param name="featureIdInternal">The internal ID of the OpenXR feature (e.g. "com.pico.openxr.feature.passthrough").</param>
+        /// <param name="fieldName">The name of the field to set (e.g. "isCameraSubsystem").</param>
+        /// <param name="value">The value to set for the field.</param> 
+        public static void SetFieldValueOfOpenXrFeature(BuildTargetGroup buildTargetGroup, string featureIdInternal, string fieldName, object value)
+        {
+            var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
+            foreach (var feature in settings.GetFeatures())
+            {
+                FieldInfo fieldInfo = feature.GetType().GetField("featureIdInternal", BindingFlags.NonPublic | BindingFlags.Instance);
+                string tmp_featureIdInternal = (string)fieldInfo.GetValue(feature);
+
+                if (tmp_featureIdInternal == featureIdInternal)
+                {
+                    var type = feature.GetType();
+                    var field = type.GetField(fieldName);
+                    if (field != null)
+                    {
+                        field.SetValue(feature, value);
+                        Debug.Log($"Set {fieldName} of {feature.GetType().Name} to {value}");
+                    }
+                    else
+                    {
+                        Debug.LogError($"Field '{fieldName}' not found in {feature.GetType().Name}");
+                    }
+                }
+                // Mark the feature as dirty to ensure changes are saved
+                EditorUtility.SetDirty(feature);
+                AssetDatabase.SaveAssets();
+            }
+        }
+
+        /// <summary>
         /// Enables a specific XR plugin for the given build target group.
         /// /// Data will be saved to `Assets/XR/XRGeneralSettingsPerBuildTarget.asset`
         /// </summary>

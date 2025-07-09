@@ -30,14 +30,15 @@ namespace Styly.XRRig.SdkSwitcher
                 "com.unity.openxr.feature.input.PICO4Ultratouch"
             });
 
-            // ToDo 1
-            // Opne XR Passthroughの右の歯車マークをクリック
-            // ダイアログからis Camera Subsystemをチェック
+            // Extra settings for PICO XR
+            // Set isCameraSubsystem to true
+            SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
 
             // ToDo 2
             // PICO Supportの右の歯車ボタンを押しPICO Supportダイアログを開く
             // Feature Settingsから、 Hand Trackingにチェック
             // Hand Tracking SupportからControllers And Hands を選択
+            // => デフォルトでこの設定になっている
 
         }
 
@@ -66,6 +67,8 @@ namespace Styly.XRRig.SdkSwitcher
                 "vive.openxr.feature.focus3controller"
             });
 
+            // Extra settings for VIVE XR
+            
             // ToDo 1
             // Graphics APIからVulkanを削除し、OpenGLES3のみにする
 
