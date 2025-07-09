@@ -11,11 +11,121 @@ using UnityEditor.XR.Management;
 using UnityEngine.XR.Management;
 using UnityEditor.XR.OpenXR.Features;
 using UnityEngine.XR.OpenXR;
+using UnityEngine.XR.OpenXR.Features;
 
 namespace Styly.XRRig.SdkSwitcher
 {
     public class SwitchSdkUtils
     {
+
+        /// <summary>
+        /// Debugs all available XR settings information for the specified build target group.
+        /// This includes XR Loaders, XR Feature Sets, OpenXR Features, and Interaction Profiles.
+        /// The output is logged to the Unity console.
+        /// <param name="buildTargetGroup">The build target group for which to debug XR settings.</param>
+        public static void DebugAllAvailableInfo(BuildTargetGroup buildTargetGroup)
+        {
+            List<string> DebugLines = new();
+            DebugLines.Add($"=== Debugging XR Settings for {buildTargetGroup} ===");
+            var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
+
+            // All XR Loaders
+            DebugLines.Add("\n=== XR Loaders ===");
+            var pkgs = UnityEditor.XR.Management.Metadata.XRPackageMetadataStore.GetAllPackageMetadata();
+            foreach (var pkg in pkgs)
+            {
+                foreach (UnityEditor.XR.Management.Metadata.IXRLoaderMetadata meta in pkg.metadata.loaderMetadata)
+                {
+                    if (meta.supportedBuildTargets.Contains(buildTargetGroup))
+                    {
+                        DebugLines.Add($"Loader: {meta.loaderName}, Type: {meta.loaderType}");
+                    }
+                }
+            }
+
+            // All XR Feature Sets
+            DebugLines.Add("\n=== All XR Feature Sets ===");
+            foreach (var set in OpenXRFeatureSetManager.FeatureSetsForBuildTarget(buildTargetGroup))
+            {
+                DebugLines.Add($"Feature Set: {set.featureSetId}, Enabled: {set.isEnabled}, Installed: {set.isInstalled}");
+            }
+
+            // All OpenXR Features
+            DebugLines.Add("\n=== All OpenXR Features ===");
+            foreach (var feature in settings.GetFeatures())
+            {
+                FieldInfo fieldInfo = feature.GetType().GetField("featureIdInternal", BindingFlags.NonPublic | BindingFlags.Instance);
+                string featureIdInternal = (string)fieldInfo.GetValue(feature);
+                DebugLines.Add($"OpenXR Feature: {feature.name}, ID: {featureIdInternal}, Type: {feature.GetType().Name}, Enabled: {feature.enabled}");
+            }
+
+            // All Interaction Profiles
+            DebugLines.Add("\n=== All Interaction Profiles ===");
+            foreach (var feature in settings.GetFeatures<OpenXRInteractionFeature>())
+            {
+                FieldInfo fieldInfo = feature.GetType().GetField("featureIdInternal", BindingFlags.NonPublic | BindingFlags.Instance);
+                string featureIdInternal = (string)fieldInfo.GetValue(feature);
+                DebugLines.Add($"Interaction Profile Feature: {feature.name}, ID: {featureIdInternal}, Type: {feature.GetType().Name}, Enabled: {feature.enabled}");
+            }
+
+            // Add newlines for better readability
+            DebugLines.Add("\n\n");
+
+            // Output all debug lines in the console at one time
+            Debug.Log(string.Join("\n", DebugLines));
+        }
+
+        /// <summary>
+        /// Clears all interaction profiles for the specified build target group.
+        /// This will disable all interaction profiles, effectively resetting the OpenXR interaction settings for that build
+        /// target group.
+        /// </summary>
+        /// <param name="buildTargetGroup">The build target group for which to clear interaction profiles.</param>
+        public static void ClearAllInteractionProfiles(BuildTargetGroup buildTargetGroup)
+        {
+            var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
+            foreach (var feature in settings.GetFeatures<OpenXRInteractionFeature>())
+            {
+                feature.enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Enables a list of OpenXR interaction profiles by their internal IDs for the given build target group.
+        /// Data will be saved to `Assets/XR/Settings/OpenXR Package Settings.asset`
+        /// </summary>
+        public static void EnableInteractionProfiles(BuildTargetGroup buildTargetGroup, string[] featureIdInternal)
+        {
+            ClearAllInteractionProfiles(buildTargetGroup);
+            foreach (var id in featureIdInternal)
+            {
+                EnableInteractionProfile(buildTargetGroup, id);
+            }
+        }
+
+        /// <summary>
+        /// Enables a specific OpenXR interaction profile by its internal ID for the given build target group
+        /// Data will be saved to `Assets/XR/Settings/OpenXR Package Settings.asset`
+        /// </summary>
+        /// <param name="buildTargetGroup">The build target group for which to enable the interaction profile.</param>
+        /// <param name="featureIdInternal">The internal ID of the OpenXR interaction profile to enable (e.g. "com.unity.openxr.feature.input.PICO4touch").</param>
+        public static void EnableInteractionProfile(BuildTargetGroup buildTargetGroup, string featureIdInternal)
+        {
+            var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
+            foreach (var feature in settings.GetFeatures<OpenXRInteractionFeature>())
+            {
+                FieldInfo fieldInfo = feature.GetType().GetField("featureIdInternal", BindingFlags.NonPublic | BindingFlags.Instance);
+                string tmp_featureIdInternal = (string)fieldInfo.GetValue(feature);
+
+                if (tmp_featureIdInternal == featureIdInternal)
+                {
+                    // Enable the feature
+                    feature.enabled = true;
+                    Debug.Log($"Enabled OpenXR Interaction feature: {feature.name}");
+                }
+            }
+        }
+
         /// <summary>
         /// Clears all OpenXR features for the specified build target group.
         /// This will disable all features, effectively resetting the OpenXR settings for that build target group
@@ -25,8 +135,25 @@ namespace Styly.XRRig.SdkSwitcher
             var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
             foreach (var feature in settings.GetFeatures())
             {
-                // Disable the feature
                 feature.enabled = false;
+            }
+        }
+
+        /// <summary>
+        /// Enables a list of OpenXR features by their internal IDs for the given build target group
+        /// Data will be saved to `Assets/XR/Settings/OpenXR Package Settings.asset`
+        /// </summary>
+        /// <param name="buildTargetGroup">The build target group for which to enable the features.</param>
+        /// <param name="featureIdsInternal">A list of internal IDs of the OpenXR features to enable (e.g. "com.pico.openxr.feature.passthrough").</param>
+        /// <example>
+        /// EnableOpenXrFeatures(BuildTargetGroup.Android, new List<string> { "com.pico.openxr.feature.passthrough", "com.pico.openxr.feature.foveation" });
+        /// </example>
+        public static void EnableOpenXrFeatures(BuildTargetGroup buildTargetGroup, string[] featureIdsInternal)
+        {
+            ClearAllOpenXrFeatures(buildTargetGroup);
+            foreach (var id in featureIdsInternal)
+            {
+                EnableOpenXrFeature(buildTargetGroup, id);
             }
         }
 
@@ -116,14 +243,12 @@ namespace Styly.XRRig.SdkSwitcher
         /// Enables a specific OpenXR feature set for the given build target group.
         /// Data will be saved to `Assets/XR/Settings/OpenXR Editor Settings.asset`
         /// </summary>
-        /// <param name="featureSetId">
-        /// The ID of the feature set to enable (e.g. "com.unity.openxr.featureset.meta").
-        /// </param>
         /// <param name="buildTargetGroup">The build target group for which to enable the feature set.</param>
+        /// <param name="featureSetId">The ID of the feature set to enable (e.g. "com.unity.openxr.featureset.meta").</param>
         /// <example>
-        /// EnableXRFeatureSet("com.unity.openxr.featureset.meta", BuildTargetGroup.Android);
+        /// EnableXRFeatureSet(BuildTargetGroup.Android, "com.unity.openxr.featureset.meta");
         /// </example>
-        public static void EnableXRFeatureSet(string featureSetId, BuildTargetGroup buildTargetGroup)
+        public static void EnableXRFeatureSet(BuildTargetGroup buildTargetGroup, string featureSetId)
         {
             var featureSet = OpenXRFeatureSetManager.FeatureSetsForBuildTarget(buildTargetGroup).FirstOrDefault((set => set.featureSetId == featureSetId));
             if (featureSet == null)
