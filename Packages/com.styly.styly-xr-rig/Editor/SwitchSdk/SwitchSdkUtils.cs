@@ -13,11 +13,54 @@ using UnityEditor.XR.OpenXR.Features;
 using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Features;
 using UnityEngine.Rendering;
+using UnityEditor.Rendering;
 
 namespace Styly.XRRig.SdkSwitcher
 {
     public class SwitchSdkUtils
     {
+        /// <summary>
+        /// The path to the STYLY Mobile Render Pipeline Asset. 
+        /// </summary>
+        private static readonly string STYLY_Mobile_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_Mobile_RPAsset.asset";
+
+        /// <summary>
+        /// Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+        /// </summary>
+        public static void ApplyStylyPipelineAsset()
+        {
+            // Get the STYLY Mobile Render Pipeline Asset
+            var rpAsset = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(STYLY_Mobile_RPAsset_path);
+            if (rpAsset == null)
+            {
+                Debug.LogError($"Failed to load STYLY Mobile Render Pipeline Asset at {STYLY_Mobile_RPAsset_path}");
+                return;
+            }
+
+            // Apply the Render Pipeline Asset to GraphicsSettings and QualitySettings
+            ApplyPipelineAsset(rpAsset);
+        }
+
+        /// <summary>
+        /// Updates both GraphicsSettings and QualitySettings with the specified RenderPipelineAsset.
+        /// </summary>
+        public static void ApplyPipelineAsset(RenderPipelineAsset asset)
+        {
+            // 1) Set for the entire project
+            GraphicsSettings.defaultRenderPipeline = asset;
+
+            // 2) Set for all Quality levels
+            for (int i = 0; i < QualitySettings.names.Length; i++)
+            {
+                QualitySettings.SetQualityLevel(i, false);
+                QualitySettings.renderPipeline = asset;
+            }
+
+            // 3) Persist changes
+            EditorUtility.SetDirty(GraphicsSettings.GetGraphicsSettings());
+            AssetDatabase.SaveAssets();
+        }
+
         /// <summary>
         /// Sets the graphics APIs for a specific build target.
         /// </summary>
