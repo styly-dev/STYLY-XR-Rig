@@ -1,5 +1,6 @@
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -9,6 +10,9 @@ namespace Styly.XRRig.SdkSwitcher
         public static void SwitchTo_MetaOpenXrSdk()
         {
             Debug.LogError("Meta OpenXR SDK is not implemented yet.");
+
+            // Set OpenXR Render Mode to MultiPass
+            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);

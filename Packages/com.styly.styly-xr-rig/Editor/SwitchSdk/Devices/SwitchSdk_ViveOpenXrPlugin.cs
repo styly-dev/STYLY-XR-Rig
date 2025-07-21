@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -32,6 +33,9 @@ namespace Styly.XRRig.SdkSwitcher
                 "com.unity.openxr.feature.input.handinteraction",
                 "vive.openxr.feature.focus3controller"
             });
+
+            // Set OpenXR Render Mode to MultiPass
+            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Extra settings for VIVE XR
 

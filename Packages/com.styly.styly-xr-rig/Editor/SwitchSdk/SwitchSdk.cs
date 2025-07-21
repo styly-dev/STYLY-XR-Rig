@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -12,6 +13,9 @@ namespace Styly.XRRig.SdkSwitcher
         {
             ApplyStylyPipelineAsset();
             UseNewInputSystemOnly();
+
+            // Set OpenXR Render Mode to MultiPass for PC
+            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Standalone);
         }
 
         public static void RemoveAllSdks()
