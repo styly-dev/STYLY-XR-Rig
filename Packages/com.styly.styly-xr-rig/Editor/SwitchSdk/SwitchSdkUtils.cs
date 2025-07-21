@@ -25,6 +25,41 @@ namespace Styly.XRRig.SdkSwitcher
         private static readonly string STYLY_Mobile_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_Mobile_RPAsset.asset";
 
         /// <summary>
+        /// Sets the active input handling to "Input System Package (New)".
+        /// This will ensure that the new input system is used exclusively.
+        /// Note: This change will take effect after restarting the Unity Editor.
+        /// </summary>
+        public static void UseNewInputSystemOnly()
+        {
+            // Get the PlayerSettings asset
+            var playerSettings = Resources.FindObjectsOfTypeAll<PlayerSettings>().FirstOrDefault();
+            if (playerSettings == null)
+            {
+                Debug.LogError("PlayerSettings asset not found.");
+                return;
+            }
+
+            var so = new SerializedObject(playerSettings);
+
+            // enum: 0=Old, 1=New, 2=Both
+            const string kActiveInputHandler = "activeInputHandler";
+            var prop = so.FindProperty(kActiveInputHandler);
+
+            if (prop == null)
+            {
+                Debug.LogError($"Property '{kActiveInputHandler}' not found.");
+                return;
+            }
+
+            if (prop.intValue != 1)
+            {
+                prop.intValue = 1; // 1 = Input System Package (New)
+                so.ApplyModifiedProperties();
+                Debug.Log("Active Input Handling set to 'Input System Package (New)'. Changes will take effect after restarting the Unity Editor.");
+            }
+        }
+
+        /// <summary>
         /// Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
         /// </summary>
         public static void ApplyStylyPipelineAsset()
