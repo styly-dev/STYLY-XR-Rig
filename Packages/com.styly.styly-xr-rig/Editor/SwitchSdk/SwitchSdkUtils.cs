@@ -12,11 +12,28 @@ using UnityEngine.XR.Management;
 using UnityEditor.XR.OpenXR.Features;
 using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Features;
+using UnityEngine.Rendering;
 
 namespace Styly.XRRig.SdkSwitcher
 {
     public class SwitchSdkUtils
     {
+        /// <summary>
+        /// Sets the graphics APIs for a specific build target.
+        /// </summary>
+        /// <param name="target">The build target for which to set the graphics APIs.</param>
+        /// <param name="graphicsDeviceTypes">A list of graphics device types to set for the target.</param>
+        /// <example>
+        /// SetGraphicsAPIs(BuildTarget.Android, new List<GraphicsDeviceType> { GraphicsDeviceType.Vulkan, GraphicsDeviceType.OpenGLES3 });
+        /// </example>
+        public static void SetGraphicsAPIs(BuildTarget target, List<GraphicsDeviceType> graphicsDeviceTypes)
+        {
+            // Turn off automatic graphics API selection and switch to manual list
+            PlayerSettings.SetUseDefaultGraphicsAPIs(target, false);
+
+            // The order of the list determines priority from left to right
+            PlayerSettings.SetGraphicsAPIs(target, graphicsDeviceTypes.ToArray());
+        }
 
         /// <summary>
         /// Debugs all available XR settings information for the specified build target group.

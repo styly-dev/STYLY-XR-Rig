@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
+using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
 {
@@ -38,7 +41,15 @@ namespace Styly.XRRig.SdkSwitcher
         [MenuItem("File/Switch HMD SDKs/Remove all SDK packages")]
         static void RemoveAllSDKs()
         {
+            // Remove all SDK packages from the project
             SwitchSdk.RemoveAllSdks();
+
+            // Set graphics APIs to Vulkan and OpenGLES3
+            SetGraphicsAPIs(BuildTarget.Android,
+                new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan,
+                    GraphicsDeviceType.OpenGLES3
+                });
         }
 
         [MenuItem("File/Switch HMD SDKs/[Debug] Debug All Available Info for Android")]

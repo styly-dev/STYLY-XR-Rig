@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -16,6 +18,12 @@ namespace Styly.XRRig.SdkSwitcher
         public static void TestFunc()
         {
             // You can add more test logic here if needed
+
+            SetGraphicsAPIs(BuildTarget.Android,
+                new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan,
+                    GraphicsDeviceType.OpenGLES3
+                });
         }
     }
 }
