@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -32,18 +34,18 @@ namespace Styly.XRRig.SdkSwitcher
             });
 
             // Extra settings for VIVE XR
-            
-            // ToDo 1
-            // Graphics APIからVulkanを削除し、OpenGLES3のみにする
 
-            // ToDo 2
-            // Preferences > Graphics > Properties > Advanced PropertiesをAll Visibleにする
+            // Set graphics APIs to OpenGLES3
+            SetGraphicsAPIs(BuildTarget.Android,
+                new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.OpenGLES3
+                });
 
-            // ToDo 3
-            // HDR設定を変更する
-            // Project Settings > Quality > MobileのRender Pipeline Assetを選択。
-            // QualityのHDRをオフにする
-            // または、QualityのHDRはONのまま、HDR Percisionを64bitに変更する
+            // Fix all XR project validation issues
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+
+            // Post-switch SDK setup
+            PostSwitchSdk();
         }
     }
 }

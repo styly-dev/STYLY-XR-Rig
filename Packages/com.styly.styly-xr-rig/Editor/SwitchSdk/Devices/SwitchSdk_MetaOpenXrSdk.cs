@@ -9,6 +9,12 @@ namespace Styly.XRRig.SdkSwitcher
         public static void SwitchTo_MetaOpenXrSdk()
         {
             Debug.LogError("Meta OpenXR SDK is not implemented yet.");
+
+            // Fix all XR project validation issues
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+
+            // Post-switch SDK setup
+            PostSwitchSdk();
         }
     }
 }

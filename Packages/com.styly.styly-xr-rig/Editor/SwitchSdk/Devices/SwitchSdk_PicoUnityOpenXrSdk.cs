@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
@@ -31,6 +33,14 @@ namespace Styly.XRRig.SdkSwitcher
             });
 
             // Extra settings for PICO XR
+
+            // Set graphics APIs to Vulkan and OpenGLES3
+            SetGraphicsAPIs(BuildTarget.Android,
+                new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan,
+                    GraphicsDeviceType.OpenGLES3
+                });
+
             // Set isCameraSubsystem to true
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
 
@@ -43,6 +53,13 @@ namespace Styly.XRRig.SdkSwitcher
             // データは Assets/Resources/PICOProjectSetting.asset に保存される
             // => 参考:
             // https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK/blob/3aa3e62bff41df618529eeb60ff02c29a515dafe/Editor/PICOFeatureEditor.cs#L43
+
+            // Fix all XR project validation issues
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+
+            // Post-switch SDK setup
+            PostSwitchSdk();
+
         }
     }
 }
