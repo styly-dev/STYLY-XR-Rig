@@ -25,6 +25,35 @@ namespace Styly.XRRig.SdkSwitcher
         private static readonly string STYLY_Mobile_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_Mobile_RPAsset.asset";
 
         /// <summary>
+        /// Sets the OpenXR Render Mode for the specified build target group.
+        /// This will change the render mode to either "Single Pass" or "Multi Pass" depending on the mode specified.
+        /// </summary>
+        /// <param name="mode">The render mode to set (e.g. OpenXRSettings.RenderMode.SinglePass or OpenXRSettings.RenderMode.MultiPass).</param>
+        /// <param name="group">The build target group for which to set the render mode.</param>
+        /// <example>
+        /// SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+        /// </example>
+        public static void SetRenderMode(OpenXRSettings.RenderMode mode, BuildTargetGroup group)
+        {
+            var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(group);
+            if (settings == null)
+            {
+                Debug.LogWarning($"OpenXRSettings for {group} not found.");
+                return;
+            }
+
+            if (settings.renderMode != mode)
+            {
+                Undo.RecordObject(settings, $"Set OpenXR Render Mode ({group})");
+                settings.renderMode = mode;
+                EditorUtility.SetDirty(settings);
+                Debug.Log($"Set OpenXR Render Mode for {group} to {mode}");
+            }
+            AssetDatabase.SaveAssets();
+        }
+
+
+        /// <summary>
         /// Sets the active input handling to "Input System Package (New)".
         /// This will ensure that the new input system is used exclusively.
         /// Note: This change will take effect after restarting the Unity Editor.
