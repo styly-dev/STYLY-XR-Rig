@@ -29,6 +29,12 @@ namespace Styly.XRRig.SdkSwitcher
             SwitchSdk.SwitchTo_PolySpatialVisionOS();
         }
 
+        [MenuItem("File/Switch HMD SDKs/Switch to XREAL SDK")]
+        static void SwitchTo_Xreal()
+        {
+            SwitchSdk.SwitchTo_XrealSdk();
+        }
+
         [MenuItem("File/Switch HMD SDKs/Remove all SDK packages")]
         static void RemoveAllSDKs()
         {
