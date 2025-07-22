@@ -9,10 +9,10 @@ namespace Styly.XRRig.SdkSwitcher
 {
     public partial class SwitchSdk
     {
-        public static void PostSwitchSdk()
+        public static void SwitchPC()
         {
-            ApplyStylyPipelineAsset();
-            UseNewInputSystemOnly();
+            // ApplyStylyPipelineAsset();
+            // UseNewInputSystemOnly();
 
             // Set OpenXR Render Mode to MultiPass for PC
             SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Standalone);

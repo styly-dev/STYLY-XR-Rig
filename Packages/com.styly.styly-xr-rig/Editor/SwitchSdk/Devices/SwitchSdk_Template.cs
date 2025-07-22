@@ -7,9 +7,9 @@ using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
 {
-    public class SwitchSdk_ViveOpenXrPlugin
+    public class SwitchSdk_Template
     {
-        private static readonly string packageIdentifier = "com.htc.upm.vive.openxr@2.5.1";
+        private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
 
         public static void InstallPackage()
         {
@@ -32,30 +32,30 @@ namespace Styly.XRRig.SdkSwitcher
             // Use the new input system only
             UseNewInputSystemOnly();
 
-            // Set graphics APIs to OpenGLES3
+            // Set graphics APIs to Vulkan and OpenGLES3
             SetGraphicsAPIs(BuildTarget.Android,
                 new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan,
                     GraphicsDeviceType.OpenGLES3
                 });
 
             // Enable the OpenXR Loader and set the XR Feature Set
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.htc.vive.openxr.featureset.vivexr");
+            EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
 
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {
-                "vive.openxr.feature.compositionlayer",
-                "vive.openxr.feature.hand.tracking",
-                "vive.openxr.feature.passthrough",
-                "com.unity.openxr.feature.vivefocus3"
+                "com.unity.openxr.feature.input.handtracking",
+                "com.xxxx.xxxx.feature.passthrough"
             });
 
             // Enable Interaction Profiles
             EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
             {
                 "com.unity.openxr.feature.input.handinteraction",
-                "vive.openxr.feature.focus3controller"
+                "com.unity.openxr.feature.input.xxxxxxxx",
+                "com.unity.openxr.feature.input.yyyyyyyy"
             });
 
             // Set OpenXR Render Mode to MultiPass
@@ -64,7 +64,7 @@ namespace Styly.XRRig.SdkSwitcher
             // Fix all XR project validation issues
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
 
-            // ==== Extra settings for VIVE XR ====
+            // ==== Extra settings for XXXXXXXX ====
 
 
         }

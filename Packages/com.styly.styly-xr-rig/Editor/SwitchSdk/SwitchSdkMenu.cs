@@ -11,13 +11,13 @@ namespace Styly.XRRig.SdkSwitcher
         [MenuItem("File/Switch HMD SDKs/Switch to PICO Unity OpenXR SDK")]
         static void SwitchTo_PICO()
         {
-            SwitchSdk.SwitchTo_PicoUnityOpenXrSdk();
+            SwitchSdk_PicoUnityOpenXrSdk.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to VIVE OpenXR Plugin")]
         static void SwitchTo_VIVE()
         {
-            SwitchSdk.SwitchTo_ViveOpenXrPlugin();
+            SwitchSdk_ViveOpenXrPlugin.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to Meta OpenXR SDK")]

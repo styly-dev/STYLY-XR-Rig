@@ -10,11 +10,9 @@ namespace Styly.XRRig.SdkSwitcher
         {
             Debug.LogError("PolySpatial VisionOS SDK is not implemented yet.");
 
-            // Fix all XR project validation issues
+            // Fix all XR project validation issues WITH Ignore strings ******************
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.VisionOS);
 
-            // Post-switch SDK setup
-            PostSwitchSdk();
         }
     }
 }
