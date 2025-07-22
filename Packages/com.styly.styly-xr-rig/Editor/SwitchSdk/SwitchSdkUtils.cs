@@ -14,6 +14,7 @@ using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Features;
 using UnityEngine.Rendering;
 using UnityEditor.Rendering;
+using System.Threading.Tasks;
 
 namespace Styly.XRRig.SdkSwitcher
 {
@@ -23,6 +24,29 @@ namespace Styly.XRRig.SdkSwitcher
         /// The path to the STYLY Mobile Render Pipeline Asset. 
         /// </summary>
         private static readonly string STYLY_Mobile_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_Mobile_RPAsset.asset";
+
+        /// <summary>
+        /// Waits for a specified number of frames to pass.
+        /// </summary>
+        public static Task WaitFramesAsync(int frames)
+        {
+            if (frames <= 0) return Task.CompletedTask;
+
+            var tcs = new TaskCompletionSource<bool>();
+            int remaining = frames;
+
+            void Tick()
+            {
+                if (--remaining == 0)
+                {
+                    EditorApplication.update -= Tick;
+                    tcs.TrySetResult(true);
+                }
+            }
+
+            EditorApplication.update += Tick;
+            return tcs.Task;
+        }
 
         /// <summary>
         /// Sets the OpenXR Render Mode for the specified build target group.
@@ -51,7 +75,6 @@ namespace Styly.XRRig.SdkSwitcher
             }
             AssetDatabase.SaveAssets();
         }
-
 
         /// <summary>
         /// Sets the active input handling to "Input System Package (New)".
@@ -557,6 +580,8 @@ namespace Styly.XRRig.SdkSwitcher
                 UnityEngine.Debug.LogError(request.Error.message);
                 return false;
             }
+            Debug.Log($"Package {packageNameWithVersion} added successfully.");
+            AssetDatabase.Refresh();
             return true;
         }
 
