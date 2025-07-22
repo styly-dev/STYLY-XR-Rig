@@ -1,21 +1,46 @@
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEngine;
+using UnityEditor.Callbacks;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
 
 namespace Styly.XRRig.SdkSwitcher
 {
-    public partial class SwitchSdk
+    public class SwitchSdk_PicoUnityOpenXrSdk
     {
-        public static void SwitchTo_PicoUnityOpenXrSdk()
+        private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
+
+        public static void InstallPackage()
         {
-            // Add SDK Package
-            AddUnityPackage("https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0");
+            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+        }
+
+        [DidReloadScripts]
+        private static void OnScriptsReloaded()
+        {
+            if (!SessionState.GetBool(packageIdentifier, false)) { return; }
+            SessionState.EraseBool(packageIdentifier);
+            SetUpSdkSettings();
+        }
+
+        private static void SetUpSdkSettings()
+        {
+            // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+            ApplyStylyPipelineAsset();
+
+            // Use the new input system only
+            UseNewInputSystemOnly();
+
+           // Set graphics APIs to Vulkan and OpenGLES3
+            SetGraphicsAPIs(BuildTarget.Android,
+                new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan,
+                    GraphicsDeviceType.OpenGLES3
+                });
 
             // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(UnityEngine.XR.OpenXR.OpenXRLoader));
+            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.picoxr.openxr.features");
 
             // Enable OpenXR Features
@@ -36,14 +61,10 @@ namespace Styly.XRRig.SdkSwitcher
             // Set OpenXR Render Mode to MultiPass
             SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
-            // Extra settings for PICO XR
+            // Fix all XR project validation issues
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
 
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
-                    GraphicsDeviceType.OpenGLES3
-                });
+            // ==== Extra settings for PICO XR ==== 
 
             // Set isCameraSubsystem to true
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
@@ -57,13 +78,6 @@ namespace Styly.XRRig.SdkSwitcher
             // データは Assets/Resources/PICOProjectSetting.asset に保存される
             // => 参考:
             // https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK/blob/3aa3e62bff41df618529eeb60ff02c29a515dafe/Editor/PICOFeatureEditor.cs#L43
-
-            // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
-
-            // Post-switch SDK setup
-            PostSwitchSdk();
-
         }
     }
 }
