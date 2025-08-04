@@ -647,6 +647,64 @@ namespace Styly.XRRig.SdkSwitcher
             File.WriteAllText(manifestPath, JsonConvert.SerializeObject(manifest, Formatting.Indented));
         }
 
+        /// <summary>
+        /// Configure PICO hand tracking settings by directly modifying the PICOProjectSetting asset
+        /// This enables the Hand Tracking checkbox whenever switching to the PICO SDK.
+        /// </summary>
+        /// <param name="buildTargetGroup">The build target group to configure</param>
+        public static void ConfigurePicoHandTracking(BuildTargetGroup buildTargetGroup)
+        {
+            EditorApplication.delayCall += () => {
+                try
+                {
+                    // Load the PICO project setting asset
+                    var picoProjectSetting = Resources.Load("PICOProjectSetting");
+                    if (picoProjectSetting != null)
+                    {
+                        ModifyPicoProjectSettingAsset(picoProjectSetting);
+                        return;
+                    }
+
+                    Debug.LogWarning("PICOProjectSetting asset not found. Hand tracking configuration failed.");
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogWarning($"Failed to configure PICO hand tracking: {e.Message}");
+                }
+            };
+        }
+
+        /// <summary>
+        /// Modify the PICOProjectSetting asset to enable hand tracking
+        /// </summary>
+        private static void ModifyPicoProjectSettingAsset(object picoProjectSetting)
+        {
+            try
+            {
+                var type = picoProjectSetting.GetType();
+                
+                // Set isHandTracking to true (handTrackingSupportType defaults to ControllersAndHands)
+                var isHandTrackingField = type.GetField("isHandTracking", BindingFlags.Public | BindingFlags.Instance);
+                if (isHandTrackingField != null && isHandTrackingField.FieldType == typeof(bool))
+                {
+                    isHandTrackingField.SetValue(picoProjectSetting, true);
+                    Debug.Log("Enabled PICO Hand Tracking.");
+                }
+
+                // Save changes
+                if (picoProjectSetting is UnityEngine.Object unityObject)
+                {
+                    EditorUtility.SetDirty(unityObject);
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                }
+            }
+            catch (System.Exception e)
+            {
+                Debug.LogWarning($"Failed to modify PICO hand tracking settings: {e.Message}");
+            }
+        }
+
         class ScopedRegistry
         {
             public string name;
