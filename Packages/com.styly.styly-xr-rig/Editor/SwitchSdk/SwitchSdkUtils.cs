@@ -651,8 +651,7 @@ namespace Styly.XRRig.SdkSwitcher
         /// Configure PICO hand tracking settings by directly modifying the PICOProjectSetting asset
         /// This enables the Hand Tracking checkbox whenever switching to the PICO SDK.
         /// </summary>
-        /// <param name="buildTargetGroup">The build target group to configure</param>
-        public static void ConfigurePicoHandTracking(BuildTargetGroup buildTargetGroup)
+        public static void ConfigurePicoHandTracking()
         {
             EditorApplication.delayCall += () => {
                 try
@@ -684,11 +683,16 @@ namespace Styly.XRRig.SdkSwitcher
                 var type = picoProjectSetting.GetType();
                 
                 // Set isHandTracking to true (handTrackingSupportType defaults to ControllersAndHands)
-                var isHandTrackingField = type.GetField("isHandTracking", BindingFlags.Public | BindingFlags.Instance);
+                const string IsHandTrackingFieldName = "isHandTracking";
+                var isHandTrackingField = type.GetField(IsHandTrackingFieldName, BindingFlags.Public | BindingFlags.Instance);
                 if (isHandTrackingField != null && isHandTrackingField.FieldType == typeof(bool))
                 {
                     isHandTrackingField.SetValue(picoProjectSetting, true);
                     Debug.Log("Enabled PICO Hand Tracking.");
+                }
+                else
+                {
+                    Debug.LogWarning($"Could not find field '{IsHandTrackingFieldName}' or it has the wrong type in PICOProjectSetting asset. Hand tracking configuration may have failed.");
                 }
 
                 // Save changes

@@ -70,7 +70,7 @@ namespace Styly.XRRig.SdkSwitcher
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
 
             // Configure PICO Hand Tracking
-            SwitchSdkUtils.ConfigurePicoHandTracking(BuildTargetGroup.Android);
+            SwitchSdkUtils.ConfigurePicoHandTracking();
         }
     }
 }
