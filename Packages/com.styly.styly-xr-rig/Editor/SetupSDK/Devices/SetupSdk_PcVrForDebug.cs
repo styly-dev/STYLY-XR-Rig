@@ -1,28 +1,16 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
-using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
+using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 
-namespace Styly.XRRig.SdkSwitcher
+namespace Styly.XRRig.SetupSdk
 {
-    public class SwitchSdk_Template
+    public class SetupSdk_PcVrForDebug
     {
         private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
-
-        public static void InstallPackage()
-        {
-            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
-        }
-
-        [DidReloadScripts]
-        private static void OnScriptsReloaded()
-        {
-            if (!SessionState.GetBool(packageIdentifier, false)) { return; }
-            SessionState.EraseBool(packageIdentifier);
-            SetUpSdkSettings();
-        }
 
         private static void SetUpSdkSettings()
         {
@@ -68,5 +56,32 @@ namespace Styly.XRRig.SdkSwitcher
 
 
         }
+
+#region CommonCode
+        public static void InstallPackage()
+        {
+            // Attempt to add the Unity package and handle the result
+            int PackageInstallResult = AddUnityPackage(packageIdentifier);
+            switch (PackageInstallResult)
+            {
+                case 0: // Package already installed, continue setting up SDK settings
+                    SetUpSdkSettings();
+                    break;
+                case 1: // Package added successfully, set up SDK settings after scripts reload
+                    SessionState.SetBool(packageIdentifier, true);
+                    break;
+                case -1: // Error occurred while adding the package
+                    break;
+            }
+        }
+
+        [DidReloadScripts]
+        private static void OnScriptsReloaded()
+        {
+            if (!SessionState.GetBool(packageIdentifier, false)) { return; }
+            SessionState.EraseBool(packageIdentifier);
+            SetUpSdkSettings();
+        }
+#endregion
     }
 }

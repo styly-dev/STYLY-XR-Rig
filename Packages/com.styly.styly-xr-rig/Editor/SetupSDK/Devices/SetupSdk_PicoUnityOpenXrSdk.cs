@@ -1,28 +1,16 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
-using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
+using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 
-namespace Styly.XRRig.SdkSwitcher
+namespace Styly.XRRig.SetupSdk
 {
-    public class SwitchSdk_PicoUnityOpenXrSdk
+    public class SetupSdk_PicoUnityOpenXrSdk
     {
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
-
-        public static void InstallPackage()
-        {
-            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
-        }
-
-        [DidReloadScripts]
-        private static void OnScriptsReloaded()
-        {
-            if (!SessionState.GetBool(packageIdentifier, false)) { return; }
-            SessionState.EraseBool(packageIdentifier);
-            SetUpSdkSettings();
-        }
 
         private static void SetUpSdkSettings()
         {
@@ -32,7 +20,7 @@ namespace Styly.XRRig.SdkSwitcher
             // Use the new input system only
             UseNewInputSystemOnly();
 
-           // Set graphics APIs to Vulkan and OpenGLES3
+            // Set graphics APIs to Vulkan and OpenGLES3
             SetGraphicsAPIs(BuildTarget.Android,
                 new List<GraphicsDeviceType> {
                     GraphicsDeviceType.Vulkan,
@@ -70,7 +58,34 @@ namespace Styly.XRRig.SdkSwitcher
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
 
             // Configure PICO Hand Tracking
-            SwitchSdkUtils.ConfigurePicoHandTracking();
+            SetupSdkUtils.ConfigurePicoHandTracking();
         }
+        
+#region CommonCode
+        public static void InstallPackage()
+        {
+            // Attempt to add the Unity package and handle the result
+            int PackageInstallResult = AddUnityPackage(packageIdentifier);
+            switch (PackageInstallResult)
+            {
+                case 0: // Package already installed, continue setting up SDK settings
+                    SetUpSdkSettings();
+                    break;
+                case 1: // Package added successfully, set up SDK settings after scripts reload
+                    SessionState.SetBool(packageIdentifier, true);
+                    break;
+                case -1: // Error occurred while adding the package
+                    break;
+            }
+        }
+
+        [DidReloadScripts]
+        private static void OnScriptsReloaded()
+        {
+            if (!SessionState.GetBool(packageIdentifier, false)) { return; }
+            SessionState.EraseBool(packageIdentifier);
+            SetUpSdkSettings();
+        }
+#endregion
     }
 }

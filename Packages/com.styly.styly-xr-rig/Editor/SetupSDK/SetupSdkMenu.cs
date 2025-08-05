@@ -2,47 +2,53 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static Styly.XRRig.SdkSwitcher.SwitchSdkUtils;
+using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 
-namespace Styly.XRRig.SdkSwitcher
+namespace Styly.XRRig.SetupSdk
 {
-    public class SwitchSdkMenu
+    public class SetupSdkMenu
     {
         [MenuItem("File/Switch HMD SDKs/Switch to PICO Unity OpenXR SDK")]
         static void SwitchTo_PICO()
         {
-            SwitchSdk_PicoUnityOpenXrSdk.InstallPackage();
+            SetupSdk_PicoUnityOpenXrSdk.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to VIVE OpenXR Plugin")]
         static void SwitchTo_VIVE()
         {
-            SwitchSdk_ViveOpenXrPlugin.InstallPackage();
+            SetupSdk_ViveOpenXrPlugin.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to Meta OpenXR SDK")]
         static void SwitchTo_Meta()
         {
-            SwitchSdk.SwitchTo_MetaOpenXrSdk();
+            SetupSdk_MetaOpenXrSdk.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to PolySpatial (visionOS)")]
         static void SwitchTo_PolySpatial()
         {
-            SwitchSdk.SwitchTo_PolySpatialVisionOS();
+            SetupSdk_PolySpatialVisionOS.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to XREAL SDK")]
         static void SwitchTo_Xreal()
         {
-            SwitchSdk.SwitchTo_XrealSdk();
+            SetupSdk_XrealSdk.InstallPackage();
+        }
+
+        [MenuItem("File/Switch HMD SDKs/Switch to Android XR")]
+        static void SwitchTo_AndroidXR()
+        {
+            SetupSdk_AndroidXR.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Remove all SDK packages")]
         static void RemoveAllSDKs()
         {
             // Remove all SDK packages from the project
-            SwitchSdk.RemoveAllSdks();
+            SetupSdk.RemoveAllSdks();
 
             // Set graphics APIs to Vulkan and OpenGLES3
             SetGraphicsAPIs(BuildTarget.Android,
@@ -55,13 +61,13 @@ namespace Styly.XRRig.SdkSwitcher
         [MenuItem("File/Switch HMD SDKs/[Debug] Debug All Available Info for Android")]
         static void DebugAllAvailableInfoForAndroid()
         {
-            SwitchSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Android);
+            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Android);
         }
 
         [MenuItem("File/Switch HMD SDKs/Test Function")]
         static void TestFunc()
         {
-            SwitchSdk.TestFunc();
+            SetupSdk.TestFunc();
         }
     }
 }

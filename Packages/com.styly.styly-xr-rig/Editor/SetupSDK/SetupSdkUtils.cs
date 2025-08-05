@@ -16,9 +16,9 @@ using UnityEngine.Rendering;
 using UnityEditor.Rendering;
 using System.Threading.Tasks;
 
-namespace Styly.XRRig.SdkSwitcher
+namespace Styly.XRRig.SetupSdk
 {
-    public class SwitchSdkUtils
+    public class SetupSdkUtils
     {
         /// <summary>
         /// The path to the STYLY Mobile Render Pipeline Asset. 
@@ -559,12 +559,21 @@ namespace Styly.XRRig.SdkSwitcher
         /// example: "com.unity.textmeshpro@3.0.6"
         /// </summary>
         /// <param name="packageNameWithVersion"></param>
-        /// <returns></returns>
-        public static bool AddUnityPackage(string packageNameWithVersion)
+        /// <returns>
+        /// 1 if the package was added successfully, 0 if the package was already installed, -1 if there was an error.
+        /// </returns>
+        public static int AddUnityPackage(string packageNameWithVersion)
         {
             // Separate the package name and version
             var packageName = packageNameWithVersion.Split('@')[0];
             var version = packageNameWithVersion.Split('@').Length > 1 ? packageNameWithVersion.Split('@')[1] : null;
+
+            // Check if the package is already installed
+            if (IsPackageInstalled(packageName, version))
+            {
+                Debug.Log($"Package {packageNameWithVersion} is already installed.");
+                return 0;
+            }
 
             // If the package is not Unity official and not a URL, add a scoped registry for OpenUPM
             if (!packageName.StartsWith("com.unity.") && !packageName.StartsWith("https://"))
@@ -578,11 +587,36 @@ namespace Styly.XRRig.SdkSwitcher
             if (request.Error != null)
             {
                 UnityEngine.Debug.LogError(request.Error.message);
-                return false;
+                return -1;
             }
             Debug.Log($"Package {packageNameWithVersion} added successfully.");
             AssetDatabase.Refresh();
-            return true;
+            return 1;
+        }
+
+        /// <summary>
+        /// Check if a Unity package is installed by its name and version.
+        /// </summary>
+        /// <param name="packageName">The name of the package (e.g. "com.unity.textmeshpro").</param>
+        /// <param name="version">The version of the package (e.g. "3.0.6").</param>
+        /// <returns>
+        /// True if the package is installed with the specified version, false otherwise.
+        /// </returns>
+        public static bool IsPackageInstalled(string packageName, string version)
+        {
+            if (version == null) { return false; }
+
+            var request = UnityEditor.PackageManager.Client.List(true, true);
+            while (!request.IsCompleted) { }
+            if (request.Status == StatusCode.Success)
+            {
+                return request.Result.Any(pkg => pkg.name == packageName && pkg.version == version);
+            }
+            else if (request.Status >= StatusCode.Failure)
+            {
+                UnityEngine.Debug.LogError("Failed to check if package is installed.");
+            }
+            return false;
         }
 
         /// <summary>
@@ -653,7 +687,8 @@ namespace Styly.XRRig.SdkSwitcher
         /// </summary>
         public static void ConfigurePicoHandTracking()
         {
-            EditorApplication.delayCall += () => {
+            EditorApplication.delayCall += () =>
+            {
                 try
                 {
                     // Load the PICO project setting asset
@@ -681,7 +716,7 @@ namespace Styly.XRRig.SdkSwitcher
             try
             {
                 var type = picoProjectSetting.GetType();
-                
+
                 // Set isHandTracking to true (handTrackingSupportType defaults to ControllersAndHands)
                 const string IsHandTrackingFieldName = "isHandTracking";
                 var isHandTrackingField = type.GetField(IsHandTrackingFieldName, BindingFlags.Public | BindingFlags.Instance);
