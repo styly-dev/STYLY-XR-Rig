@@ -10,7 +10,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_PolySpatialVisionOS
     {
-        private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
+        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.2.4";
 
         private static async void SetUpSdkSettings()
         {
@@ -20,43 +20,18 @@ namespace Styly.XRRig.SetupSdk
             // Use the new input system only
             UseNewInputSystemOnly();
 
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
-                    GraphicsDeviceType.OpenGLES3
-                });
-
             // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
+#if USE_POLYSPATIAL
+            EnableXRPlugin(BuildTargetGroup.VisionOS, typeof(UnityEngine.XR.VisionOS.VisionOSLoader));
+#endif
 
             // Wait for 1 frame to ensure the OpenXR Loader is initialized
             await WaitFramesAsync(1);
-            
-            // Enable OpenXR Features
-            EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
-            {
-                "com.unity.openxr.feature.input.handtracking",
-                "com.xxxx.xxxx.feature.passthrough"
-            });
-
-            // Enable Interaction Profiles
-            EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
-            {
-                "com.unity.openxr.feature.input.handinteraction",
-                "com.unity.openxr.feature.input.xxxxxxxx",
-                "com.unity.openxr.feature.input.yyyyyyyy"
-            });
-
-            // Set OpenXR Render Mode to MultiPass
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.VisionOS);
 
-            // ==== Extra settings for XXXXXXXX ====
-
+            // ==== Extra settings for PolySpatial (visionOS) ====
 
         }
 
