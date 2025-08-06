@@ -55,33 +55,21 @@ namespace Styly.XRRig.SetupSdk
 
             // Fix all XR project validation issues
             // Fixing duplicate settings deletes the settings. So the issue will be ignored.
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android, new string[]{"The OpenXR Package Settings asset has duplicate settings and must be regenerated."});
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android, new string[] { "The OpenXR Package Settings asset has duplicate settings and must be regenerated." });
 
-            // ==== Extra settings for VIVE XR ====
+            // ==== Extra settings for VIVE XR ==== 
 
             // ToDo 1
             // Enable Passthrough via script
             // https://developer.vive.com/resources/openxr/unity/tutorials/passthrough/
             // https://qiita.com/afjk/items/f723f6dd2101f9b85905
-            
+
         }
 
-#region CommonCode
+        #region CommonCode
         public static void InstallPackage()
         {
-            // Attempt to add the Unity package and handle the result
-            int PackageInstallResult = AddUnityPackage(packageIdentifier);
-            switch (PackageInstallResult)
-            {
-                case 0: // Package already installed, continue setting up SDK settings
-                    SetUpSdkSettings();
-                    break;
-                case 1: // Package added successfully, set up SDK settings after scripts reload
-                    SessionState.SetBool(packageIdentifier, true);
-                    break;
-                case -1: // Error occurred while adding the package
-                    break;
-            }
+            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
         }
 
         [DidReloadScripts]
@@ -91,6 +79,6 @@ namespace Styly.XRRig.SetupSdk
             SessionState.EraseBool(packageIdentifier);
             SetUpSdkSettings();
         }
-#endregion
+        #endregion
     }
 }

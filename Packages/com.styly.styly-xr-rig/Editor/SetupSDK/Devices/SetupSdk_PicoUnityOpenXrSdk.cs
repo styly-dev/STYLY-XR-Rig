@@ -63,22 +63,10 @@ namespace Styly.XRRig.SetupSdk
             SetupSdkUtils.ConfigurePicoHandTracking();
         }
         
-#region CommonCode
+        #region CommonCode
         public static void InstallPackage()
         {
-            // Attempt to add the Unity package and handle the result
-            int PackageInstallResult = AddUnityPackage(packageIdentifier);
-            switch (PackageInstallResult)
-            {
-                case 0: // Package already installed, continue setting up SDK settings
-                    SetUpSdkSettings();
-                    break;
-                case 1: // Package added successfully, set up SDK settings after scripts reload
-                    SessionState.SetBool(packageIdentifier, true);
-                    break;
-                case -1: // Error occurred while adding the package
-                    break;
-            }
+            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
         }
 
         [DidReloadScripts]
@@ -88,6 +76,6 @@ namespace Styly.XRRig.SetupSdk
             SessionState.EraseBool(packageIdentifier);
             SetUpSdkSettings();
         }
-#endregion
+        #endregion
     }
 }

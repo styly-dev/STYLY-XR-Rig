@@ -27,17 +27,15 @@ namespace Styly.XRRig.SetupSdk
         {
             // You can add more test logic here if needed
 
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
 
-            // ApplyStylyPipelineAsset();
+#if USE_XREAL
+            Debug.Log("XREAL SDK is enabled.");
+#endif
 
-            // UseNewInputSystemOnly();
 
-            // SetGraphicsAPIs(BuildTarget.Android,
-            //     new List<GraphicsDeviceType> {
-            //         GraphicsDeviceType.Vulkan,
-            //         GraphicsDeviceType.OpenGLES3
-            //     });
+
+
+
         }
     }
 }
