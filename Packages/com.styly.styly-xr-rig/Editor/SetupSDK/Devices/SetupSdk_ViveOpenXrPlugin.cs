@@ -54,7 +54,8 @@ namespace Styly.XRRig.SetupSdk
             SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+            // Fixing duplicate settings deletes the settings. So the issue will be ignored.
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android, new string[]{"The OpenXR Package Settings asset has duplicate settings and must be regenerated."});
 
             // ==== Extra settings for VIVE XR ====
 
