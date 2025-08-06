@@ -64,10 +64,12 @@ namespace Styly.XRRig.SetupSdk
                 });
         }
 
-        [MenuItem("File/Switch HMD SDKs/[Debug] Debug All Available Info for Android")]
+        [MenuItem("File/Switch HMD SDKs/[Debug] Debug All Available identifiers for XR")]
         static void DebugAllAvailableInfoForAndroid()
         {
             SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Android);
+            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Standalone);
+            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.VisionOS);
         }
 
         [MenuItem("File/Switch HMD SDKs/Test Function")]
