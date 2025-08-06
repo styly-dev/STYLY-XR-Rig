@@ -13,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
         /// The package identifier for SDK (UPM package name@version, gitURL etc).
         private static readonly string packageIdentifier = "com.unity.xr.meta-openxr@2.2.0";
 
-        private static void SetUpSdkSettings()
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -21,7 +21,7 @@ namespace Styly.XRRig.SetupSdk
             // Use the new input system only
             UseNewInputSystemOnly();
 
-            // Set graphics APIs to Vulkan and OpenGLES3
+            // Set graphics APIs
             SetGraphicsAPIs(BuildTarget.Android,
                 new List<GraphicsDeviceType> {
                     GraphicsDeviceType.Vulkan
@@ -30,6 +30,9 @@ namespace Styly.XRRig.SetupSdk
             // Enable the OpenXR Loader and set the XR Feature Set
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.unity.openxr.featureset.meta");
+
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
 
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
@@ -59,6 +62,10 @@ namespace Styly.XRRig.SetupSdk
 
             // ==== Extra settings for XXXXXXXX ====
 
+            // ToDo 1
+            // Enable Passthrough
+            // Add AR Camera Manager component
+            // https://qiita.com/afjk/items/a57b07915feb0bed2d3a
 
         }
 

@@ -12,7 +12,7 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
 
-        private static void SetUpSdkSettings()
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -23,7 +23,6 @@ namespace Styly.XRRig.SetupSdk
             // Set graphics APIs to Vulkan and OpenGLES3
             SetGraphicsAPIs(BuildTarget.Android,
                 new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
                     GraphicsDeviceType.OpenGLES3
                 });
 
@@ -31,6 +30,9 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.picoxr.openxr.features");
 
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
+            
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {

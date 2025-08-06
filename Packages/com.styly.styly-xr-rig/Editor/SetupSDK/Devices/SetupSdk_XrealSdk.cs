@@ -10,9 +10,13 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_XrealSdk
     {
-        private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
+        private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250314/com.xreal.xr.tar.gz";
 
-        private static void SetUpSdkSettings()
+        // ToDo 
+        // Make AddUnityPackage function compatibale with tar.gz packages
+
+        
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -31,6 +35,9 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
 
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
+
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {
@@ -46,7 +53,7 @@ namespace Styly.XRRig.SetupSdk
                 "com.unity.openxr.feature.input.yyyyyyyy"
             });
 
-            // Set OpenXR Render Mode to MultiPass
+            // Set OpenXR Render Mode
             SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues

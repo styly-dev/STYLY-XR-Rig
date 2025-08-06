@@ -44,6 +44,12 @@ namespace Styly.XRRig.SetupSdk
             SetupSdk_AndroidXR.InstallPackage();
         }
 
+        [MenuItem("File/Switch HMD SDKs/Switch to PC VR for Development")]
+        static void SwitchTo_PcVrForDevelopment()
+        {
+            SetupSdk_PcVrForDevelopment.InstallPackage();
+        }
+
         [MenuItem("File/Switch HMD SDKs/Remove all SDK packages")]
         static void RemoveAllSDKs()
         {

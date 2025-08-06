@@ -8,11 +8,11 @@ using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 
 namespace Styly.XRRig.SetupSdk
 {
-    public class SetupSdk_PcVrForDebug
+    public class SetupSdk_PcVrForDevelopment
     {
-        private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
+        private static readonly string packageIdentifier = null;
 
-        private static void SetUpSdkSettings()
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -20,39 +20,41 @@ namespace Styly.XRRig.SetupSdk
             // Use the new input system only
             UseNewInputSystemOnly();
 
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
-                    GraphicsDeviceType.OpenGLES3
-                });
+            // // Set graphics APIs to Vulkan and OpenGLES3
+            // SetGraphicsAPIs(BuildTarget.Android,
+            //     new List<GraphicsDeviceType> {
+            //         GraphicsDeviceType.Vulkan,
+            //         GraphicsDeviceType.OpenGLES3
+            //     });
 
             // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
+            EnableXRPlugin(BuildTargetGroup.Standalone, typeof(OpenXRLoader));
+            // EnableXRFeatureSet(BuildTargetGroup.Standalone, "com.xxxx.xxxx.features");
 
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
+            
             // Enable OpenXR Features
-            EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
+            EnableOpenXrFeatures(BuildTargetGroup.Standalone, new string[]
             {
                 "com.unity.openxr.feature.input.handtracking",
-                "com.xxxx.xxxx.feature.passthrough"
+                "com.unity.openxr.feature.compositionlayers"
             });
 
             // Enable Interaction Profiles
-            EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
+            EnableInteractionProfiles(BuildTargetGroup.Standalone, new string[]
             {
                 "com.unity.openxr.feature.input.handinteraction",
-                "com.unity.openxr.feature.input.xxxxxxxx",
-                "com.unity.openxr.feature.input.yyyyyyyy"
+                "com.unity.openxr.feature.input.khrsimpleprofile"
             });
 
             // Set OpenXR Render Mode to MultiPass
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Standalone);
 
             // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Standalone);
 
-            // ==== Extra settings for XXXXXXXX ====
+            // ==== Extra settings for PCVR ====
 
 
         }

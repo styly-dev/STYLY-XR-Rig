@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SetupSdk.SetupSdkUtils;
+using System.Threading.Tasks;
 
 namespace Styly.XRRig.SetupSdk
 {
@@ -12,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "com.htc.upm.vive.openxr@2.5.1";
 
-        private static void SetUpSdkSettings()
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -30,6 +31,9 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.htc.vive.openxr.featureset.vivexr");
 
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
+
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {
@@ -46,7 +50,7 @@ namespace Styly.XRRig.SetupSdk
                 "vive.openxr.feature.focus3controller"
             });
 
-            // Set OpenXR Render Mode to MultiPass
+            // Set OpenXR Render Mode
             SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues
@@ -54,7 +58,11 @@ namespace Styly.XRRig.SetupSdk
 
             // ==== Extra settings for VIVE XR ====
 
-
+            // ToDo 1
+            // Enable Passthrough via script
+            // https://developer.vive.com/resources/openxr/unity/tutorials/passthrough/
+            // https://qiita.com/afjk/items/f723f6dd2101f9b85905
+            
         }
 
 #region CommonCode

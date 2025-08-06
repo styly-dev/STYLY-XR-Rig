@@ -558,38 +558,82 @@ namespace Styly.XRRig.SetupSdk
         /// Add a Unity package by its name and version.
         /// example: "com.unity.textmeshpro@3.0.6"
         /// </summary>
-        /// <param name="packageNameWithVersion"></param>
+        /// <param name="packageIdentifier"></param>
         /// <returns>
         /// 1 if the package was added successfully, 0 if the package was already installed, -1 if there was an error.
         /// </returns>
-        public static int AddUnityPackage(string packageNameWithVersion)
+        public static int AddUnityPackage(string packageIdentifier)
         {
-            // Separate the package name and version
-            var packageName = packageNameWithVersion.Split('@')[0];
-            var version = packageNameWithVersion.Split('@').Length > 1 ? packageNameWithVersion.Split('@')[1] : null;
+            // Exit if the packageIdentifier is null or empty
+            if (string.IsNullOrEmpty(packageIdentifier)) { return 0; }
 
-            // Check if the package is already installed
+            // Separate the package name and version
+            var packageName = packageIdentifier.Split('@')[0];
+            var version = packageIdentifier.Split('@').Length > 1 ? packageIdentifier.Split('@')[1] : null;
+
+            // Check if the version of the package is already installed
             if (IsPackageInstalled(packageName, version))
             {
-                Debug.Log($"Package {packageNameWithVersion} is already installed.");
+                Debug.Log($"Package {packageIdentifier} is already installed.");
                 return 0;
             }
 
             // If the package is not Unity official and not a URL, add a scoped registry for OpenUPM
-            if (!packageName.StartsWith("com.unity.") && !packageName.StartsWith("https://"))
+            if (!packageName.StartsWith("com.unity.") && !packageIdentifier.StartsWith("https://"))
             {
                 AddScopedRegistryOfOpenUpmPackage(packageName);
             }
 
+            // If the package is .tar.gz located at a URL, donwload it to /Packages directory
+            if (packageIdentifier.EndsWith(".tar.gz") && packageIdentifier.StartsWith("https://"))
+            {
+                string packageFileName = Path.GetFileName(packageIdentifier);
+                string packagePath = Path.Combine("Packages", packageFileName);
+
+                // // Check if the package already exists
+                // if (File.Exists(packagePath))
+                // {
+                //     // Delete the existing package file
+                //     try
+                //     {
+                //         File.Delete(packagePath);
+                //         Debug.Log($"Deleted existing package file: {packagePath}");
+                //     }
+                //     catch (Exception e)
+                //     {
+                //         Debug.LogError($"Failed to delete existing package file: {e.Message}");
+                //         return -1;
+                //     }
+                // }
+
+                // using (var webClient = new System.Net.WebClient())
+                // {
+                //     try
+                //     {
+                //         webClient.DownloadFile(packageIdentifier, packagePath);
+                //         Debug.Log($"Downloaded package from {packageIdentifier} to {packagePath}");
+                //     }
+                //     catch (Exception e)
+                //     {
+                //         Debug.LogError($"Failed to download package: {e.Message}");
+                //         return -1;
+                //     }
+                // }
+
+                // packageIdentifier = "file:" + packageFileName; // Update the identifier to the local path
+                packageIdentifier  = "file:com.xreal.xr3.tar.gz"; // Update the identifier to the local path
+            }
+
             // Add the package
-            var request = UnityEditor.PackageManager.Client.Add(packageNameWithVersion);
+            var request = UnityEditor.PackageManager.Client.Add(packageIdentifier);
             while (!request.IsCompleted) { }
             if (request.Error != null)
             {
                 UnityEngine.Debug.LogError(request.Error.message);
                 return -1;
             }
-            Debug.Log($"Package {packageNameWithVersion} added successfully.");
+
+            Debug.Log($"Package {packageIdentifier} added successfully.");
             AssetDatabase.Refresh();
             return 1;
         }
@@ -604,7 +648,7 @@ namespace Styly.XRRig.SetupSdk
         /// </returns>
         public static bool IsPackageInstalled(string packageName, string version)
         {
-            if (version == null) { return false; }
+            if (string.IsNullOrEmpty(version)) { return false; }
 
             var request = UnityEditor.PackageManager.Client.List(true, true);
             while (!request.IsCompleted) { }

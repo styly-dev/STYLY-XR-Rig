@@ -12,7 +12,7 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "com.xxxxx.xxxxxx";
 
-        private static void SetUpSdkSettings()
+        private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
@@ -31,6 +31,9 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
 
+            // Wait for 1 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(1);
+            
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {
