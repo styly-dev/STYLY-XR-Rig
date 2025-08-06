@@ -12,10 +12,6 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250314/com.xreal.xr.tar.gz";
 
-        // ToDo 
-        // Make AddUnityPackage function compatibale with tar.gz packages
-
-        
         private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
@@ -24,62 +20,44 @@ namespace Styly.XRRig.SetupSdk
             // Use the new input system only
             UseNewInputSystemOnly();
 
-            // Set graphics APIs to Vulkan and OpenGLES3
+            // Set graphics API
             SetGraphicsAPIs(BuildTarget.Android,
                 new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
                     GraphicsDeviceType.OpenGLES3
                 });
 
             // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.xxxx.xxxx.features");
-
+#if USE_XREAL
+            EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader));
+#endif
             // Wait for 1 frame to ensure the OpenXR Loader is initialized
             await WaitFramesAsync(1);
 
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
             {
-                "com.unity.openxr.feature.input.handtracking",
-                "com.xxxx.xxxx.feature.passthrough"
             });
 
             // Enable Interaction Profiles
             EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
             {
-                "com.unity.openxr.feature.input.handinteraction",
-                "com.unity.openxr.feature.input.xxxxxxxx",
-                "com.unity.openxr.feature.input.yyyyyyyy"
             });
 
             // Set OpenXR Render Mode
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+            SetRenderMode(OpenXRSettings.RenderMode.SinglePassInstanced, BuildTargetGroup.Android);
 
             // Fix all XR project validation issues
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
 
-            // ==== Extra settings for XXXXXXXX ====
+            // ==== Extra settings for XREAL ====
 
 
         }
 
-#region CommonCode
+        #region CommonCode
         public static void InstallPackage()
         {
-            // Attempt to add the Unity package and handle the result
-            int PackageInstallResult = AddUnityPackage(packageIdentifier);
-            switch (PackageInstallResult)
-            {
-                case 0: // Package already installed, continue setting up SDK settings
-                    SetUpSdkSettings();
-                    break;
-                case 1: // Package added successfully, set up SDK settings after scripts reload
-                    SessionState.SetBool(packageIdentifier, true);
-                    break;
-                case -1: // Error occurred while adding the package
-                    break;
-            }
+            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
         }
 
         [DidReloadScripts]
@@ -89,6 +67,6 @@ namespace Styly.XRRig.SetupSdk
             SessionState.EraseBool(packageIdentifier);
             SetUpSdkSettings();
         }
-#endregion
+        #endregion
     }
 }

@@ -15,6 +15,7 @@ using UnityEngine.XR.OpenXR.Features;
 using UnityEngine.Rendering;
 using UnityEditor.Rendering;
 using System.Threading.Tasks;
+using UnityEditor.Compilation;
 
 namespace Styly.XRRig.SetupSdk
 {
@@ -559,24 +560,14 @@ namespace Styly.XRRig.SetupSdk
         /// example: "com.unity.textmeshpro@3.0.6"
         /// </summary>
         /// <param name="packageIdentifier"></param>
-        /// <returns>
-        /// 1 if the package was added successfully, 0 if the package was already installed, -1 if there was an error.
-        /// </returns>
-        public static int AddUnityPackage(string packageIdentifier)
+        public static bool AddUnityPackage(string packageIdentifier)
         {
             // Exit if the packageIdentifier is null or empty
-            if (string.IsNullOrEmpty(packageIdentifier)) { return 0; }
+            if (string.IsNullOrEmpty(packageIdentifier)) { return false; }
 
             // Separate the package name and version
             var packageName = packageIdentifier.Split('@')[0];
             var version = packageIdentifier.Split('@').Length > 1 ? packageIdentifier.Split('@')[1] : null;
-
-            // Check if the version of the package is already installed
-            if (IsPackageInstalled(packageName, version))
-            {
-                Debug.Log($"Package {packageIdentifier} is already installed.");
-                return 0;
-            }
 
             // If the package is not Unity official and not a URL, add a scoped registry for OpenUPM
             if (!packageName.StartsWith("com.unity.") && !packageIdentifier.StartsWith("https://"))
@@ -584,58 +575,55 @@ namespace Styly.XRRig.SetupSdk
                 AddScopedRegistryOfOpenUpmPackage(packageName);
             }
 
-            // If the package is .tar.gz located at a URL, donwload it to /Packages directory
-            if (packageIdentifier.EndsWith(".tar.gz") && packageIdentifier.StartsWith("https://"))
-            {
-                string packageFileName = Path.GetFileName(packageIdentifier);
-                string packagePath = Path.Combine("Packages", packageFileName);
+            // If the package is a tarball URL, download it and get the local file path
+            packageIdentifier = DownloadAndGetLocalFilepathIfTarball(packageIdentifier);
 
-                // // Check if the package already exists
-                // if (File.Exists(packagePath))
-                // {
-                //     // Delete the existing package file
-                //     try
-                //     {
-                //         File.Delete(packagePath);
-                //         Debug.Log($"Deleted existing package file: {packagePath}");
-                //     }
-                //     catch (Exception e)
-                //     {
-                //         Debug.LogError($"Failed to delete existing package file: {e.Message}");
-                //         return -1;
-                //     }
-                // }
-
-                // using (var webClient = new System.Net.WebClient())
-                // {
-                //     try
-                //     {
-                //         webClient.DownloadFile(packageIdentifier, packagePath);
-                //         Debug.Log($"Downloaded package from {packageIdentifier} to {packagePath}");
-                //     }
-                //     catch (Exception e)
-                //     {
-                //         Debug.LogError($"Failed to download package: {e.Message}");
-                //         return -1;
-                //     }
-                // }
-
-                // packageIdentifier = "file:" + packageFileName; // Update the identifier to the local path
-                packageIdentifier  = "file:com.xreal.xr3.tar.gz"; // Update the identifier to the local path
-            }
-
-            // Add the package
+            // Add the package and measure the time taken
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
             var request = UnityEditor.PackageManager.Client.Add(packageIdentifier);
             while (!request.IsCompleted) { }
+            stopwatch.Stop();
+            
             if (request.Error != null)
             {
                 UnityEngine.Debug.LogError(request.Error.message);
-                return -1;
+                return false;
             }
 
             Debug.Log($"Package {packageIdentifier} added successfully.");
             AssetDatabase.Refresh();
-            return 1;
+            CompilationPipeline.RequestScriptCompilation(); // In order to invoke [DidReloadScripts] even when new version of the package is not installed.
+            return true;
+        }
+
+        /// <summary>
+        /// If the package is a tarball URL, download it and return the local file path. Returns the original packageIdentifier otherwise.
+        /// </summary>
+        private static string DownloadAndGetLocalFilepathIfTarball(string packageIdentifier)
+        {
+            string ret = packageIdentifier;
+
+            // If the package is .tar.gz or .tgz located at a URL, download it to /Packages directory
+            if ((packageIdentifier.EndsWith(".tar.gz") || packageIdentifier.EndsWith(".tgz")) && packageIdentifier.StartsWith("https://"))
+            {
+                string packageFileName = Path.GetFileName(packageIdentifier);
+                string packagePath = Path.Combine("Packages", packageFileName);
+
+                try
+                {
+                    if (File.Exists(packagePath)) File.Delete(packagePath);
+                    using var wc = new System.Net.WebClient();
+                    wc.DownloadFile(packageIdentifier, packagePath);
+                    Debug.Log($"Downloaded package: {packagePath}");
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError($"Failed to download package: {e.Message}");
+                    return null;
+                }
+                ret = "file:" + packageFileName; // Update the identifier to the local path.
+            }
+            return ret;
         }
 
         /// <summary>
