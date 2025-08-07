@@ -6,7 +6,10 @@
         "GUID:f9fe0089ec81f4079af78eb2287a6163",
         "GUID:ae3d1603ce9534ff5a9eb62408568574",
         "GUID:4847341ff46394e83bb78fbd0652937e",
-        "GUID:8efef0e48627b4af5a28950b21575514"
+        "GUID:96aa6ba065960476598f8f643e7252b6",
+        "GUID:8efef0e48627b4af5a28950b21575514",
+        "GUID:4ddd23ea56a3a40f0aa0036d1624a53e",
+        "GUID:2b1cc58b5fab727499169f06e9336a3b"
     ],
     "includePlatforms": [
         "Editor"
@@ -22,6 +25,11 @@
             "name": "com.unity.polyspatial.visionos",
             "expression": "",
             "define": "USE_POLYSPATIAL"
+        },
+        {
+            "name": "com.xreal.xr",
+            "expression": "",
+            "define": "USE_XREAL"
         }
     ],
     "noEngineReferences": false
