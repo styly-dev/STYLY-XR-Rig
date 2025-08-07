@@ -27,15 +27,6 @@ namespace Styly.XRRig.SetupSdk
         {
             // You can add more test logic here if needed
 
-
-#if USE_XREAL
-            Debug.Log("XREAL SDK is enabled.");
-#endif
-
-
-
-
-
         }
     }
 }

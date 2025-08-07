@@ -13,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
 
         private static async void SetUpSdkSettings()
-        {
+        {            
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
 
@@ -64,9 +64,10 @@ namespace Styly.XRRig.SetupSdk
         }
         
         #region CommonCode
-        public static void InstallPackage()
+        public static async void InstallPackage()
         {
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+            await WaitFramesAsync(1);
         }
 
         [DidReloadScripts]

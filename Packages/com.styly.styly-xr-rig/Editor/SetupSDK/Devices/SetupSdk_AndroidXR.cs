@@ -11,7 +11,7 @@ namespace Styly.XRRig.SetupSdk
     public class SetupSdk_AndroidXR
     {
         private static readonly string packageIdentifier = "com.unity.xr.androidxr-openxr@1.0.1";
-
+        
         private static async void SetUpSdkSettings()
         {
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
@@ -74,9 +74,10 @@ namespace Styly.XRRig.SetupSdk
         }
 
         #region CommonCode
-        public static void InstallPackage()
+        public static async void InstallPackage()
         {
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+            await WaitFramesAsync(1);
         }
 
         [DidReloadScripts]

@@ -10,7 +10,6 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_MetaOpenXrSdk
     {
-        /// The package identifier for SDK (UPM package name@version, gitURL etc).
         private static readonly string packageIdentifier = "com.unity.xr.meta-openxr@2.2.0";
 
         private static async void SetUpSdkSettings()
@@ -70,9 +69,10 @@ namespace Styly.XRRig.SetupSdk
         }
 
         #region CommonCode
-        public static void InstallPackage()
+        public static async void InstallPackage()
         {
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+            await WaitFramesAsync(1);
         }
 
         [DidReloadScripts]
