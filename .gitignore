@@ -122,3 +122,7 @@ ContentPackages/com.unity.xr-content.xr-sim-environments-*.tgz
 /[Aa]ssets/_temp.meta
 /_Output/*
 /_Output.meta
+.claude/settings.local.json
+.mcp.json
+.serena/*
+**/.serena/*
