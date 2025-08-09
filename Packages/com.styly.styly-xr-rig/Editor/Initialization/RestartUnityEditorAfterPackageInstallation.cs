@@ -8,16 +8,10 @@ using UnityEditor.PackageManager;
 class RestartUnityEditorAfterPackageInstallation
 {
     [InitializeOnLoadMethod]
-    static void CheckNeedRestart()
+    static void ExecuteOnceAfterPackageInstallation()
     {
-        // Get the infomation of the package of this script 
-        var MyPackageInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(System.Reflection.MethodInfo.GetCurrentMethod().DeclaringType.Assembly);
-        string MyPackageName = MyPackageInfo.name;
-        string MyPackageVersion = GetPackageVersion(MyPackageName);
-
-        if (EditorUserSettings.GetConfigValue("VersionOf_" + MyPackageName) != MyPackageVersion)
+        if (IsFirstRun.IsFirstRunForVersion())
         {
-            EditorUserSettings.SetConfigValue("VersionOf_" + MyPackageName, MyPackageVersion);
             if (EditorUtility.DisplayDialog("Restart Unity",
                 "You need to restart Unity to apply the new changes. Restart now?",
                 "Restart", "Later"))
@@ -36,14 +30,62 @@ class RestartUnityEditorAfterPackageInstallation
     }
 
     /// <summary>
-    /// Get the version of the package
+    /// Provides methods to determine if this is the first run after a package installation or upgrade.
     /// </summary>
-    /// <param name="packageName"></param>
-    /// <returns></returns>
-    private static string GetPackageVersion(string packageName)
+    private static class IsFirstRun
     {
-        var request = Client.List(true, true);
-        while (!request.IsCompleted) { }
-        return request.Result.FirstOrDefault(package => package.name == packageName)?.version;
+        /// <summary>
+        /// Whether this is the first run (different from the saved version)
+        /// </summary>
+        internal static bool IsFirstRunForVersion()
+        {
+            string packageName = GetThisPackageName();
+            string currentVersion = GetPackageVersion(packageName);
+            string key = GetVersionConfigKey(packageName);
+            bool isFirstRun = EditorUserSettings.GetConfigValue(key) != currentVersion;
+            if (isFirstRun) { SaveCurrentPackageVersion(); }
+            return isFirstRun;
+        }
+
+        /// <summary>
+        /// Save the current package version
+        /// The data will be saved in the /UserSettings/EditorUserSettings.asset
+        /// </summary>
+        private static void SaveCurrentPackageVersion()
+        {
+            string packageName = GetThisPackageName();
+            string currentVersion = GetPackageVersion(packageName);
+            string key = GetVersionConfigKey(packageName);
+            EditorUserSettings.SetConfigValue(key, currentVersion);
+        }
+
+        /// <summary>
+        /// Get the package name this script belongs to
+        /// </summary>
+        private static string GetThisPackageName()
+        {
+            var pkgInfo = UnityEditor.PackageManager.PackageInfo.FindForAssembly(
+                System.Reflection.MethodInfo.GetCurrentMethod().DeclaringType.Assembly);
+            return pkgInfo.name;
+        }
+
+        /// <summary>
+        /// Get the version of the package
+        /// </summary>
+        private static string GetPackageVersion(string packageName)
+        {
+            var request = Client.List(true, true);
+            while (!request.IsCompleted) { }
+            return request.Result.FirstOrDefault(package => package.name == packageName)?.version;
+        }
+
+        /// <summary>
+        /// Build a unique key that includes the package name and the current class name
+        /// </summary>
+        private static string GetVersionConfigKey(string packageName)
+        {
+            var declaringType = System.Reflection.MethodBase.GetCurrentMethod().DeclaringType;
+            return $"VersionOf_{packageName}_{declaringType?.FullName}";
+        }
     }
 }
