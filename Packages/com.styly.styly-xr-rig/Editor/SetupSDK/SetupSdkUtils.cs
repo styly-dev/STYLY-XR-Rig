@@ -424,45 +424,75 @@ namespace Styly.XRRig.SetupSdk
 
         /// <summary>
         /// Enables a specific OpenXR feature set for the given build target group.
-        /// Data will be saved to `Assets/XR/Settings/OpenXR Editor Settings.asset`
+        /// Applies in two phases across multiple groups and frames to avoid custom runtime loader conflicts.
         /// </summary>
-        /// <param name="buildTargetGroup">The build target group for which to enable the feature set.</param>
-        /// <param name="featureSetId">The ID of the feature set to enable (e.g. "com.unity.openxr.featureset.meta").</param>
-        /// <example>
-        /// EnableXRFeatureSet(BuildTargetGroup.Android, "com.unity.openxr.featureset.meta");
-        /// </example>
         public static void EnableXRFeatureSet(BuildTargetGroup buildTargetGroup, string featureSetId)
         {
-            var featureSet = OpenXRFeatureSetManager.FeatureSetsForBuildTarget(buildTargetGroup).FirstOrDefault((set => set.featureSetId == featureSetId));
-            if (featureSet == null)
-            {
-                Debug.LogError($"Feature set with ID '{featureSetId}' not found for build target group '{buildTargetGroup}'.");
-                return;
-            }
+            if (s_IsSwitchingFeatureSet) { Debug.LogWarning("Feature set switch already in progress."); return; }
+            s_IsSwitchingFeatureSet = true;
 
-            if (!featureSet.isInstalled)
+            EditorApplication.delayCall += async () =>
             {
-                Debug.LogError($"Feature set with ID '{featureSetId}' is not installed.");
-                return;
-            }
-
-            // Disable all other feature sets for the build target group
-            foreach (var set in OpenXRFeatureSetManager.FeatureSetsForBuildTarget(buildTargetGroup))
-            {
-                if (set.featureSetId != featureSetId)
+                try
                 {
-                    set.isEnabled = false;
-                    Debug.Log($"Disabling feature set: {set.featureSetId}");
+                    // Resolve target feature set upfront.
+                    var targetSets = OpenXRFeatureSetManager.FeatureSetsForBuildTarget(buildTargetGroup).ToList();
+                    var targetSet = targetSets.FirstOrDefault(set => set.featureSetId == featureSetId);
+                    if (targetSet == null)
+                    {
+                        Debug.LogError($"Feature set with ID '{featureSetId}' not found for build target group '{buildTargetGroup}'.");
+                        return;
+                    }
+                    if (!targetSet.isInstalled)
+                    {
+                        Debug.LogError($"Feature set with ID '{featureSetId}' is not installed.");
+                        return;
+                    }
+
+                    // Phase 1: Disable all sets and all features for relevant groups, apply, save.
+                    foreach (var group in s_RelevantGroups)
+                    {
+                        var sets = OpenXRFeatureSetManager.FeatureSetsForBuildTarget(group).ToList();
+                        foreach (var set in sets)
+                        {
+                            if (set.isEnabled)
+                            {
+                                set.isEnabled = false;
+                                Debug.Log($"Disabling feature set for {group}: {set.featureSetId}");
+                            }
+                        }
+
+                        // Apply "no feature set" state and clear any enabled features.
+                        OpenXRFeatureSetManager.SetFeaturesFromEnabledFeatureSets(group);
+                        ClearAllOpenXrFeatures(group);
+
+                        var settings = OpenXRSettings.GetSettingsForBuildTargetGroup(group);
+                        if (settings != null) EditorUtility.SetDirty(settings);
+                    }
+
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+
+                    // Give OpenXR validation time to settle with no custom runtime loaders.
+                    await WaitFramesAsync(2);
+
+                    // Phase 2: Enable the desired feature set on the requested group only, apply, save.
+                    targetSet.isEnabled = true;
+                    OpenXRFeatureSetManager.SetFeaturesFromEnabledFeatureSets(buildTargetGroup);
+
+                    var finalSettings = OpenXRSettings.GetSettingsForBuildTargetGroup(buildTargetGroup);
+                    if (finalSettings != null) EditorUtility.SetDirty(finalSettings);
+
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+
+                    Debug.Log($"Feature set '{targetSet.featureSetId}' enabled for '{buildTargetGroup}'.");
                 }
-            }
-
-            // Enable the specified feature set
-            featureSet.isEnabled = true;
-            OpenXRFeatureSetManager.SetFeaturesFromEnabledFeatureSets(buildTargetGroup);
-            AssetDatabase.SaveAssets();
-
-            Debug.Log($"Feature set '{featureSet.featureSetId}' has been enabled for build target group '{buildTargetGroup}'.");
-
+                finally
+                {
+                    s_IsSwitchingFeatureSet = false;
+                }
+            };
         }
 
         /// <summary>
@@ -775,6 +805,14 @@ namespace Styly.XRRig.SetupSdk
                 Debug.LogWarning($"Failed to modify PICO hand tracking settings: {e.Message}");
             }
         }
+
+        // Prevent overlapping transitions and define relevant groups for OpenXR feature set switching.
+        static bool s_IsSwitchingFeatureSet = false;
+        static readonly BuildTargetGroup[] s_RelevantGroups = new[]
+        {
+            BuildTargetGroup.Android,
+            BuildTargetGroup.Standalone
+        };
 
         class ScopedRegistry
         {

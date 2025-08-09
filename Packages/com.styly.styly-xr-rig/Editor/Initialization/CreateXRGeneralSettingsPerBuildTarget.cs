@@ -1,32 +1,65 @@
 using System.Linq;
 using UnityEditor;
 using UnityEditor.PackageManager;
+using System.IO;
+using UnityEditor.XR.Management;
+using UnityEngine;
+using UnityEngine.XR.Management;
 
-/// <summary>
-/// Restart Unity Editor after package installation
-/// </summary>
-class RestartUnityEditorAfterPackageInstallation
+public class CreateXRGeneralSettingsPerBuildTarget
 {
     [InitializeOnLoadMethod]
     static void ExecuteOnceAfterPackageInstallation()
     {
         if (IsFirstRun.IsFirstRunForVersion())
         {
-            if (EditorUtility.DisplayDialog("Restart Unity",
-                "You need to restart Unity to apply the new changes. Restart now?",
-                "Restart", "Later"))
-            {
-                // Restart Unity Editor
-                EditorApplication.OpenProject(System.Environment.CurrentDirectory);
-            }
-            else
-            {
-                // Inform the user to restart Unity manually
-                EditorUtility.DisplayDialog("Manual Restart Required",
-                    "Please close and reopen Unity to complete the update.",
-                    "OK");
-            }
+            InitializeXrPluginManagementForAllPlatforms();
         }
+    }
+
+    /// <summary>
+    /// Initializes XR Plug-in Management settings for all platforms.
+    /// </summary>
+    public static void InitializeXrPluginManagementForAllPlatforms()
+    {
+        InitializeXrPluginManagement(BuildTargetGroup.Standalone);
+        InitializeXrPluginManagement(BuildTargetGroup.Android);
+        InitializeXrPluginManagement(BuildTargetGroup.iOS);
+        InitializeXrPluginManagement(BuildTargetGroup.VisionOS);
+        AssetDatabase.SaveAssets();
+        Debug.Log("XR Plug-in Management is initialized.");
+    }
+
+    /// <summary>
+    /// Initializes XR Plug-in Management settings for a specific build target group.
+    /// </summary>
+    public static void InitializeXrPluginManagement(BuildTargetGroup group)
+    {
+        // 1) Obtain or create the per-build-target settings container
+        XRGeneralSettingsPerBuildTarget pbt;
+        if (!EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.k_SettingsKey, out pbt) || pbt == null)
+        {
+            pbt = ScriptableObject.CreateInstance<XRGeneralSettingsPerBuildTarget>();
+            Directory.CreateDirectory("Assets/XR");
+            var pbtPath = "Assets/XR/XRGeneralSettingsPerBuildTarget.asset";
+            AssetDatabase.CreateAsset(pbt, pbtPath);
+            EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, pbt, true);
+        }
+
+        // 2) Prepare XRGeneralSettings for the target group
+        if (!pbt.HasSettingsForBuildTarget(group)) pbt.CreateDefaultSettingsForBuildTarget(group);
+        var general = pbt.SettingsForBuildTarget(group);
+
+        // 3) Prepare XRManagerSettings
+        if (!pbt.HasManagerSettingsForBuildTarget(group)) pbt.CreateDefaultManagerSettingsForBuildTarget(group);
+        var manager = pbt.ManagerSettingsForBuildTarget(group);
+
+        // Link just in case (compatibility with older versions)
+        if (general.Manager == null) general.Manager = manager;
+
+        EditorUtility.SetDirty(pbt);
+        EditorUtility.SetDirty(general);
+        EditorUtility.SetDirty(manager);
     }
 
     /// <summary>
