@@ -13,7 +13,10 @@ namespace Styly.XRRig.SetupSdk
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
 
         private static async void SetUpSdkSettings()
-        {            
+        {
+            // Set Android Minimum API Level
+            SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel23);
+
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
 
