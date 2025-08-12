@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.XR.PXR;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -7,6 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 #if USE_PICO
+using Unity.XR.PXR;
 using Unity.XR.OpenXR.Features.PICOSupport;
 #endif
 
