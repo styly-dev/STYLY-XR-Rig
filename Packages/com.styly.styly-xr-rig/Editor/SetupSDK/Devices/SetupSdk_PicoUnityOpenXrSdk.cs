@@ -5,6 +5,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SetupSdk.SetupSdkUtils;
+#if USE_PICO
+using Unity.XR.OpenXR.Features.PICOSupport;
+#endif
 
 namespace Styly.XRRig.SetupSdk
 {
@@ -61,7 +64,17 @@ namespace Styly.XRRig.SetupSdk
 
             // Set isCameraSubsystem to true
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
-
+            
+            // Create the PICO project setting asset if it does not exist
+            // This is necessary for the PICO Hand Tracking feature to work properly
+            var picoProjectSetting = Resources.Load("PICOProjectSetting");
+#if USE_PICO
+            if (picoProjectSetting == null)
+            {
+                PICOProjectSetting.GetProjectConfig();
+            }
+#endif
+            
             // Configure PICO Hand Tracking
             SetupSdkUtils.ConfigurePicoHandTracking();
         }
