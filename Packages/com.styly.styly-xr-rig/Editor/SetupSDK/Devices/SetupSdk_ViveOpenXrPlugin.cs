@@ -34,8 +34,8 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.htc.vive.openxr.featureset.vivexr");
 
-            // Wait for 1 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(1);
+            // Wait for 2 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(2);
 
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]

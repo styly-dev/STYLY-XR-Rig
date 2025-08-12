@@ -33,8 +33,8 @@ namespace Styly.XRRig.SetupSdk
 #if USE_XREAL
             EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader));
 #endif
-            // Wait for 1 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(1);
+            // Wait for 2 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(2);
 
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]

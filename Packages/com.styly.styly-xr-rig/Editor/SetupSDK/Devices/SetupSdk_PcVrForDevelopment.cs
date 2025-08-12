@@ -31,8 +31,8 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Standalone, typeof(OpenXRLoader));
             // EnableXRFeatureSet(BuildTargetGroup.Standalone, "com.xxxx.xxxx.features");
 
-            // Wait for 1 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(1);
+            // Wait for 2 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(2);
             
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Standalone, new string[]
