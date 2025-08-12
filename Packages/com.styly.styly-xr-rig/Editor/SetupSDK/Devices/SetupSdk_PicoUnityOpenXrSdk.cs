@@ -66,30 +66,16 @@ namespace Styly.XRRig.SetupSdk
             // Set isCameraSubsystem to true
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
             
-            // Create the PICO project setting asset if it does not exist
-            // This is necessary for the PICO Hand Tracking feature to work properly
-            var picoProjectSetting = Resources.Load("PICOProjectSetting");
-#if USE_PICO
-            if (picoProjectSetting == null)
-            {
-                PICOProjectSetting.GetProjectConfig();
-            }
-#endif
+            // create PICOProjectSetting.asset if it does not exist
+            CreatePicoProjectSettingAsset();
             
             // Configure PICO Hand Tracking
             SetupSdkUtils.ConfigurePicoHandTracking();
             
-#if USE_PICO
             // Create PXR_PlatformSetting.asset if it does not exist
-            var platformInstance = PXR_PlatformSetting.Instance;
-            Debug.Log(platformInstance.appID);
-            if (platformInstance.appID == null)
-            {
-                platformInstance.appID = "";
-            }
-#endif
+            CreatePXRPlatformSettingAsset();
         }
-        
+
         #region CommonCode
         public static async void InstallPackage()
         {
@@ -105,5 +91,31 @@ namespace Styly.XRRig.SetupSdk
             SetUpSdkSettings();
         }
         #endregion
+        
+        private static void CreatePicoProjectSettingAsset()
+        {
+            // Create the PICO project setting asset if it does not exist
+            // This is necessary for the PICO Hand Tracking feature to work properly
+            var picoProjectSetting = Resources.Load("PICOProjectSetting");
+#if USE_PICO
+            if (picoProjectSetting == null)
+            {
+                PICOProjectSetting.GetProjectConfig();
+            }
+#endif
+        }
+        
+        private static void CreatePXRPlatformSettingAsset()
+        {
+#if USE_PICO
+            // Create PXR_PlatformSetting.asset if it does not exist
+            var platformInstance = PXR_PlatformSetting.Instance;
+            Debug.Log(platformInstance.appID);
+            if (platformInstance.appID == null)
+            {
+                platformInstance.appID = "";
+            }
+#endif
+        }
     }
 }
