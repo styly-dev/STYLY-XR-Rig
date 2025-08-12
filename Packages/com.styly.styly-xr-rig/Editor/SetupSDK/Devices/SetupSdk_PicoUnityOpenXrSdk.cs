@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.XR.PXR;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -77,6 +78,16 @@ namespace Styly.XRRig.SetupSdk
             
             // Configure PICO Hand Tracking
             SetupSdkUtils.ConfigurePicoHandTracking();
+            
+#if USE_PICO
+            // Create PXR_PlatformSetting.asset if it does not exist
+            var platformInstance = PXR_PlatformSetting.Instance;
+            Debug.Log(platformInstance.appID);
+            if (platformInstance.appID == null)
+            {
+                platformInstance.appID = "";
+            }
+#endif
         }
         
         #region CommonCode
