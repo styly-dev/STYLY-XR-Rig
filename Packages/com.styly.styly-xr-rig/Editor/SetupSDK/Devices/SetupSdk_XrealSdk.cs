@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+#if USE_XREAL
+using Unity.XR.XREAL;
+#endif
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -53,8 +56,9 @@ namespace Styly.XRRig.SetupSdk
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
 
             // ==== Extra settings for XREAL ====
-
-
+#if USE_XREAL
+            SetInitialInputSourceToHands();
+#endif
         }
 
         #region CommonCode
@@ -72,5 +76,69 @@ namespace Styly.XRRig.SetupSdk
             SetUpSdkSettings();
         }
         #endregion
+
+#if USE_XREAL
+        private static void SetInitialInputSourceToHands()
+        {
+            // find the XREALSettings asset in the project
+            XREALSettings xrealSettings = FindXREALSettingsAsset();
+        
+            if (xrealSettings == null)
+            {
+                Debug.LogError("XREALSettings asset not found in the project");
+                return;
+            }
+        
+            // Create a SerializedObject to modify the InitialInputSource property
+            SerializedObject serializedObject = new SerializedObject(xrealSettings);
+            SerializedProperty initialInputSourceProperty = serializedObject.FindProperty("InitialInputSource");
+        
+            if (initialInputSourceProperty != null)
+            {
+                Debug.Log($"Current InitialInputSource value: {initialInputSourceProperty.intValue}");
+
+                // Set the InitialInputSource to Hands (value: 2)
+                initialInputSourceProperty.intValue = 2;
+            
+                serializedObject.ApplyModifiedProperties();
+            
+                EditorUtility.SetDirty(xrealSettings);
+                AssetDatabase.SaveAssets();
+            
+                Debug.Log("InitialInputSource has been set to Hands (value: 2)");
+            }
+            else
+            {
+                Debug.LogError("InitialInputSource property not found in XREALSettings");
+            }
+        }
+        
+        /// <summary>
+        /// Finds the XREALSettings asset in the project.
+        /// </summary>
+        private static XREALSettings FindXREALSettingsAsset()
+        {
+            // AssetDatabase.FindAssets returns an array of GUIDs for assets that match the specified type
+            string[] guids = AssetDatabase.FindAssets($"t:{typeof(XREALSettings).Name}");
+        
+            if (guids.Length == 0)
+            {
+                Debug.LogWarning("No XREALSettings assets found in the project");
+                return null;
+            }
+        
+            if (guids.Length > 1)
+            {
+                Debug.LogWarning($"Multiple XREALSettings assets found in the project ({guids.Length}). Using the first one.");
+            }
+        
+            // Load the first found XREALSettings asset using its GUID
+            string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
+            XREALSettings settings = AssetDatabase.LoadAssetAtPath<XREALSettings>(assetPath);
+        
+            Debug.Log($"Found XREALSettings asset at: {assetPath}");
+            return settings;
+        }
+#endif
     }
 }
