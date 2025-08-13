@@ -420,6 +420,12 @@ namespace Styly.XRRig.SetupSdk
             {
                 var xrLoader = ScriptableObject.CreateInstance(loaderType) as XRLoader;
                 xrManagerSettings.TryAddLoader(xrLoader);
+                
+                var loaderAssetPath = $"Assets/XR/Loaders/{loaderType.Name}.asset";
+                AssetDatabase.CreateAsset(xrLoader, loaderAssetPath);
+                xrManagerSettings.TryAddLoader(xrLoader);
+                EditorUtility.SetDirty(xrLoader);
+                AssetDatabase.SaveAssets();
             }
 
             // Set the initialization mode to OnDemand or Automatic as needed
