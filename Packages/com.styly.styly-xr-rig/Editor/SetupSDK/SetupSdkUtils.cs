@@ -50,6 +50,18 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
+        /// Sets Android Minimum API Level using AndroidSdkVersions enum.
+        /// </summary>
+        public static void SetAndroidMinimumApiLevel(AndroidSdkVersions version)
+        {
+            if (PlayerSettings.Android.minSdkVersion == version) return;
+
+            PlayerSettings.Android.minSdkVersion = version;
+            Debug.Log($"Set Android Minimum API Level to {(int)version} ({version}).");
+            AssetDatabase.SaveAssets();
+        }
+
+        /// <summary>
         /// Sets the OpenXR Render Mode for the specified build target group.
         /// This will change the render mode to either "Single Pass" or "Multi Pass" depending on the mode specified.
         /// </summary>
@@ -408,6 +420,12 @@ namespace Styly.XRRig.SetupSdk
             {
                 var xrLoader = ScriptableObject.CreateInstance(loaderType) as XRLoader;
                 xrManagerSettings.TryAddLoader(xrLoader);
+                
+                var loaderAssetPath = $"Assets/XR/Loaders/{loaderType.Name}.asset";
+                AssetDatabase.CreateAsset(xrLoader, loaderAssetPath);
+                xrManagerSettings.TryAddLoader(xrLoader);
+                EditorUtility.SetDirty(xrLoader);
+                AssetDatabase.SaveAssets();
             }
 
             // Set the initialization mode to OnDemand or Automatic as needed

@@ -47,11 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UseBoundedModeForVisionOs: 0
-  BoundedVolumeCamera: {fileID: 11400000, guid: c9ed470b3c2874103983523e07d2528a,
-    type: 2}
-  UnBoundedVolumeCamera: {fileID: 11400000, guid: a0c3012ff03ff403d863e558d3950400,
-    type: 2}
-  CameraOffset: {fileID: 5334543195907239889}
+  BoundedVolumeCamera: {fileID: 0}
+  UnBoundedVolumeCamera: {fileID: 0}
+  CameraOffset: {fileID: 0}
   CameraHeightInEditor: 1.3
 --- !u!1 &6664475746926423262
 GameObject:
@@ -74,6 +72,7 @@ GameObject:
   - component: {fileID: 8350917714724710710}
   - component: {fileID: 309208983074670755}
   - component: {fileID: 9033487482681785171}
+  - component: {fileID: 1809524206583297602}
   m_Layer: 0
   m_Name: XRRigManager
   m_TagString: Untagged
@@ -258,6 +257,18 @@ MonoBehaviour:
   SecondaryInteractionGroupVariant: {fileID: 5634100613655797955, guid: 22cec44340d434e3c8f424730befa832,
     type: 3}
   AttachTo: {fileID: 8840584769326606986}
+--- !u!114 &1809524206583297602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6664475746926423262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ff8f6a6986645ba80e94f856c635bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8840584769326606986
 GameObject:
   m_ObjectHideFlags: 0
@@ -298,6 +309,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5778849293402468298}
     m_Modifications:
+    - target: {fileID: 672474568160651641, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 932545197216251793, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
         type: 3}
       propertyPath: m_Name
@@ -353,6 +369,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1267713160512907504, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1956381348160497355, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
         type: 3}
       propertyPath: m_ClearFlags
@@ -382,6 +403,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3656330326468574956, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4769305810017898753, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6029586211641139315, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7773554868081864343, guid: 8ea6960e82d7c419c93a7f4f18e7b06e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

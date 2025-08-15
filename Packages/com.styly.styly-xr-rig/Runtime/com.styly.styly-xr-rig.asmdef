@@ -6,7 +6,8 @@
         "GUID:a9420e37d7990b54abdef6688edbe313",
         "GUID:4fe4a1be2f2c04eecbd2036d47b4b310",
         "GUID:92703082f92b41ba80f0d6912de66115",
-        "GUID:fe685ec1767f73d42b749ea8045bfe43"
+        "GUID:fe685ec1767f73d42b749ea8045bfe43",
+        "GUID:d0a204fb2c62e9f4caca92f1c1e8c06b"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -20,6 +21,11 @@
             "name": "com.unity.polyspatial.visionos",
             "expression": "",
             "define": "USE_POLYSPATIAL"
+        },
+        {
+            "name": "com.htc.upm.vive.openxr",
+            "expression": "",
+            "define": "USE_VIVE"
         }
     ],
     "noEngineReferences": false

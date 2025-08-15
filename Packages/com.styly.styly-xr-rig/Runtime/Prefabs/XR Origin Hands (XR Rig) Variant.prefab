@@ -63,6 +63,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: XR Origin Hands (XR Rig) Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 6008492305507399660, guid: d6878e1999eb4b44a9f5a263af86c185,
+        type: 3}
+      propertyPath: 'm_ActionAssets.Array.data[0]'
+      value: 
+      objectReference: {fileID: -944628639613478452, guid: 20633288ef64e4124a7e9a7bfebc20fa,
+        type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -90,4 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 728ad7fae8e460a4ba41265c7308d757, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <trackablesChanged>k__BackingField:
+    m_PersistentCalls:
+      m_Calls: []
   m_AnchorPrefab: {fileID: 0}
