@@ -25,8 +25,8 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.VisionOS, typeof(UnityEngine.XR.VisionOS.VisionOSLoader));
 #endif
 
-            // Wait for 1 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(1);
+            // Wait for 2 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(2);
 
             // Fix all XR project validation issues
             XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.VisionOS);

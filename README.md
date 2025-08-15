@@ -87,6 +87,7 @@ Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
     - Set _added GameObject inside STYLY XR Rig
   - `HideHandMeshOnVisionOs.cs`
     - `Left Hand Visual`  
+  - `PassthroughSupport.cs`
 XR Origin Hands (XR Rig)  
 └Camera Offset  
 　└Left Hand  

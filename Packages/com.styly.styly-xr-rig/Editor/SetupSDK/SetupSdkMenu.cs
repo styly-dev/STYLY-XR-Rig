@@ -11,21 +11,21 @@ namespace Styly.XRRig.SetupSdk
         [MenuItem("File/Switch HMD SDKs/Switch to PICO Unity OpenXR SDK")]
         static void SwitchTo_PICO()
         {
-            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.VisionOS, BuildTarget.VisionOS);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             SetupSdk_PicoUnityOpenXrSdk.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to VIVE OpenXR Plugin")]
         static void SwitchTo_VIVE()
         {
-            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.VisionOS, BuildTarget.VisionOS);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             SetupSdk_ViveOpenXrPlugin.InstallPackage();
         }
 
         [MenuItem("File/Switch HMD SDKs/Switch to Meta OpenXR SDK")]
         static void SwitchTo_Meta()
         {
-            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.VisionOS, BuildTarget.VisionOS);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             SetupSdk_MetaOpenXrSdk.InstallPackage();
         }
 
@@ -39,7 +39,7 @@ namespace Styly.XRRig.SetupSdk
         [MenuItem("File/Switch HMD SDKs/Switch to XREAL SDK")]
         static void SwitchTo_Xreal()
         {
-            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.VisionOS, BuildTarget.VisionOS);
+            EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
             SetupSdk_XrealSdk.InstallPackage();
         }
 

@@ -5,6 +5,10 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.XR.OpenXR;
 using static Styly.XRRig.SetupSdk.SetupSdkUtils;
+#if USE_PICO
+using Unity.XR.PXR;
+using Unity.XR.OpenXR.Features.PICOSupport;
+#endif
 
 namespace Styly.XRRig.SetupSdk
 {
@@ -13,7 +17,10 @@ namespace Styly.XRRig.SetupSdk
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
 
         private static async void SetUpSdkSettings()
-        {            
+        {
+            // Set Android Minimum API Level
+            SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel26);
+
             // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
             ApplyStylyPipelineAsset();
 
@@ -30,8 +37,8 @@ namespace Styly.XRRig.SetupSdk
             EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
             EnableXRFeatureSet(BuildTargetGroup.Android, "com.picoxr.openxr.features");
 
-            // Wait for 1 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(1);
+            // Wait for 2 frame to ensure the OpenXR Loader is initialized
+            await WaitFramesAsync(2);
             
             // Enable OpenXR Features
             EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
@@ -58,11 +65,17 @@ namespace Styly.XRRig.SetupSdk
 
             // Set isCameraSubsystem to true
             SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
-
+            
+            // create PICOProjectSetting.asset if it does not exist
+            CreatePicoProjectSettingAsset();
+            
             // Configure PICO Hand Tracking
             SetupSdkUtils.ConfigurePicoHandTracking();
+            
+            // Create PXR_PlatformSetting.asset if it does not exist
+            CreatePXRPlatformSettingAsset();
         }
-        
+
         #region CommonCode
         public static async void InstallPackage()
         {
@@ -78,5 +91,31 @@ namespace Styly.XRRig.SetupSdk
             SetUpSdkSettings();
         }
         #endregion
+        
+        private static void CreatePicoProjectSettingAsset()
+        {
+            // Create the PICO project setting asset if it does not exist
+            // This is necessary for the PICO Hand Tracking feature to work properly
+            var picoProjectSetting = Resources.Load("PICOProjectSetting");
+#if USE_PICO
+            if (picoProjectSetting == null)
+            {
+                PICOProjectSetting.GetProjectConfig();
+            }
+#endif
+        }
+        
+        private static void CreatePXRPlatformSettingAsset()
+        {
+#if USE_PICO
+            // Create PXR_PlatformSetting.asset if it does not exist
+            var platformInstance = PXR_PlatformSetting.Instance;
+            Debug.Log(platformInstance.appID);
+            if (platformInstance.appID == null)
+            {
+                platformInstance.appID = "";
+            }
+#endif
+        }
     }
 }
