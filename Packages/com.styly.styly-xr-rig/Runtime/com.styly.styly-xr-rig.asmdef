@@ -27,6 +27,11 @@
             "name": "com.htc.upm.vive.openxr",
             "expression": "",
             "define": "USE_VIVE"
+        },
+        {
+            "name": "com.xreal.xr",
+            "expression": "",
+            "define": "USE_XREAL"
         }
     ],
     "noEngineReferences": false
