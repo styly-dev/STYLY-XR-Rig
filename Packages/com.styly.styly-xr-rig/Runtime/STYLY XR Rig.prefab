@@ -46,11 +46,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3eb85024d9e48048e4c26bab4eabad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UseBoundedModeForVisionOs: 0
-  BoundedVolumeCamera: {fileID: 0}
-  UnBoundedVolumeCamera: {fileID: 0}
-  CameraOffset: {fileID: 0}
-  CameraHeightInEditor: 1.3
 --- !u!1 &6664475746926423262
 GameObject:
   m_ObjectHideFlags: 0
