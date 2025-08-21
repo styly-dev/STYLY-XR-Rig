@@ -15,7 +15,10 @@ namespace Styly.XRRig
         {
             // Skip if running in the editor
             if (Application.isEditor) { return; }
-
+#if USE_XREAL
+            // Skip if using XREAL
+            return;
+#endif
             // Set the camera offset to zero
             SetCameraOffsetY_Zero();
         }
