@@ -12,14 +12,14 @@ namespace Styly.XRRig
             var leftSelect = Find("XRI Left Interaction/Select");
             if (leftSelect != null)
             {
-                leftSelect.AddBinding("<XREALHandTracking>/indexPressed")
+                leftSelect.AddBinding("<XREALHandTracking>{LeftHand}/indexPressed")
                     .WithInteraction("Press(pressPoint=0.5)");
             }
 
             var rightSelect = Find("XRI Right Interaction/Select");
             if (rightSelect != null)
             {
-                rightSelect.AddBinding("<XREALHandTracking>/indexPressed")
+                rightSelect.AddBinding("<XREALHandTracking>{RightHand}/indexPressed")
                     .WithInteraction("Press(pressPoint=0.5)");
             }
 
