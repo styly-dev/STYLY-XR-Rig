@@ -6,13 +6,13 @@ This XR Rig is currently used only in [STYLY for Vision Pro](https://apps.apple.
 
 # How to add STYLY-XR-Rig
 
-## Option 1
+## Add package
 
 ```
 openupm add -f com.styly.styly-xr-rig
 ```
 
-## Option 2 (If you use [STYLY-Spatial-Layer-Plugin](https://github.com/styly-dev/STYLY-Spatial-Layer-Plugin))
+## Add STYLY XR Rig to your scene
 Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in the `XR` section.  
   
 ![How To Add STYLY XR Rig](https://github.com/styly-dev/STYLY-XR-Rig/assets/387880/e84dde8e-8000-48ec-b5bf-4492d9e6db97)
@@ -59,45 +59,11 @@ The required samples are listed in `required_samples.json`
 - `XR Interaction Toolkit/x.x.x/visionOS`
 
 ## STYLY-XR-Rig structure
-Create `XR Origin Hands (XR Rig) Variant` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/XR Origin Hands (XR Rig)` in `Packages/com.styly.styly-xr-rig/Runtime/Prefabs/XR Origin Hands (XR Rig) Variant.prefab`
+Created `XR Origin Hands (XR Rig) Variant` from `Assets/Samples/XR Interaction Toolkit/x.x.x/Hands Interaction Demo/Prefabs/XR Origin Hands (XR Rig)` in `Packages/com.styly.styly-xr-rig/Runtime/Prefabs/XR Origin Hands (XR Rig) Variant.prefab`
+Renamed the variant to `STYLY XR Rig`
 
-Create prefab instance of `XR Origin Hands (XR Rig) Variant` under STYLY-XR-Rig
+Added scripts and components to the Rig prefab. The changes can be viewed on the prefab overrides menu.
+<img width="844" height="609" alt="STYLY-XR-Rig_Prefab_Overrides" src="https://github.com/user-attachments/assets/81d11240-4257-4260-b9dd-4f03ae14030e" />
 
-Add `ARAnchorManager.cs` to `XR Origin Hands (XR Rig) Variant` and set enabled. This manager script cannot be added at runtime.
 
-Create empty prefab `_Added`
-Create empty prefab `XRRigManager` as a child of `_Added` and attach scripts
-
-- Scripts from XR Interaction Toolkit  
-  - `Packages/com.unity.xr.interaction.toolkit/Runtime/Interaction/XRInteractionManager.cs`
-
-- Scripts from /Runtime/Scripts  
-  - `AddVisionOSHoverEffect.cs`
-  - `ARMeshManagerAttacher.cs`
-  - `ARPlaneManagerAttacher.cs`
-  - `ARSessionCreator.cs`
-  - `ARTrackedImageManagerAttacher.cs`
-  - `DisableAnotherMainCameraAndAudioListener.cs`
-  - `DisableLocomotion.cs`
-  - `EnableOpenXrPassthrough.cs`
-  - `SetCameraYOffsetZeroOnBuildApp.cs`
-  - `InteractionGroupAttacher.cs`
-    - Set PrimaryInteractionGroup prefab from XRI visionOS sample
-    - Set SecondaryInteractionGroupVariant prefab from XRI visionOS sample
-    - Set _added GameObject inside STYLY XR Rig
-  - `HideHandMeshOnVisionOs.cs`
-    - `Left Hand Visual`  
-  - `PassthroughSupport.cs`
-XR Origin Hands (XR Rig)  
-└Camera Offset  
-　└Left Hand  
-　　└Left Hand Interaction Visual  
-　　　└LeftHand  
-
-    - `Left Pinch Visual`  
-XR Origin Hands (XR Rig)  
-└Camera Offset  
-　└Left Hand  
-　　└Pinch Point Stabilized  
-　　　└Pinch Visual  
 
