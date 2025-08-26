@@ -50,6 +50,15 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
+        /// Prepares the SDK installation by initializing necessary settings.
+        /// </summary>
+        public static void PrepareSdkInstallation()
+        {
+            // Initialize XRGeneralSettingsPerBuildTarget.asset if it does not exist
+            InitializeXrPluginManagementForAllPlatforms();
+        }
+
+        /// <summary>
         /// Sets Android Minimum API Level using AndroidSdkVersions enum.
         /// </summary>
         public static void SetAndroidMinimumApiLevel(AndroidSdkVersions version)
@@ -438,6 +447,55 @@ namespace Styly.XRRig.SetupSdk
             AssetDatabase.SaveAssets();
 
             Debug.Log($"{loaderType.Name} has been enabled successfully for {buildTargetGroup}.");
+        }
+
+        /// <summary>
+        /// Initializes XR Plug-in Management settings for all platforms.
+        /// This code will generate /Assets/XR/XRGeneralSettingsPerBuildTarget.asset
+        /// </summary>
+        public static void InitializeXrPluginManagementForAllPlatforms()
+        {
+            Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+            object result = ReflectionHelper.CallInternalGetOrCreate(internalType);
+
+            EnsureDefaults(BuildTargetGroup.Standalone);
+            EnsureDefaults(BuildTargetGroup.Android);
+            EnsureDefaults(BuildTargetGroup.iOS);
+            EnsureDefaults(BuildTargetGroup.VisionOS);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("Initialized XR Plug-in Management for all platforms.");
+
+            static void EnsureDefaults(BuildTargetGroup group)
+            {
+                Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+                var s = ReflectionHelper.CallInternalGetOrCreate(internalType) as XRGeneralSettingsPerBuildTarget;
+                if (s == null)
+                    throw new Exception("Failed to get XRGeneralSettingsPerBuildTarget instance.");
+                if (!s.HasSettingsForBuildTarget(group))
+                    s.CreateDefaultSettingsForBuildTarget(group);
+                if (!s.HasManagerSettingsForBuildTarget(group))
+                    s.CreateDefaultManagerSettingsForBuildTarget(group);
+            }
+        }
+        
+        /// <summary>
+        /// Helper class for reflection-related utility to call internal method.
+        /// </summary>
+        public static class ReflectionHelper
+        {
+            public static object CallInternalGetOrCreate(Type targetType, params object[] parameters)
+            {
+                // Find the internal static method "GetOrCreate"
+                MethodInfo method = targetType.GetMethod(
+                    "GetOrCreate",
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public
+                ) ?? throw new Exception("Method 'GetOrCreate' not found.");
+
+                // Invoke the method (null for static)
+                return method.Invoke(null, parameters);
+            }
         }
 
         /// <summary>

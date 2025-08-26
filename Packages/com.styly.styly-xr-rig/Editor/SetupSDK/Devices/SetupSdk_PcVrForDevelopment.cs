@@ -12,55 +12,83 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = null;
 
-        private static async void SetUpSdkSettings()
+        private static void SetUpSdkSettings()
         {
-            // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
-            ApplyStylyPipelineAsset();
+            EditorApplication.delayCall += Step1;
 
-            // Use the new input system only
-            UseNewInputSystemOnly();
-
-            // // Set graphics APIs to Vulkan and OpenGLES3
-            // SetGraphicsAPIs(BuildTarget.Android,
-            //     new List<GraphicsDeviceType> {
-            //         GraphicsDeviceType.Vulkan,
-            //         GraphicsDeviceType.OpenGLES3
-            //     });
-
-            // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Standalone, typeof(OpenXRLoader));
-            // EnableXRFeatureSet(BuildTargetGroup.Standalone, "com.xxxx.xxxx.features");
-
-            // Wait for 2 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(2);
-            
-            // Enable OpenXR Features
-            EnableOpenXrFeatures(BuildTargetGroup.Standalone, new string[]
+            void Step1()  // Enable the OpenXR Loader
             {
+                EnableXRPlugin(BuildTargetGroup.Standalone, typeof(OpenXRLoader));
+
+                EditorApplication.delayCall += Step2;
+            }
+
+            void Step2() // Enable the XR Feature Set
+            {
+                // Nothing to do
+
+                EditorApplication.delayCall += Step3;
+            }
+
+            void Step3() // Enable OpenXR Features
+            {
+                EnableOpenXrFeatures(BuildTargetGroup.Standalone, new string[]
+                {
                 "com.unity.openxr.feature.input.handtracking",
                 "com.unity.openxr.feature.compositionlayers"
-            });
+                });
 
-            // Enable Interaction Profiles
-            EnableInteractionProfiles(BuildTargetGroup.Standalone, new string[]
+                EditorApplication.delayCall += Step4;
+            }
+
+            void Step4() // Enable Interaction Profiles
             {
+                EnableInteractionProfiles(BuildTargetGroup.Standalone, new string[]
+                {
                 "com.unity.openxr.feature.input.handinteraction",
                 "com.unity.openxr.feature.input.khrsimpleprofile"
-            });
+                });
 
-            // Set OpenXR Render Mode to MultiPass
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Standalone);
+                EditorApplication.delayCall += Step5;
+            }
 
-            // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Standalone);
+            void Step5() // Setup Other Settings
+            {
+                // Set Android Minimum API Level
+                // Nothing to do
 
-            // ==== Extra settings for PCVR ====
+                // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+                ApplyStylyPipelineAsset();
 
+                // Use the new input system only
+                UseNewInputSystemOnly();
+
+                // Set graphics APIs
+                // Nothing to do
+
+                // Set OpenXR Render Mode
+                SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Standalone);
+
+                EditorApplication.delayCall += Step6;
+            }
+
+            void Step6() // Fix XR Project Validation Issues
+            {
+                XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Standalone);
+
+                EditorApplication.delayCall += Step7;
+            }
+
+            void Step7() // Additional Settings
+            {
+                // Nothing to do
+            }
         }
 
         #region CommonCode
         public static async void InstallPackage()
         {
+            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }

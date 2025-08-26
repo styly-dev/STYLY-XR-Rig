@@ -11,34 +11,30 @@ namespace Styly.XRRig.SetupSdk
     public class SetupSdk_AndroidXR
     {
         private static readonly string packageIdentifier = "com.unity.xr.androidxr-openxr@1.0.1";
-        
-        private static async void SetUpSdkSettings()
+
+        private static void SetUpSdkSettings()
         {
-            // Set Android Minimum API Level
-            SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel24);
 
-            // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
-            ApplyStylyPipelineAsset();
+            EditorApplication.delayCall += Step1;
 
-            // Use the new input system only
-            UseNewInputSystemOnly();
-
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan
-                });
-
-            // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.unity.openxr.featureset.android");
-
-            // Wait for 2 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(2);
-
-            // Enable OpenXR Features
-            EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
+            void Step1()  // Enable the OpenXR Loader
             {
+                EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
+
+                EditorApplication.delayCall += Step2;
+            }
+
+            void Step2() // Enable the XR Feature Set
+            {
+                EnableXRFeatureSet(BuildTargetGroup.Android, "com.unity.openxr.featureset.android");
+
+                EditorApplication.delayCall += Step3;
+            }
+
+            void Step3() // Enable OpenXR Features
+            {
+                EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
+                {
                 "com.unity.openxr.feature.androidxr-support",
                 "com.unity.openxr.feature.arfoundation-androidxr-anchor",
                 "com.unity.openxr.feature.arfoundation-androidxr-camera",
@@ -49,20 +45,56 @@ namespace Styly.XRRig.SetupSdk
                 "com.unity.openxr.feature.arfoundation-androidxr-session",
                 "com.unity.openxr.feature.androidxr-display-utilities",
                 "com.unity.openxr.feature.androidxr-hand-mesh-data"
-            });
+                });
 
-            // Enable Interaction Profiles
-            EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
+                EditorApplication.delayCall += Step4;
+            }
+
+            void Step4() // Enable Interaction Profiles
             {
+                EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
+                {
                 "com.unity.openxr.feature.input.handinteraction",
                 "com.unity.openxr.feature.input.khrsimpleprofile"
-            });
+                });
 
-            // Set OpenXR Render Mode to MultiPass
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+                EditorApplication.delayCall += Step5;
+            }
 
-            // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+            void Step5() // Setup Other Settings
+            {
+                // Set Android Minimum API Level
+                SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel24);
+
+                // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+                ApplyStylyPipelineAsset();
+
+                // Use the new input system only
+                UseNewInputSystemOnly();
+
+                // Set graphics APIs to Vulkan and OpenGLES3
+                SetGraphicsAPIs(BuildTarget.Android,
+                    new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.Vulkan
+                    });
+
+                // Set OpenXR Render Mode
+                SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+
+                EditorApplication.delayCall += Step6;
+            }
+
+            void Step6() // Fix XR Project Validation Issues
+            {
+                XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+
+                EditorApplication.delayCall += Step7;
+            }
+
+            void Step7() // Additional Settings
+            {
+                // Nothing to do
+            }
 
             // ==== Extra settings for Android XR ====
 
@@ -79,6 +111,7 @@ namespace Styly.XRRig.SetupSdk
         #region CommonCode
         public static async void InstallPackage()
         {
+            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }
