@@ -441,6 +441,55 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
+        /// Initializes XR Plug-in Management settings for all platforms.
+        /// This code will generate /Assets/XR/XRGeneralSettingsPerBuildTarget.asset
+        /// </summary>
+        public static void InitializeXrPluginManagementForAllPlatforms()
+        {
+            Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+            object result = ReflectionHelper.CallInternalGetOrCreate(internalType);
+
+            EnsureDefaults(BuildTargetGroup.Standalone);
+            EnsureDefaults(BuildTargetGroup.Android);
+            EnsureDefaults(BuildTargetGroup.iOS);
+            EnsureDefaults(BuildTargetGroup.VisionOS);
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            Debug.Log("Initialized XR Plug-in Management for all platforms.");
+
+            static void EnsureDefaults(BuildTargetGroup group)
+            {
+                Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+                var s = ReflectionHelper.CallInternalGetOrCreate(internalType) as XRGeneralSettingsPerBuildTarget;
+                if (s == null)
+                    throw new Exception("Failed to get XRGeneralSettingsPerBuildTarget instance.");
+                if (!s.HasSettingsForBuildTarget(group))
+                    s.CreateDefaultSettingsForBuildTarget(group);
+                if (!s.HasManagerSettingsForBuildTarget(group))
+                    s.CreateDefaultManagerSettingsForBuildTarget(group);
+            }
+        }
+        
+        /// <summary>
+        /// Helper class for reflection-related utility to call internal method.
+        /// </summary>
+        public static class ReflectionHelper
+        {
+            public static object CallInternalGetOrCreate(Type targetType, params object[] parameters)
+            {
+                // Find the internal static method "GetOrCreate"
+                MethodInfo method = targetType.GetMethod(
+                    "GetOrCreate",
+                    BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Public
+                ) ?? throw new Exception("Method 'GetOrCreate' not found.");
+
+                // Invoke the method (null for static)
+                return method.Invoke(null, parameters);
+            }
+        }
+
+        /// <summary>
         /// Enables a specific OpenXR feature set for the given build target group.
         /// Applies in two phases across multiple groups and frames to avoid custom runtime loader conflicts.
         /// </summary>
