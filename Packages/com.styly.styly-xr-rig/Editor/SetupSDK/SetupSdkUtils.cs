@@ -50,6 +50,15 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
+        /// Prepares the SDK installation by initializing necessary settings.
+        /// </summary>
+        public static void PrepareSdkInstallation()
+        {
+            // Initialize XRGeneralSettingsPerBuildTarget.asset if it does not exist
+            InitializeXrPluginManagementForAllPlatforms();
+        }
+
+        /// <summary>
         /// Sets Android Minimum API Level using AndroidSdkVersions enum.
         /// </summary>
         public static void SetAndroidMinimumApiLevel(AndroidSdkVersions version)
