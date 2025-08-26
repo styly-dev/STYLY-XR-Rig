@@ -16,69 +16,99 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "https://github.com/Pico-Developer/PICO-Unity-OpenXR-SDK.git#release_1.4.0";
 
-        private static async void SetUpSdkSettings()
+        private static void SetUpSdkSettings()
         {
-            // Set Android Minimum API Level
-            SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel26);
+            EditorApplication.delayCall += Step1;
 
-            // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
-            ApplyStylyPipelineAsset();
-
-            // Use the new input system only
-            UseNewInputSystemOnly();
-
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.OpenGLES3
-                });
-
-            // Enable the OpenXR Loader and set the XR Feature Set
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
-            EnableXRFeatureSet(BuildTargetGroup.Android, "com.picoxr.openxr.features");
-
-            // Wait for 2 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(2);
-            
-            // Enable OpenXR Features
-            EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
+            void Step1()  // Enable the OpenXR Loader
             {
+                EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
+
+                EditorApplication.delayCall += Step2;
+            }
+
+            void Step2() // Enable the XR Feature Set
+            {
+                EnableXRFeatureSet(BuildTargetGroup.Android, "com.picoxr.openxr.features");
+
+                EditorApplication.delayCall += Step3;
+            }
+
+            void Step3() // Enable OpenXR Features
+            {
+                EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
+                {
                 "com.unity.openxr.feature.input.handtracking",
                 "com.pico.openxr.feature.passthrough"
-            });
+                });
 
-            // Enable Interaction Profiles
-            EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
+                EditorApplication.delayCall += Step4;
+            }
+
+            void Step4() // Enable Interaction Profiles
             {
+                EnableInteractionProfiles(BuildTargetGroup.Android, new string[]
+                {
                 "com.unity.openxr.feature.input.handinteraction",
                 "com.unity.openxr.feature.input.PICO4touch",
                 "com.unity.openxr.feature.input.PICO4Ultratouch"
-            });
+                });
 
-            // Set OpenXR Render Mode to MultiPass
-            SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+                EditorApplication.delayCall += Step5;
+            }
 
-            // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+            void Step5() // Setup Other Settings
+            {
+                // Set Android Minimum API Level
+                SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel26);
 
-            // ==== Extra settings for PICO XR ==== 
+                // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+                ApplyStylyPipelineAsset();
 
-            // Set isCameraSubsystem to true
-            SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
-            
-            // create PICOProjectSetting.asset if it does not exist
-            CreatePicoProjectSettingAsset();
-            
-            // Configure PICO Hand Tracking
-            SetupSdkUtils.ConfigurePicoHandTracking();
-            
-            // Create PXR_PlatformSetting.asset if it does not exist
-            CreatePXRPlatformSettingAsset();
+                // Use the new input system only
+                UseNewInputSystemOnly();
+
+                // Set graphics APIs
+                SetGraphicsAPIs(BuildTarget.Android,
+                    new List<GraphicsDeviceType> {
+                    GraphicsDeviceType.OpenGLES3
+                    });
+
+                // Set OpenXR Render Mode
+                SetRenderMode(OpenXRSettings.RenderMode.MultiPass, BuildTargetGroup.Android);
+
+                EditorApplication.delayCall += Step6;
+            }
+
+            void Step6() // Fix XR Project Validation Issues
+            {
+                XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.Android);
+
+                EditorApplication.delayCall += Step7;
+            }
+
+            void Step7() // Additional Settings
+            {
+                // ==== Extra settings for PICO XR ==== 
+
+                // Set isCameraSubsystem to true
+                SetFieldValueOfOpenXrFeature(BuildTargetGroup.Android, "com.pico.openxr.feature.passthrough", "isCameraSubsystem", true);
+
+                // create PICOProjectSetting.asset if it does not exist
+                CreatePicoProjectSettingAsset();
+
+                // Configure PICO Hand Tracking
+                SetupSdkUtils.ConfigurePicoHandTracking();
+
+                // Create PXR_PlatformSetting.asset if it does not exist
+                CreatePXRPlatformSettingAsset();
+            }
         }
 
         #region CommonCode
         public static async void InstallPackage()
         {
+            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }
@@ -91,7 +121,7 @@ namespace Styly.XRRig.SetupSdk
             SetUpSdkSettings();
         }
         #endregion
-        
+
         private static void CreatePicoProjectSettingAsset()
         {
             // Create the PICO project setting asset if it does not exist
@@ -104,7 +134,7 @@ namespace Styly.XRRig.SetupSdk
             }
 #endif
         }
-        
+
         private static void CreatePXRPlatformSettingAsset()
         {
 #if USE_PICO

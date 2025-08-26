@@ -26,6 +26,8 @@ namespace Styly.XRRig.SetupSdk
         public static void TestFunc()
         {
             // You can add more test logic here if needed
+            string packageIdentifier = "com.htc.upm.vive.openxr@2.5.1";
+            AddUnityPackage(packageIdentifier);
 
         }
     }

@@ -12,32 +12,77 @@ namespace Styly.XRRig.SetupSdk
     {
         private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.2.4";
 
-        private static async void SetUpSdkSettings()
+        private static void SetUpSdkSettings()
         {
-            // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
-            ApplyStylyPipelineAsset();
+            EditorApplication.delayCall += Step1;
 
-            // Use the new input system only
-            UseNewInputSystemOnly();
-
-            // Enable the OpenXR Loader and set the XR Feature Set
+            void Step1()  // Enable the OpenXR Loader
+            {
 #if USE_POLYSPATIAL
             EnableXRPlugin(BuildTargetGroup.VisionOS, typeof(UnityEngine.XR.VisionOS.VisionOSLoader));
 #endif
 
-            // Wait for 2 frame to ensure the OpenXR Loader is initialized
-            await WaitFramesAsync(2);
+                EditorApplication.delayCall += Step2;
+            }
 
-            // Fix all XR project validation issues
-            XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.VisionOS);
+            void Step2() // Enable the XR Feature Set
+            {
+                // Nothing to do
 
-            // ==== Extra settings for PolySpatial (visionOS) ====
+                EditorApplication.delayCall += Step3;
+            }
 
+            void Step3() // Enable OpenXR Features
+            {
+                // Nothing to do
+
+                EditorApplication.delayCall += Step4;
+            }
+
+            void Step4() // Enable Interaction Profiles
+            {
+                // Nothing to do
+
+                EditorApplication.delayCall += Step5;
+            }
+
+            void Step5() // Setup Other Settings
+            {
+                // Set Android Minimum API Level
+                // Nothing to do
+
+                // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+                ApplyStylyPipelineAsset();
+
+                // Use the new input system only
+                UseNewInputSystemOnly();
+
+                // Set graphics APIs
+                // Nothing to do
+
+                // Set OpenXR Render Mode
+                // Nothing to do
+
+                EditorApplication.delayCall += Step6;
+            }
+
+            void Step6() // Fix XR Project Validation Issues
+            {
+                XRProjectValidationFixAll.FixAllIssues(BuildTargetGroup.VisionOS);
+
+                EditorApplication.delayCall += Step7;
+            }
+
+            void Step7() // Additional Settings
+            {
+                // Nothing to do
+            }
         }
 
         #region CommonCode
         public static async void InstallPackage()
         {
+            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }
