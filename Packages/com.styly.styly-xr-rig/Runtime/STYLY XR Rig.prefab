@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 2907708859642309068}
   - component: {fileID: 1901460064738478333}
   - component: {fileID: 4321886860393714057}
+  - component: {fileID: 129172355910230854}
   m_Layer: 0
   m_Name: STYLY XR RigManager
   m_TagString: Untagged
@@ -233,6 +234,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xriActions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
+--- !u!114 &129172355910230854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591456111131864104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad7d9ccec2bb44c4b0797d02ca2e0f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 932545197216251794}
+  moveSpeed: 5
+  lookSensitivity: 8
 --- !u!1001 &1313010322738206687
 PrefabInstance:
   m_ObjectHideFlags: 0
