@@ -56,32 +56,21 @@ namespace Styly.XRRig.SetupSdk
             SetupSdk_PcVrForDevelopment.InstallPackage();
         }
 
-        [MenuItem("File/Setup HMD SDKs/Remove all SDK packages")]
-        static void RemoveAllSDKs()
-        {
-            // Remove all SDK packages from the project
-            SetupSdk.RemoveAllSdks();
-
-            // Set graphics APIs to Vulkan and OpenGLES3
-            SetGraphicsAPIs(BuildTarget.Android,
-                new List<GraphicsDeviceType> {
-                    GraphicsDeviceType.Vulkan,
-                    GraphicsDeviceType.OpenGLES3
-                });
-        }
-
+#if STYLY_EXPERIMENTAL
         [MenuItem("File/Setup HMD SDKs/[Debug] Debug All Available identifiers for XR")]
         static void DebugAllAvailableInfoForAndroid()
         {
-            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Android);
             SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Standalone);
+            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.Android);
+            SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.iOS);
             SetupSdkUtils.DebugAllAvailableInfo(BuildTargetGroup.VisionOS);
         }
 
         [MenuItem("File/Setup HMD SDKs/Test Function")]
         static void TestFunc()
         {
-            SetupSdk.TestFunc();
+
         }
+#endif
     }
 }
