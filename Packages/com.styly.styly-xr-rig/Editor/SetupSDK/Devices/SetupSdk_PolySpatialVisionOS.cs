@@ -10,15 +10,18 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_PolySpatialVisionOS
     {
-        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.3.1";
+        // Setup code for VisionOS is different from code for other SDKs.
+        // InstallPackageAndAssignLoaderForBuildTarget cannot take SDK version.
+        // Set com.unity.xr.visionos instead of com.unity.polyspatial.visionos
+        private static readonly string packageIdentifier = "com.unity.xr.visionos"; 
 
         private static void SetUpSdkSettings()
         {
             EditorApplication.delayCall += Step1;
 
-            void Step1()  // Enable the visionOS Loader
+            void Step1()  // Enable Loader
             {
-                InstallPackageAndAssignLoaderForBuildTarget("com.unity.xr.visionos", "UnityEngine.XR.VisionOS.VisionOSLoader", BuildTargetGroup.VisionOS);
+                // Nothing to do
 
                 EditorApplication.delayCall += Step2;
             }
@@ -77,10 +80,11 @@ namespace Styly.XRRig.SetupSdk
             }
         }
 
-        #region CommonCode
+        #region CodeForVisionOS
         public static async void InstallPackage()
         {
-            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+            // Install package and assign loader
+            if (InstallPackageAndAssignLoaderForBuildTarget("com.unity.xr.visionos", "UnityEngine.XR.VisionOS.VisionOSLoader", BuildTargetGroup.VisionOS)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }
 
