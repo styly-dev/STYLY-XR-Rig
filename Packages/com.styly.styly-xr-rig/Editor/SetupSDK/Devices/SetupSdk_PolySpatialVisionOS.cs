@@ -18,9 +18,7 @@ namespace Styly.XRRig.SetupSdk
 
             void Step1()  // Enable the OpenXR Loader
             {
-#if USE_POLYSPATIAL
-            EnableXRPlugin(BuildTargetGroup.VisionOS, typeof(UnityEngine.XR.VisionOS.VisionOSLoader));
-#endif
+                EnableXRPlugin(BuildTargetGroup.VisionOS, "UnityEngine.XR.VisionOS.VisionOSLoader");
 
                 EditorApplication.delayCall += Step2;
             }
