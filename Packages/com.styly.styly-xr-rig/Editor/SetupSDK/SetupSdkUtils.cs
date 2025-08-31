@@ -16,6 +16,7 @@ using UnityEngine.Rendering;
 using UnityEditor.Rendering;
 using System.Threading.Tasks;
 using UnityEditor.Compilation;
+using UnityEditor.XR.Management.Metadata;
 
 namespace Styly.XRRig.SetupSdk
 {
@@ -55,7 +56,35 @@ namespace Styly.XRRig.SetupSdk
         public static void PrepareSdkInstallation()
         {
             // Initialize XRGeneralSettingsPerBuildTarget.asset if it does not exist
-            InitializeXrPluginManagementForAllPlatforms();
+            // InitializeXrPluginManagementForAllPlatforms();
+        }
+
+        /// <summary>
+        /// Installs a package and assigns a loader for the specified build target group.
+        /// </summary>
+        /// <param name="packageId"></param>
+        /// <param name="loaderType"></param>
+        /// <param name="buildTargetGroup"></param>
+        public static void InstallPackageAndAssignLoaderForBuildTarget(string packageId, string loaderType, BuildTargetGroup buildTargetGroup)
+        {
+            // Get the XRPackageMetadataStore type  
+            Type metadataStoreType = Type.GetType("UnityEditor.XR.Management.Metadata.XRPackageMetadataStore, Unity.XR.Management.Editor");
+
+            if (metadataStoreType != null)
+            {
+                // Get the method  
+                MethodInfo method = metadataStoreType.GetMethod("InstallPackageAndAssignLoaderForBuildTarget",
+                    BindingFlags.NonPublic | BindingFlags.Static);
+                if (method != null)
+                {
+                    // Invoke the method  
+                    method.Invoke(null, new object[] {
+                        packageId,
+                        loaderType,
+                        buildTargetGroup
+                    });
+                }
+            }
         }
 
         /// <summary>
@@ -385,101 +414,91 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
-        /// Enables a specific XR plugin for the given build target group.
-        /// /// Data will be saved to `Assets/XR/XRGeneralSettingsPerBuildTarget.asset`
+        /// Enables an XR plugin for a specific build target group.
         /// </summary>
-        /// <param name="buildTargetGroup">The build target group for which to enable the plugin.</param>
-        /// <param name="loaderType">The type of the XRLoader to enable (e.g. UnityEngine.XR.OpenXR.OpenXRLoader).</param>
-        /// <example>
-        /// EnableXRPlugin(BuildTargetGroup.Standalone, typeof(UnityEngine.XR.OpenXR.OpenXRLoader));
-        /// </example>
-        public static void EnableXRPlugin(BuildTargetGroup buildTargetGroup, Type loaderType)
+        /// <param name="buildTargetGroup"></param>
+        /// <param name="loaderType"></param>
+        public static void EnableXRPlugin(BuildTargetGroup buildTargetGroup, string loaderType)
         {
-            Debug.Log($"Enabling {loaderType.Name} for {buildTargetGroup}...");
+            Debug.Log($"Enabling {loaderType} for {buildTargetGroup}...");
 
-            // Get the current XRGeneralSettings instance
-            XRGeneralSettings xrGeneralSettings = XRGeneralSettingsPerBuildTarget.XRGeneralSettingsForBuildTarget(buildTargetGroup);
+            var xrg = EnsureGeneralSettingsAsset();
+            if (!xrg.HasSettingsForBuildTarget(buildTargetGroup)) xrg.CreateDefaultSettingsForBuildTarget(buildTargetGroup);
+            if (!xrg.HasManagerSettingsForBuildTarget(buildTargetGroup)) xrg.CreateDefaultManagerSettingsForBuildTarget(buildTargetGroup);
 
-            if (xrGeneralSettings == null)
-            {
-                Debug.LogError("XRGeneralSettings is null. Make sure XR Plugin Management is installed and configured.");
-                return;
-            }
-
-            // Get or create the XRManagerSettings instance
-            XRManagerSettings xrManagerSettings = xrGeneralSettings.AssignedSettings;
-            if (xrManagerSettings == null)
-            {
-                xrManagerSettings = ScriptableObject.CreateInstance<XRManagerSettings>();
-                xrGeneralSettings.AssignedSettings = xrManagerSettings;
-            }
+            var xrManagerSettings = xrg.ManagerSettingsForBuildTarget(buildTargetGroup);
+            xrManagerSettings.automaticLoading = true;
+            xrManagerSettings.automaticRunning = true;
 
             // Loop through existing loaders and disable them if they are not the one we want to enable
             foreach (var loader in xrManagerSettings.activeLoaders.ToList())
             {
-                if (loader.GetType() != loaderType)
+                if (loader.GetType().ToString() != loaderType)
                 {
-                    xrManagerSettings.TryRemoveLoader(loader);
+                    XRPackageMetadataStore.RemoveLoader(xrManagerSettings, loader.GetType().ToString(), buildTargetGroup);
                     Debug.Log($"Disabling loader: {loader.GetType().Name}");
                 }
             }
 
             // Enable the specified loader if it's not already enabled
-            if (!xrManagerSettings.activeLoaders.Any(loader => loader.GetType() == loaderType))
+            if (!xrManagerSettings.activeLoaders.Any(loader => loader.GetType().ToString() == loaderType))
             {
-                var xrLoader = ScriptableObject.CreateInstance(loaderType) as XRLoader;
-                xrManagerSettings.TryAddLoader(xrLoader);
-                
-                var loaderAssetPath = $"Assets/XR/Loaders/{loaderType.Name}.asset";
-                AssetDatabase.CreateAsset(xrLoader, loaderAssetPath);
-                xrManagerSettings.TryAddLoader(xrLoader);
-                EditorUtility.SetDirty(xrLoader);
-                AssetDatabase.SaveAssets();
+                if (!XRPackageMetadataStore.IsLoaderAssigned(loaderType, buildTargetGroup))
+                {
+                    var ok = XRPackageMetadataStore.AssignLoader(xrManagerSettings, loaderType, buildTargetGroup);
+                    Debug.Log(ok
+                        ? loaderType + " assigned."
+                        : "Failed to assign " + loaderType + ". Is the package installed?");
+                }
             }
 
-            // Set the initialization mode to OnDemand or Automatic as needed
-            xrManagerSettings.automaticLoading = true;
-            xrManagerSettings.automaticRunning = true;
-
-            // Save the changes
-            EditorUtility.SetDirty(xrGeneralSettings);
-            EditorUtility.SetDirty(xrManagerSettings);
-            AssetDatabase.SaveAssets();
-
-            Debug.Log($"{loaderType.Name} has been enabled successfully for {buildTargetGroup}.");
+            Debug.Log($"{loaderType} has been enabled successfully for {buildTargetGroup}.");
         }
 
-        /// <summary>
-        /// Initializes XR Plug-in Management settings for all platforms.
-        /// This code will generate /Assets/XR/XRGeneralSettingsPerBuildTarget.asset
-        /// </summary>
-        public static void InitializeXrPluginManagementForAllPlatforms()
+        static XRGeneralSettingsPerBuildTarget EnsureGeneralSettingsAsset()
         {
-            Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
-            object result = ReflectionHelper.CallInternalGetOrCreate(internalType);
-
-            EnsureDefaults(BuildTargetGroup.Standalone);
-            EnsureDefaults(BuildTargetGroup.Android);
-            EnsureDefaults(BuildTargetGroup.iOS);
-            EnsureDefaults(BuildTargetGroup.VisionOS);
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Debug.Log("Initialized XR Plug-in Management for all platforms.");
-
-            static void EnsureDefaults(BuildTargetGroup group)
+            if (!EditorBuildSettings.TryGetConfigObject(XRGeneralSettings.k_SettingsKey, out XRGeneralSettingsPerBuildTarget asset) || asset == null)
             {
-                Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
-                var s = ReflectionHelper.CallInternalGetOrCreate(internalType) as XRGeneralSettingsPerBuildTarget;
-                if (s == null)
-                    throw new Exception("Failed to get XRGeneralSettingsPerBuildTarget instance.");
-                if (!s.HasSettingsForBuildTarget(group))
-                    s.CreateDefaultSettingsForBuildTarget(group);
-                if (!s.HasManagerSettingsForBuildTarget(group))
-                    s.CreateDefaultManagerSettingsForBuildTarget(group);
+                asset = ScriptableObject.CreateInstance<XRGeneralSettingsPerBuildTarget>();
+                if (!AssetDatabase.IsValidFolder("Assets/XR")) AssetDatabase.CreateFolder("Assets", "XR");
+                AssetDatabase.CreateAsset(asset, "Assets/XR/XRGeneralSettingsPerBuildTarget.asset");
+                AssetDatabase.SaveAssets();
+                EditorBuildSettings.AddConfigObject(XRGeneralSettings.k_SettingsKey, asset, true);
             }
+            return asset;
         }
-        
+
+        // /// <summary>
+        // /// Initializes XR Plug-in Management settings for all platforms.
+        // /// This code will generate /Assets/XR/XRGeneralSettingsPerBuildTarget.asset
+        // /// </summary>
+        // public static void InitializeXrPluginManagementForAllPlatforms()
+        // {
+        //     Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+        //     object result = ReflectionHelper.CallInternalGetOrCreate(internalType);
+
+        //     EnsureDefaults(BuildTargetGroup.Standalone);
+        //     EnsureDefaults(BuildTargetGroup.Android);
+        //     EnsureDefaults(BuildTargetGroup.iOS);
+        //     EnsureDefaults(BuildTargetGroup.VisionOS);
+
+        //     AssetDatabase.SaveAssets();
+        //     AssetDatabase.Refresh();
+        //     Debug.Log("Initialized XR Plug-in Management for all platforms.");
+
+        //     static void EnsureDefaults(BuildTargetGroup group)
+        //     {
+        //         Type internalType = typeof(XRGeneralSettingsPerBuildTarget);
+        //         var s = ReflectionHelper.CallInternalGetOrCreate(internalType) as XRGeneralSettingsPerBuildTarget;
+        //         if (s == null)
+        //             throw new Exception("Failed to get XRGeneralSettingsPerBuildTarget instance.");
+        //         if (!s.HasSettingsForBuildTarget(group))
+        //             s.CreateDefaultSettingsForBuildTarget(group);
+        //         if (!s.HasManagerSettingsForBuildTarget(group))
+        //             s.CreateDefaultManagerSettingsForBuildTarget(group);
+        //     }
+        // }
+
         /// <summary>
         /// Helper class for reflection-related utility to call internal method.
         /// </summary>
@@ -689,7 +708,7 @@ namespace Styly.XRRig.SetupSdk
             var request = UnityEditor.PackageManager.Client.Add(packageIdentifier);
             while (!request.IsCompleted) { }
             stopwatch.Stop();
-            
+
             if (request.Error != null)
             {
                 UnityEngine.Debug.LogError(request.Error.message);
