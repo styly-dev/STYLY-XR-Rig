@@ -10,15 +10,15 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_PolySpatialVisionOS
     {
-        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.2.4";
+        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.3.1";
 
         private static void SetUpSdkSettings()
         {
             EditorApplication.delayCall += Step1;
 
-            void Step1()  // Enable the OpenXR Loader
+            void Step1()  // Enable the visionOS Loader
             {
-                EnableXRPlugin(BuildTargetGroup.VisionOS, "UnityEngine.XR.VisionOS.VisionOSLoader");
+                InstallPackageAndAssignLoaderForBuildTarget("com.unity.xr.visionos", "UnityEngine.XR.VisionOS.VisionOSLoader", BuildTargetGroup.VisionOS);
 
                 EditorApplication.delayCall += Step2;
             }

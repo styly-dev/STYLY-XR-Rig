@@ -13,7 +13,6 @@ using UnityEditor.XR.OpenXR.Features;
 using UnityEngine.XR.OpenXR;
 using UnityEngine.XR.OpenXR.Features;
 using UnityEngine.Rendering;
-using UnityEditor.Rendering;
 using System.Threading.Tasks;
 using UnityEditor.Compilation;
 using UnityEditor.XR.Management.Metadata;
@@ -52,6 +51,7 @@ namespace Styly.XRRig.SetupSdk
 
         /// <summary>
         /// Installs a package and assigns a loader for the specified build target group.
+        /// This code performs the same process as checking the Plug-in Providers in XR Plug-in Management of project settings.
         /// </summary>
         /// <param name="packageId"></param>
         /// <param name="loaderType"></param>
