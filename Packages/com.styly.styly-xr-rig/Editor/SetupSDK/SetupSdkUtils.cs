@@ -51,15 +51,6 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
-        /// Prepares the SDK installation by initializing necessary settings.
-        /// </summary>
-        public static void PrepareSdkInstallation()
-        {
-            // Initialize XRGeneralSettingsPerBuildTarget.asset if it does not exist
-            // InitializeXrPluginManagementForAllPlatforms();
-        }
-
-        /// <summary>
         /// Installs a package and assigns a loader for the specified build target group.
         /// </summary>
         /// <param name="packageId"></param>
