@@ -56,26 +56,36 @@ namespace Styly.XRRig.SetupSdk
         /// <param name="packageId"></param>
         /// <param name="loaderType"></param>
         /// <param name="buildTargetGroup"></param>
-        public static void InstallPackageAndAssignLoaderForBuildTarget(string packageId, string loaderType, BuildTargetGroup buildTargetGroup)
+        public static bool InstallPackageAndAssignLoaderForBuildTarget(string packageId, string loaderType, BuildTargetGroup buildTargetGroup)
         {
-            // Get the XRPackageMetadataStore type  
-            Type metadataStoreType = Type.GetType("UnityEditor.XR.Management.Metadata.XRPackageMetadataStore, Unity.XR.Management.Editor");
-
-            if (metadataStoreType != null)
+            try
             {
-                // Get the method  
-                MethodInfo method = metadataStoreType.GetMethod("InstallPackageAndAssignLoaderForBuildTarget",
-                    BindingFlags.NonPublic | BindingFlags.Static);
-                if (method != null)
+                // Get the XRPackageMetadataStore type  
+                Type metadataStoreType = Type.GetType("UnityEditor.XR.Management.Metadata.XRPackageMetadataStore, Unity.XR.Management.Editor");
+
+                if (metadataStoreType != null)
                 {
-                    // Invoke the method  
-                    method.Invoke(null, new object[] {
-                        packageId,
-                        loaderType,
-                        buildTargetGroup
-                    });
+                    // Get the method  
+                    MethodInfo method = metadataStoreType.GetMethod("InstallPackageAndAssignLoaderForBuildTarget",
+                        BindingFlags.NonPublic | BindingFlags.Static);
+                    if (method != null)
+                    {
+                        // Invoke the method  
+                        method.Invoke(null, new object[] {
+                            packageId,
+                            loaderType,
+                            buildTargetGroup
+                        });
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.LogError($"InstallPackageAndAssignLoaderForBuildTarget failed: {ex}");
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
