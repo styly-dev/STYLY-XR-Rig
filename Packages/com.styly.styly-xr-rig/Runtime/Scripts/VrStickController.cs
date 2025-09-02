@@ -6,6 +6,9 @@ namespace Styly.XRRig
 {
     public class VrStickController : MonoBehaviour
     {
+        // Error message constant
+        private const string MoveTargetNotSetError = "VrStickController: moveTarget is not set. Please assign the Transform to move in the Inspector.";
+
         [Header("Input Actions (assign in Inspector)")]
         [Tooltip("Assign \"XRI Left Locomotion/Move\" from Starter Assets/XRI Default Input Actions")]
         public InputActionProperty moveAction;
@@ -49,8 +52,17 @@ namespace Styly.XRRig
 
         void Start()
         {
-            if (Camera.main != null) headTransform = Camera.main.transform;
-            moveTarget = FindFirstObjectByType<Styly.XRRig.StylyXrRig>().transform;
+            // Remove redundant assignment as it's already done in Awake
+            // Only find and assign moveTarget with proper null checking
+            var stylyXrRig = FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
+            if (stylyXrRig != null)
+            {
+                moveTarget = stylyXrRig.transform;
+            }
+            else
+            {
+                Debug.LogError("VrStickController: No StylyXrRig found in the scene. Please ensure STYLY XR Rig is present.");
+            }
         }
 
         void OnEnable()
@@ -78,13 +90,23 @@ namespace Styly.XRRig
 
             if (moveTarget == null)
             {
-                Debug.LogError("VrStickController: moveTarget is not set. Please assign the Transform to move in the Inspector.");
+                Debug.LogError(MoveTargetNotSetError);
                 return;
             }
 
             Vector2 move = Vector2.zero;
-            try { move = moveAction.action.ReadValue<Vector2>(); }
-            catch { /* Fallback for unassigned or type mismatch */ }
+            try 
+            { 
+                move = moveAction.action.ReadValue<Vector2>(); 
+            }
+            catch (InvalidOperationException ex)
+            {
+                Debug.LogWarning($"VrStickController: Failed to read move input as Vector2: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"VrStickController: Unexpected error reading move input: {ex.Message}");
+            }
 
             if (move.sqrMagnitude < 0.0001f) return;
 
@@ -113,7 +135,7 @@ namespace Styly.XRRig
 
             if (moveTarget == null)
             {
-                Debug.LogError("VrStickController: moveTarget is not set. Please assign the Transform to move in the Inspector.");
+                Debug.LogError(MoveTargetNotSetError);
                 return;
             }
 
@@ -136,7 +158,14 @@ namespace Styly.XRRig
                     raw = action.ReadValue<float>();
                 }
             }
-            catch { /* Do nothing on type mismatch */ }
+            catch (InvalidOperationException ex)
+            {
+                Debug.LogWarning($"VrStickController: Failed to read snap turn input: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"VrStickController: Unexpected error reading snap turn input: {ex.Message}");
+            }
 
             // Fire only on edge crossing the deadzone threshold + debounce
             float now = Time.time;
@@ -162,7 +191,7 @@ namespace Styly.XRRig
 
             if (moveTarget == null)
             {
-                Debug.LogWarning("VrStickController: moveTarget is not set. Please assign the Transform to move in the Inspector.");
+                Debug.LogWarning(MoveTargetNotSetError);
             }
 
             moveSpeed = Mathf.Max(0f, moveSpeed);
