@@ -22,7 +22,7 @@ namespace Styly.XRRig.SetupSdk
 
             void Step1()  // Enable the OpenXR Loader
             {
-                EnableXRPlugin(BuildTargetGroup.Android, typeof(OpenXRLoader));
+                EnableXRPlugin(BuildTargetGroup.Android, "UnityEngine.XR.OpenXR.OpenXRLoader");
 
                 EditorApplication.delayCall += Step2;
             }
@@ -108,7 +108,6 @@ namespace Styly.XRRig.SetupSdk
         #region CommonCode
         public static async void InstallPackage()
         {
-            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }

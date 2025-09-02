@@ -91,7 +91,6 @@ namespace Styly.XRRig.SetupSdk
         #region CommonCode
         public static async void InstallPackage()
         {
-            PrepareSdkInstallation();
             if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }

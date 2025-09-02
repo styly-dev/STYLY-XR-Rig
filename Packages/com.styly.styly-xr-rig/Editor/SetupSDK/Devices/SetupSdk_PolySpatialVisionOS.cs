@@ -8,19 +8,20 @@ using static Styly.XRRig.SetupSdk.SetupSdkUtils;
 
 namespace Styly.XRRig.SetupSdk
 {
+    // Setup code for VisionOS is different from code for other SDKs.
+    // InstallPackageAndAssignLoaderForBuildTarget cannot take SDK version.
+    // For InstallPackageAndAssignLoaderForBuildTarget method, set com.unity.xr.visionos instead of com.unity.polyspatial.visionos
     public class SetupSdk_PolySpatialVisionOS
     {
-        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.2.4";
+        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.3.1";
 
         private static void SetUpSdkSettings()
         {
             EditorApplication.delayCall += Step1;
 
-            void Step1()  // Enable the OpenXR Loader
+            void Step1()  // Enable Loader
             {
-#if USE_POLYSPATIAL
-            EnableXRPlugin(BuildTargetGroup.VisionOS, typeof(UnityEngine.XR.VisionOS.VisionOSLoader));
-#endif
+                // Nothing to do
 
                 EditorApplication.delayCall += Step2;
             }
@@ -75,15 +76,20 @@ namespace Styly.XRRig.SetupSdk
 
             void Step7() // Additional Settings
             {
-                // Nothing to do
+                // Overwrite specific version of PolySpatial VisionOS package
+                EditorApplication.delayCall += async () =>
+                {
+                    await System.Threading.Tasks.Task.Delay(1000);
+                    AddUnityPackage(packageIdentifier);
+                };
             }
         }
 
-        #region CommonCode
+        #region CodeForVisionOS
         public static async void InstallPackage()
         {
-            PrepareSdkInstallation();
-            if (AddUnityPackage(packageIdentifier)) { SessionState.SetBool(packageIdentifier, true); }
+            // Install package and assign loader
+            if (InstallPackageAndAssignLoaderForBuildTarget("com.unity.xr.visionos", "UnityEngine.XR.VisionOS.VisionOSLoader", BuildTargetGroup.VisionOS)) { SessionState.SetBool(packageIdentifier, true); }
             await WaitFramesAsync(1);
         }
 
