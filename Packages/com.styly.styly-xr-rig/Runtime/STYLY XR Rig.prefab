@@ -24,6 +24,7 @@ GameObject:
   - component: {fileID: 1901460064738478333}
   - component: {fileID: 4321886860393714057}
   - component: {fileID: 129172355910230854}
+  - component: {fileID: 6993317928114314129}
   m_Layer: 0
   m_Name: STYLY XR RigManager
   m_TagString: Untagged
@@ -249,6 +250,51 @@ MonoBehaviour:
   target: {fileID: 932545197216251794}
   moveSpeed: 5
   lookSensitivity: 8
+--- !u!114 &6993317928114314129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591456111131864104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b7de3e7974a54b6eaa9f0b6ee1c46c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Move
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 58d00aa3-b799-4f2c-8ac7-3e09b2d2094a
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  snapTurnAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Snap Turn
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4fa0c090-6501-4bd0-86bc-70767d9b47a3
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -8525429354371678379, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  headTransform: {fileID: 0}
+  moveTarget: {fileID: 932545197216251794}
+  moveSpeed: 2
+  flattenToGroundPlane: 1
+  snapTurnDegrees: 45
+  snapTurnDeadzone: 0.5
+  snapTurnDebounce: 0.25
 --- !u!1001 &1313010322738206687
 PrefabInstance:
   m_ObjectHideFlags: 0
