@@ -11,6 +11,10 @@ using VIVE.OpenXR.CompositionLayer;
 using VIVE.OpenXR.Passthrough;
 #endif
 
+#if USE_PICO
+using Unity.XR.OpenXR.Features.PICOSupport;
+#endif
+
 namespace Styly.XRRig
 {
     public class PassthroughManager : MonoBehaviour
@@ -52,7 +56,7 @@ namespace Styly.XRRig
         {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
-            
+
             // Set Main Camera parameteres
             mainCameraOfStylyXrRig.clearFlags = CameraClearFlags.SolidColor;
             // Set Main Camera Background to black with 0 alpha
@@ -209,6 +213,15 @@ namespace Styly.XRRig
             }
             SetPassthroughToUnderlay();
 #endif
+
+#if USE_PICO
+            // OpenXR Passthrough feature が有効かチェック
+            if (PassthroughFeature.isExtensionEnable)
+            {
+                // フルスクリーンレイヤー作成＋Startは内部で処理される
+                PassthroughFeature.EnableVideoSeeThrough = true; // => createFullScreenLayer() → passthroughStart()
+            }
+#endif
         }
 
         private void DisablePassthroughAPI()
@@ -216,6 +229,13 @@ namespace Styly.XRRig
 #if USE_VIVE
             PassthroughAPI.DestroyPassthrough(activePassthroughID);
             activePassthroughID = 0;
+#endif
+
+#if USE_PICO
+            if (PassthroughFeature.isExtensionEnable)
+            {
+                PassthroughFeature.EnableVideoSeeThrough = false; // => passthroughPause()
+            }
 #endif
         }
 
@@ -233,5 +253,14 @@ namespace Styly.XRRig
             currentActiveLayerType = LayerType.Underlay;
         }
 #endif
+
+        private void OnApplicationPause(bool pause)
+        {
+#if USE_PICO
+            if (!PassthroughFeature.isExtensionEnable) return;
+            if (pause) PassthroughFeature.PassthroughPause();
+            else PassthroughFeature.PassthroughStart();
+#endif
+        }
     }
 }
