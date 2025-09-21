@@ -273,7 +273,7 @@ namespace Styly.XRRig
         
         private void SetPassthroughToUnderlay()
         {
-            if (activePassthroughID == 0){ return;}
+            if (activePassthroughID == 0) { return; }
             PassthroughAPI.SetPassthroughLayerType(activePassthroughID, LayerType.Underlay);
             currentActiveLayerType = LayerType.Underlay;
         }
