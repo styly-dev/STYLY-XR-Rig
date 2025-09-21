@@ -215,10 +215,10 @@ namespace Styly.XRRig
 #endif
 
 #if USE_PICO
-            // OpenXR Passthrough feature が有効かチェック
+            // Check if OpenXR Passthrough feature is enabled
             if (PassthroughFeature.isExtensionEnable)
             {
-                // フルスクリーンレイヤー作成＋Startは内部で処理される
+                // Create full screen layer + Start is processed internally
                 PassthroughFeature.EnableVideoSeeThrough = true; // => createFullScreenLayer() → passthroughStart()
             }
 #endif
