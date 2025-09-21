@@ -88,7 +88,7 @@ namespace Styly.XRRig
             mainCameraOfStylyXrRig.backgroundColor = new Color(0, 0, 0, 0);
             // Set HDR Rendering to false
             mainCameraOfStylyXrRig.allowHDR = false;
-            // Add AR Camera Manage
+            // Add AR Camera Manager
             mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraManager>();
             // Add AR Camera Background
             mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraBackground>();
