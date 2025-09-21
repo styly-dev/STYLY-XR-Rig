@@ -25,8 +25,16 @@ namespace Styly.XRRig
         private Camera[] targetCameras;
 
         // --- Public API ---
-        public void SwitchToVR(float duration = 1) => StartTransition(XRMode.VR, duration);
-        public void SwitchToMR(float duration = 1) => StartTransition(XRMode.MR, duration);
+        public void SwitchToVR(float duration = 1)
+        {
+            StartTransition(XRMode.VR, duration);
+            DisablePassthroughAPI();
+        }
+        public void SwitchToMR(float duration = 1)
+        {
+            EnablePassthroughAPI();
+            StartTransition(XRMode.MR, duration);
+        }
 
         void Awake()
         {
