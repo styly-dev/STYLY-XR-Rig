@@ -8,7 +8,9 @@
         "GUID:92703082f92b41ba80f0d6912de66115",
         "GUID:fe685ec1767f73d42b749ea8045bfe43",
         "GUID:d0a204fb2c62e9f4caca92f1c1e8c06b",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:d1451cc2aec4ed743adcac8be3b46381",
+        "GUID:b98de7ff63394bdca25fc3bdddff73bf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -32,6 +34,11 @@
             "name": "com.xreal.xr",
             "expression": "",
             "define": "USE_XREAL"
+        },
+        {
+            "name": "com.unity.xr.openxr.picoxr",
+            "expression": "",
+            "define": "USE_PICO"
         }
     ],
     "noEngineReferences": false
