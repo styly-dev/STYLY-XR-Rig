@@ -60,9 +60,17 @@ namespace Styly.XRRig
             {
                 arCameraManager.enabled = true;
             }
+            else
+            {
+                Debug.LogWarning("ARCameraManager component not found on mainCameraOfStylyXrRig.");
+            }
             if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground))
             {
                 arCameraBackground.enabled = true;
+            }
+            else
+            {
+                Debug.LogWarning("ARCameraBackground component not found on mainCameraOfStylyXrRig.");
             }
         }
 
@@ -72,9 +80,17 @@ namespace Styly.XRRig
             {
                 arCameraManager.enabled = false;
             }
+            else
+            {
+                Debug.LogWarning("ARCameraManager component not found on mainCameraOfStylyXrRig.");
+            }
             if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground))
             {
                 arCameraBackground.enabled = false;
+            }
+            else
+            {
+                Debug.LogWarning("ARCameraBackground component not found on mainCameraOfStylyXrRig.");
             }
         }
 
