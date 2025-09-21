@@ -44,12 +44,30 @@ namespace Styly.XRRig
             passthroughMode = false;
             StartTransition(XRMode.VR, duration);
             Invoke(nameof(DisablePassthroughAPI), duration);
+            Invoke(nameof(DisableARCamera), duration);
         }
         public void SwitchToMR(float duration = 1)
         {
             passthroughMode = true;
+            EnableARCamera();
             EnablePassthroughAPI();
             StartTransition(XRMode.MR, duration);
+        }
+
+        private void EnableARCamera()
+        {
+            mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager);
+            arCameraManager.enabled = true;
+            mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground);
+            arCameraBackground.enabled = true;
+        }
+
+        private void DisableARCamera()
+        {
+            mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager);
+            arCameraManager.enabled = false;
+            mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground);
+            arCameraBackground.enabled = false;
         }
 
         void Awake()
