@@ -56,18 +56,26 @@ namespace Styly.XRRig
 
         private void EnableARCamera()
         {
-            mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager);
-            arCameraManager.enabled = true;
-            mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground);
-            arCameraBackground.enabled = true;
+            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager))
+            {
+                arCameraManager.enabled = true;
+            }
+            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground))
+            {
+                arCameraBackground.enabled = true;
+            }
         }
 
         private void DisableARCamera()
         {
-            mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager);
-            arCameraManager.enabled = false;
-            mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground);
-            arCameraBackground.enabled = false;
+            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager))
+            {
+                arCameraManager.enabled = false;
+            }
+            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraBackground>(out var arCameraBackground))
+            {
+                arCameraBackground.enabled = false;
+            }
         }
 
         void Awake()
