@@ -16,15 +16,14 @@ GameObject:
   - component: {fileID: 2384101921082892945}
   - component: {fileID: 751231422635946468}
   - component: {fileID: 4257161923045190575}
-  - component: {fileID: 4840038700538663069}
   - component: {fileID: 7790385100082397126}
   - component: {fileID: 3491996545254341168}
   - component: {fileID: 4670348915821672523}
   - component: {fileID: 2907708859642309068}
-  - component: {fileID: 1901460064738478333}
   - component: {fileID: 4321886860393714057}
   - component: {fileID: 129172355910230854}
   - component: {fileID: 6993317928114314129}
+  - component: {fileID: 6713127048760792997}
   m_Layer: 0
   m_Name: STYLY XR RigManager
   m_TagString: Untagged
@@ -138,18 +137,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   locomotionObject: {fileID: 6673875108562408247}
---- !u!114 &4840038700538663069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591456111131864104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80a34c007cd814418a18251bff639e9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7790385100082397126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -209,18 +196,6 @@ MonoBehaviour:
   SecondaryInteractionGroupVariant: {fileID: 5634100613655797955, guid: 22cec44340d434e3c8f424730befa832,
     type: 3}
   AttachTo: {fileID: 1591456111131864104}
---- !u!114 &1901460064738478333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1591456111131864104}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5ff8f6a6986645ba80e94f856c635bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4321886860393714057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,13 +263,23 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: -8525429354371678379, guid: c348712bda248c246b8c49b3db54643f,
       type: 3}
-  headTransform: {fileID: 0}
-  moveTarget: {fileID: 932545197216251794}
   moveSpeed: 2
   flattenToGroundPlane: 1
   snapTurnDegrees: 45
   snapTurnDeadzone: 0.5
   snapTurnDebounce: 0.25
+--- !u!114 &6713127048760792997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1591456111131864104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0e241396ebf439bbf6b85dc1a8894b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1313010322738206687
 PrefabInstance:
   m_ObjectHideFlags: 0
