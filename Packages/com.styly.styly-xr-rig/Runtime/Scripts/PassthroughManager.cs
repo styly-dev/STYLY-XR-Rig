@@ -162,7 +162,7 @@ namespace Styly.XRRig
         // --- Setup ---
         private bool ResolveMainCamera()
         {
-            // Find Main Camera of STYKY-XR-Rig
+            // Find Main Camera of STYLY-XR-Rig
             var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
             mainCameraOfStylyXrRig = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"));
             return true;
