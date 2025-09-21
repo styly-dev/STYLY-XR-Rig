@@ -28,7 +28,7 @@ namespace Styly.XRRig
         public void SwitchToVR(float duration = 1)
         {
             StartTransition(XRMode.VR, duration);
-            DisablePassthroughAPI();
+            Invoke(nameof(DisablePassthroughAPI), duration);
         }
         public void SwitchToMR(float duration = 1)
         {
