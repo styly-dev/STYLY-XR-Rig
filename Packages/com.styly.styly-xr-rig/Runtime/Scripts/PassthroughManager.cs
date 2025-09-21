@@ -19,23 +19,35 @@ namespace Styly.XRRig
 {
     public class PassthroughManager : MonoBehaviour
     {
-        public enum XRMode { VR, MR }
-
+        private enum XRMode { VR, MR }
         private Camera mainCameraOfStylyXrRig;
-        [Min(0f)] private float transitionDuration;
+        private float transitionDuration;
         private Color fadeColor = Color.black;
 
         private readonly Dictionary<Camera, Image> fadeImages = new();
         private Camera[] targetCameras;
 
         // --- Public API ---
+        private bool passthroughMode;
+        public bool PassthroughMode
+        {
+            get => passthroughMode;
+            set
+            {
+                passthroughMode = value;
+                if (value) { SwitchToMR(); } else { SwitchToVR(); }
+            }
+        }
+
         public void SwitchToVR(float duration = 1)
         {
+            passthroughMode = false;
             StartTransition(XRMode.VR, duration);
             Invoke(nameof(DisablePassthroughAPI), duration);
         }
         public void SwitchToMR(float duration = 1)
         {
+            passthroughMode = true;
             EnablePassthroughAPI();
             StartTransition(XRMode.MR, duration);
         }
@@ -45,11 +57,6 @@ namespace Styly.XRRig
             if (!ResolveMainCamera()) return;
             BuildTargetsAndOverlays();
             SetUpCameraForPassthrough();
-        }
-
-        private void Start()
-        {
-            EnablePassthroughAPI();
         }
 
         public void SetUpCameraForPassthrough()

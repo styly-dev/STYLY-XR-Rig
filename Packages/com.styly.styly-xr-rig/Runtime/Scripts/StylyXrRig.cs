@@ -7,6 +7,8 @@ namespace Styly.XRRig
 {
     public class StylyXrRig : MonoBehaviour
     {
+        [SerializeField] private bool passthroughMode = true;
+
 #if UNITY_VISIONOS && USE_POLYSPATIAL
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
@@ -140,10 +142,16 @@ namespace Styly.XRRig
 #endif
         }
 
-        // Start is called before the first frame update
         void Awake()
         {
             AwakeForVisionOS();
+        }
+
+        void Start()
+        {
+            var passthroughManager = FindFirstObjectByType<PassthroughManager>();
+            if (passthroughManager == null) return;
+            if (passthroughMode) passthroughManager.SwitchToMR(0); else passthroughManager.SwitchToVR(0);
         }
     }
 }
