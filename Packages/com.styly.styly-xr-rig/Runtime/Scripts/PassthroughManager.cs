@@ -27,20 +27,50 @@ namespace Styly.XRRig
         private readonly Dictionary<Camera, Image> fadeImages = new();
         private Camera[] targetCameras;
 
+        private XRMode currentMode = XRMode.VR;
+        private XRMode targetMode = XRMode.VR;
+        private bool isTransitioning;
+        private bool hasAppliedMode;
+        private Coroutine transitionRoutine;
+
         // --- Public API ---
         private bool passthroughMode;
         public bool PassthroughMode => passthroughMode;
 
         public void SwitchToVR(float duration = 1)
         {
+            if (IsRedundant(XRMode.VR)) { return; }
+
             passthroughMode = false;
+            targetMode = XRMode.VR;
+
+            CancelInvoke(nameof(DisablePassthroughAPI));
+            CancelInvoke(nameof(DisableARCamera));
+
             StartTransition(XRMode.VR, duration);
-            Invoke(nameof(DisablePassthroughAPI), duration);
-            Invoke(nameof(DisableARCamera), duration);
+
+            if (duration <= 0f)
+            {
+                DisablePassthroughAPI();
+                DisableARCamera();
+            }
+            else
+            {
+                Invoke(nameof(DisablePassthroughAPI), duration);
+                Invoke(nameof(DisableARCamera), duration);
+            }
         }
+
         public void SwitchToMR(float duration = 1)
         {
+            if (IsRedundant(XRMode.MR)) { return; }
+
             passthroughMode = true;
+            targetMode = XRMode.MR;
+
+            CancelInvoke(nameof(DisablePassthroughAPI));
+            CancelInvoke(nameof(DisableARCamera));
+
             EnableARCamera();
             EnablePassthroughAPI();
             StartTransition(XRMode.MR, duration);
@@ -121,15 +151,24 @@ namespace Styly.XRRig
             // Just in case cameras were added at runtime
             if (targetCameras == null || targetCameras.Length == 0) BuildTargetsAndOverlays();
 
+            if (transitionRoutine != null)
+            {
+                StopCoroutine(transitionRoutine);
+                transitionRoutine = null;
+            }
+
             if (transitionDuration <= 0f)
             {
                 ApplyMode(next);
+                currentMode = next;
+                isTransitioning = false;
+                transitionRoutine = null;
                 SetFadeAlpha(0f);
                 return;
             }
 
-            StopAllCoroutines();                // Prevent overlapping fades
-            StartCoroutine(DoTransition(next)); // Fade → Switch → Fade
+            isTransitioning = true;
+            transitionRoutine = StartCoroutine(DoTransition(next)); // Fade → Switch → Fade
         }
 
         private IEnumerator DoTransition(XRMode next)
@@ -139,6 +178,8 @@ namespace Styly.XRRig
             ApplyMode(next);
             yield return Fade(1f, 0f, half);
             SetFadeAlpha(0f);
+            isTransitioning = false;
+            transitionRoutine = null;
         }
 
         private IEnumerator Fade(float from, float to, float duration)
@@ -173,6 +214,29 @@ namespace Styly.XRRig
                     cam.backgroundColor = bg;
                 }
             }
+
+            currentMode = mode;
+            hasAppliedMode = true;
+        }
+
+        private bool IsRedundant(XRMode requestedMode)
+        {
+            if (!hasAppliedMode)
+            {
+                return false;
+            }
+
+            if (targetMode != requestedMode)
+            {
+                return false;
+            }
+
+            if (isTransitioning)
+            {
+                return true;
+            }
+
+            return currentMode == requestedMode;
         }
 
         // --- Setup ---
