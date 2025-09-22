@@ -29,15 +29,7 @@ namespace Styly.XRRig
 
         // --- Public API ---
         private bool passthroughMode;
-        public bool PassthroughMode
-        {
-            get => passthroughMode;
-            set
-            {
-                passthroughMode = value;
-                if (value) { SwitchToMR(); } else { SwitchToVR(); }
-            }
-        }
+        public bool PassthroughMode => passthroughMode;
 
         public void SwitchToVR(float duration = 1)
         {
