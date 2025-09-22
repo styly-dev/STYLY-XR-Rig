@@ -128,7 +128,7 @@ namespace Styly.XRRig
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
 
-            // Set Main Camera parameteres
+            // Set Main Camera parameters
             mainCameraOfStylyXrRig.clearFlags = CameraClearFlags.SolidColor;
             // Set Main Camera Background to black with 0 alpha
             mainCameraOfStylyXrRig.backgroundColor = new Color(0, 0, 0, 0);
