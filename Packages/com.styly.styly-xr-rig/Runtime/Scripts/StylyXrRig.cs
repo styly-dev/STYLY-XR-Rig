@@ -151,7 +151,14 @@ namespace Styly.XRRig
         {
             var passthroughManager = FindFirstObjectByType<PassthroughManager>();
             if (passthroughManager == null) return;
-            if (passthroughMode) passthroughManager.SwitchToMR(0); else passthroughManager.SwitchToVR(0);
+            if (passthroughMode)
+            {
+                passthroughManager.SwitchToMR(0);
+            }
+            else
+            {
+                passthroughManager.SwitchToVR(0);
+            }
         }
     }
 }
