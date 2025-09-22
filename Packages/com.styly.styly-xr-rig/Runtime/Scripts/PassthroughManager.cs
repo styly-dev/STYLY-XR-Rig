@@ -134,10 +134,16 @@ namespace Styly.XRRig
             mainCameraOfStylyXrRig.backgroundColor = new Color(0, 0, 0, 0);
             // Set HDR Rendering to false
             mainCameraOfStylyXrRig.allowHDR = false;
-            // Add AR Camera Manager
-            mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraManager>();
-            // Add AR Camera Background
-            mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraBackground>();
+            // Add AR Camera Manager if not already present
+            if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraManager>() == null)
+            {
+                mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraManager>();
+            }
+            // Add AR Camera Background if not already present
+            if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraBackground>() == null)
+            {
+                mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraBackground>();
+            }
             // Debug log
             Debug.Log("Passthrough is setup");
         }
