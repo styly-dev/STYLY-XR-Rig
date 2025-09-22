@@ -2,13 +2,16 @@
     "name": "com.styly.styly-xr-rig",
     "rootNamespace": "",
     "references": [
+        "GUID:4847341ff46394e83bb78fbd0652937e",
         "GUID:dc960734dc080426fa6612f1c5fe95f3",
         "GUID:a9420e37d7990b54abdef6688edbe313",
         "GUID:4fe4a1be2f2c04eecbd2036d47b4b310",
         "GUID:92703082f92b41ba80f0d6912de66115",
         "GUID:fe685ec1767f73d42b749ea8045bfe43",
         "GUID:d0a204fb2c62e9f4caca92f1c1e8c06b",
-        "GUID:75469ad4d38634e559750d17036d5f7c"
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:d1451cc2aec4ed743adcac8be3b46381",
+        "GUID:b98de7ff63394bdca25fc3bdddff73bf"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -32,6 +35,11 @@
             "name": "com.xreal.xr",
             "expression": "",
             "define": "USE_XREAL"
+        },
+        {
+            "name": "com.unity.xr.openxr.picoxr",
+            "expression": "",
+            "define": "USE_PICO"
         }
     ],
     "noEngineReferences": false
