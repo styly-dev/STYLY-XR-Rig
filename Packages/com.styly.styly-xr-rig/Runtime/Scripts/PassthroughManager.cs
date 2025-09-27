@@ -35,9 +35,9 @@ namespace Styly.XRRig
 
         // --- Public API ---
         private bool passthroughMode;
-        public bool PassthroughMode => passthroughMode;
+        internal bool PassthroughMode => passthroughMode;
 
-        public void SwitchToVR(float duration = 1)
+        internal void SwitchToVR(float duration = 1)
         {
             if (IsRedundant(XRMode.VR)) { return; }
 
@@ -61,7 +61,7 @@ namespace Styly.XRRig
             }
         }
 
-        public void SwitchToMR(float duration = 1)
+        internal void SwitchToMR(float duration = 1)
         {
             if (IsRedundant(XRMode.MR)) { return; }
 
