@@ -8,6 +8,25 @@ namespace Styly.XRRig
     public class StylyXrRig : MonoBehaviour
     {
         [SerializeField] private bool passthroughMode = true;
+        private PassthroughManager passthroughManager;
+
+        public bool PassthroughMode => passthroughManager != null ? passthroughManager.PassthroughMode : passthroughMode;
+
+        public void SwitchToVR(float duration = 1)
+        {
+            if (passthroughManager != null)
+            {
+                passthroughManager.SwitchToVR(duration);
+            }
+        }
+
+        public void SwitchToMR(float duration = 1)
+        {
+            if (passthroughManager != null)
+            {
+                passthroughManager.SwitchToMR(duration);
+            }
+        }
 
 #if UNITY_VISIONOS && USE_POLYSPATIAL
         [SerializeField]
@@ -25,7 +44,6 @@ namespace Styly.XRRig
         // Parameters of Bounded Guide Frame Gizmo
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
-
 
         void CreateVolumeCamera()
         {
@@ -145,11 +163,11 @@ namespace Styly.XRRig
         void Awake()
         {
             AwakeForVisionOS();
+            passthroughManager = GetComponentInChildren<PassthroughManager>(false);
         }
 
         void Start()
         {
-            var passthroughManager = FindFirstObjectByType<PassthroughManager>();
             if (passthroughManager == null) return;
             if (passthroughMode)
             {

@@ -10,7 +10,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_PcVrForDevelopment
     {
-        private static readonly string packageIdentifier = null;
+        private static readonly string packageIdentifier = "com.unity.xr.openxr@1.14.3";
 
         private static void SetUpSdkSettings()
         {
