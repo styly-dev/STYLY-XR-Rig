@@ -16,6 +16,12 @@ namespace Styly.XRRig
         [Tooltip("Assign \"XRI Right Locomotion/Snap Turn\" from Starter Assets/XRI Default Input Actions")]
         public InputActionProperty snapTurnAction;
 
+        [Tooltip("Assign an Input Action that fires when the X button is pressed to move upward")]
+        public InputActionProperty verticalUpAction;
+
+        [Tooltip("Assign an Input Action that fires when the Y button is pressed to move downward")]
+        public InputActionProperty verticalDownAction;
+
         // Head (Main Camera) will be assigned
         private Transform headTransform;
 
@@ -26,7 +32,7 @@ namespace Styly.XRRig
         public float moveSpeed = 2.0f;
 
         [Tooltip("Ignore Y component and move along the horizontal plane")]
-        public bool flattenToGroundPlane = true;
+        private bool flattenToGroundPlane = true;
 
         [Header("Snap Turn")]
         [Tooltip("Snap turn angle per step (degrees)")]
@@ -34,14 +40,16 @@ namespace Styly.XRRig
 
         [Tooltip("Snap turn input threshold (right: +threshold / left: -threshold)")]
         [Range(0.1f, 0.95f)]
-        public float snapTurnDeadzone = 0.5f;
+        private float snapTurnDeadzone = 0.5f;
 
         [Tooltip("Minimum interval between consecutive snap turns in the same direction (seconds)")]
-        public float snapTurnDebounce = 0.25f;
+        private float snapTurnDebounce = 0.25f;
 
         // Internal state
         float _prevSnapValue = 0f;
         float _lastSnapTime = -999f;
+
+        private const float ButtonPressedThreshold = 0.5f;
 
         void Awake()
         {
@@ -70,17 +78,22 @@ namespace Styly.XRRig
             // Enable InputActions (generally safe even with Input Action Manager)
             if (moveAction.action != null) moveAction.action.Enable();
             if (snapTurnAction.action != null) snapTurnAction.action.Enable();
+            if (verticalUpAction.action != null) verticalUpAction.action.Enable();
+            if (verticalDownAction.action != null) verticalDownAction.action.Enable();
         }
 
         void OnDisable()
         {
             if (moveAction.action != null) moveAction.action.Disable();
             if (snapTurnAction.action != null) snapTurnAction.action.Disable();
+            if (verticalUpAction.action != null) verticalUpAction.action.Disable();
+            if (verticalDownAction.action != null) verticalDownAction.action.Disable();
         }
 
         void Update()
         {
             HandleMove();
+            HandleVerticalMove();
             HandleSnapTurn();
         }
 
@@ -95,9 +108,9 @@ namespace Styly.XRRig
             }
 
             Vector2 move = Vector2.zero;
-            try 
-            { 
-                move = moveAction.action.ReadValue<Vector2>(); 
+            try
+            {
+                move = moveAction.action.ReadValue<Vector2>();
             }
             catch (InvalidOperationException ex)
             {
@@ -127,6 +140,75 @@ namespace Styly.XRRig
 
             Vector3 worldMove = forward * move.y + right * move.x;
             moveTarget.position += worldMove * moveSpeed * Time.deltaTime;
+        }
+
+        void HandleVerticalMove()
+        {
+            bool hasUpAction = verticalUpAction.action != null;
+            bool hasDownAction = verticalDownAction.action != null;
+
+            if (!hasUpAction && !hasDownAction) return;
+
+            if (moveTarget == null)
+            {
+                Debug.LogError(MoveTargetNotSetError);
+                return;
+            }
+
+            float upValue = 0f;
+            if (hasUpAction)
+            {
+                try
+                {
+                    upValue = verticalUpAction.action.ReadValue<float>();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Debug.LogWarning($"VrStickController: Failed to read vertical up input: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"VrStickController: Unexpected error reading vertical up input: {ex.Message}");
+                }
+            }
+
+            float downValue = 0f;
+            if (hasDownAction)
+            {
+                try
+                {
+                    downValue = verticalDownAction.action.ReadValue<float>();
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Debug.LogWarning($"VrStickController: Failed to read vertical down input: {ex.Message}");
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"VrStickController: Unexpected error reading vertical down input: {ex.Message}");
+                }
+            }
+
+            bool upPressed = hasUpAction && upValue > ButtonPressedThreshold;
+            bool downPressed = hasDownAction && downValue > ButtonPressedThreshold;
+
+            if (!upPressed && !downPressed) return;
+
+            Vector3 verticalDirection = Vector3.zero;
+            if (upPressed)
+            {
+                verticalDirection += Vector3.up;
+            }
+
+            if (downPressed)
+            {
+                verticalDirection += Vector3.down;
+            }
+
+            if (verticalDirection.sqrMagnitude < 0.0001f) return;
+
+            verticalDirection.Normalize();
+            moveTarget.position += verticalDirection * moveSpeed * Time.deltaTime;
         }
 
         void HandleSnapTurn()

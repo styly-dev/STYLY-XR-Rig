@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEditor;
 
 namespace Styly.XRRig
 {
@@ -9,17 +10,26 @@ namespace Styly.XRRig
 #if UNITY_EDITOR
     public class EditorPlayerController : MonoBehaviour
     {
-        [Header("Target")] [SerializeField] private Transform target;
+        [Header("Target")][SerializeField] private Transform target;
 
-        [Header("Movement Settings")] [SerializeField]
+        [Header("Movement Settings (WASD + EQ)")]
+        [SerializeField]
         private float moveSpeed = 5f;
 
-        [Header("Look Settings")] [SerializeField]
+        [Header("Look Settings")]
+        [SerializeField]
         private float lookSensitivity = 8f;
+
+        [Header("Snap Turn (Left/Right Arrow Keys)")]
+        [SerializeField]
+        private float snapTurnDegrees = 45f;
+
+        private float snapTurnDebounce = 0.25f;
 
         private Transform controlTarget;
         private float rotationX = 0f;
         private float rotationY = 0f;
+        private float lastSnapTime = -999f;
 
         void Start()
         {
@@ -35,6 +45,7 @@ namespace Styly.XRRig
         {
             HandleMovement();
             HandleRotation();
+            HandleSnapTurn();
         }
 
         /// <summary>
@@ -92,6 +103,36 @@ namespace Styly.XRRig
 
                 controlTarget.rotation = Quaternion.Euler(rotationX, rotationY, 0);
             }
+        }
+
+        /// <summary>
+        /// Snap turn handling with left/right arrow keys
+        /// </summary>
+        private void HandleSnapTurn()
+        {
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null) return;
+
+            if (controlTarget == null) return;
+
+            bool rightPressed = keyboard.rightArrowKey.wasPressedThisFrame;
+            bool leftPressed = keyboard.leftArrowKey.wasPressedThisFrame;
+
+            if (!rightPressed && !leftPressed) return;
+
+            float now = Time.time;
+            if (now - lastSnapTime < snapTurnDebounce) return;
+
+            float direction = rightPressed ? 1f : -1f;
+            if (rightPressed && leftPressed)
+            {
+                direction = 0f;
+            }
+
+            if (Mathf.Approximately(direction, 0f)) return;
+
+            controlTarget.Rotate(0f, snapTurnDegrees * direction, 0f, Space.World);
+            lastSnapTime = now;
         }
     }
 #else
