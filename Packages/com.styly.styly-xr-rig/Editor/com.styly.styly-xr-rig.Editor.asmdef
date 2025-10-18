@@ -2,6 +2,7 @@
     "name": "com.styly.styly-xr-rig.Editor",
     "rootNamespace": "",
     "references": [
+        "GUID:3755b4bd67fe24030815e9baccb497e7",
         "GUID:e40ba710768534012815d3193fa296cb",
         "GUID:f9fe0089ec81f4079af78eb2287a6163",
         "GUID:ae3d1603ce9534ff5a9eb62408568574",
