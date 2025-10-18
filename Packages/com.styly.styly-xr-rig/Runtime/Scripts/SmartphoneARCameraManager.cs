@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 namespace Styly.XRRig
 {
-    public class ARCameraManager : MonoBehaviour
+    public class SmartphoneARCameraManager : MonoBehaviour
     {
         /// <summary>
         /// Occlusion mode selection for AR camera
