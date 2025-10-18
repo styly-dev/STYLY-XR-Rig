@@ -9,20 +9,20 @@ namespace Styly.XRRig
     {
         [SerializeField] private bool passthroughMode = true;
         private PassthroughManager passthroughManager;
-        private ARCameraManager arCameraManager;
+        private SmartphoneARCameraManager smartphoneArCameraManager;
 
         public bool PassthroughMode => passthroughManager != null ? passthroughManager.PassthroughMode : passthroughMode;
 
         public void SwitchToVR(float duration = 1)
         {
             if (passthroughManager != null) { passthroughManager.SwitchToVR(duration); }
-            if (arCameraManager != null) { arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForVR); }
+            if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR); }
         }
 
         public void SwitchToMR(float duration = 1)
         {
             if (passthroughManager != null) { passthroughManager.SwitchToMR(duration); }
-            if (arCameraManager != null) { arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForMR); }
+            if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
 #if UNITY_VISIONOS && USE_POLYSPATIAL
@@ -161,7 +161,7 @@ namespace Styly.XRRig
         {
             AwakeForVisionOS();
             passthroughManager = GetComponentInChildren<PassthroughManager>(false);
-            arCameraManager = GetComponentInChildren<ARCameraManager>(false);
+            smartphoneArCameraManager = GetComponentInChildren<SmartphoneARCameraManager>(false);
         }
 
         void Start()
@@ -178,15 +178,15 @@ namespace Styly.XRRig
                 }
             }
 
-            if (arCameraManager != null)
+            if (smartphoneArCameraManager != null)
             {
                 if (passthroughMode)
                 {
-                    arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForMR);
+                    smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR);
                 }
                 else
                 {
-                    arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForVR);
+                    smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR);
                 }
             }
         }
