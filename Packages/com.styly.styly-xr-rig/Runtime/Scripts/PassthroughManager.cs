@@ -39,6 +39,9 @@ namespace Styly.XRRig
 
         internal void SwitchToVR(float duration = 1)
         {
+            // Skip on Vision OS
+            if (Utils.IsVisionOS()) { return; }
+            
             if (IsRedundant(XRMode.VR)) { return; }
 
             passthroughMode = false;
@@ -63,6 +66,9 @@ namespace Styly.XRRig
 
         internal void SwitchToMR(float duration = 1)
         {
+            // Skip on Vision OS
+            if (Utils.IsVisionOS()) { return; }
+            
             if (IsRedundant(XRMode.MR)) { return; }
 
             passthroughMode = true;
