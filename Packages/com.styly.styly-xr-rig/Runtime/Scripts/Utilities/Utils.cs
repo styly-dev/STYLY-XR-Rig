@@ -27,6 +27,9 @@ namespace Styly.XRRig
         /// Get the list of active XR Plugin provider IDs.
         /// This returns provider IDs for Standalone Desktop OS even when the build target is set to another platform.
         /// </summary>
+        /// <example>
+        /// Unity.XR.OpenXR, UnityEngine.XR.ARCore.ARCoreLoader, UnityEngine.XR.ARKit.ARKitLoader, UnityEngine.XR.VisionOS.VisionOSLoader
+        /// </example>
         /// <returns></returns>
         public static string[] GetActiveXrPluginProviderIds()
         {
