@@ -13,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
     // For InstallPackageAndAssignLoaderForBuildTarget method, set com.unity.xr.visionos instead of com.unity.polyspatial.visionos
     public class SetupSdk_PolySpatialVisionOS
     {
-        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.3.1";
+        private static readonly string packageIdentifier = "com.unity.polyspatial.visionos@2.4.3";
 
         private static void SetUpSdkSettings()
         {
