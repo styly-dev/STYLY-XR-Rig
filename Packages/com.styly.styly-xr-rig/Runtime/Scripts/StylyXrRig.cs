@@ -9,23 +9,20 @@ namespace Styly.XRRig
     {
         [SerializeField] private bool passthroughMode = true;
         private PassthroughManager passthroughManager;
+        private ARCameraManager arCameraManager;
 
         public bool PassthroughMode => passthroughManager != null ? passthroughManager.PassthroughMode : passthroughMode;
 
         public void SwitchToVR(float duration = 1)
         {
-            if (passthroughManager != null)
-            {
-                passthroughManager.SwitchToVR(duration);
-            }
+            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration); }
+            if (arCameraManager != null) { arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForVR); }
         }
 
         public void SwitchToMR(float duration = 1)
         {
-            if (passthroughManager != null)
-            {
-                passthroughManager.SwitchToMR(duration);
-            }
+            if (passthroughManager != null) { passthroughManager.SwitchToMR(duration); }
+            if (arCameraManager != null) { arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
 #if UNITY_VISIONOS && USE_POLYSPATIAL
@@ -164,18 +161,33 @@ namespace Styly.XRRig
         {
             AwakeForVisionOS();
             passthroughManager = GetComponentInChildren<PassthroughManager>(false);
+            arCameraManager = GetComponentInChildren<ARCameraManager>(false);
         }
 
         void Start()
         {
-            if (passthroughManager == null) return;
-            if (passthroughMode)
+            if (passthroughManager != null)
             {
-                passthroughManager.SwitchToMR(0);
+                if (passthroughMode)
+                {
+                    passthroughManager.SwitchToMR(0);
+                }
+                else
+                {
+                    passthroughManager.SwitchToVR(0);
+                }
             }
-            else
+
+            if (arCameraManager != null)
             {
-                passthroughManager.SwitchToVR(0);
+                if (passthroughMode)
+                {
+                    arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForMR);
+                }
+                else
+                {
+                    arCameraManager.ConfigureOcclusionSettings(ARCameraManager.OcclusionSettings.AutomaticForVR);
+                }
             }
         }
     }
