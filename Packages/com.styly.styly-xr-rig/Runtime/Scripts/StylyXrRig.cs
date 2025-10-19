@@ -25,7 +25,7 @@ namespace Styly.XRRig
             if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
-
+        [Header("visionOS Settings")]
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
         private GameObject VolumeCamera = null;
