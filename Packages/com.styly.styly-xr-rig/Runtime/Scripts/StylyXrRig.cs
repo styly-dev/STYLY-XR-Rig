@@ -25,22 +25,26 @@ namespace Styly.XRRig
             if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
-#if UNITY_VISIONOS && USE_POLYSPATIAL
+
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
         private GameObject VolumeCamera = null;
         [SerializeField]
-        private VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
+        private Object BoundedVolumeCameraObj = null;
         [SerializeField]
-        private VolumeCameraWindowConfiguration UnBoundedVolumeCamera = null;
+        private Object UnBoundedVolumeCameraObj = null;
         [SerializeField]
         private GameObject CameraOffset = null;
         [SerializeField]
         private float CameraHeightInEditor = 1.3f;
 
+#if UNITY_VISIONOS && USE_POLYSPATIAL
         // Parameters of Bounded Guide Frame Gizmo
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
+
+        private VolumeCameraWindowConfiguration BoundedVolumeCamera => BoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
+        private VolumeCameraWindowConfiguration UnBoundedVolumeCamera => UnBoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
 
         void CreateVolumeCamera()
         {
@@ -60,7 +64,6 @@ namespace Styly.XRRig
                 Debug.Log("Created VolumeCamera GameObject");
             }
         }
-
 
         /// <summary>
         /// Set volume camera configuration to VolumeCamera
