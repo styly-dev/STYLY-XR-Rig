@@ -42,8 +42,10 @@ namespace Styly.XRRig
 
         void Start()
         {
-            AddOcclusionComponents();
-            InitializeOcclusionSettings();
+#if !UNITY_EDITOR
+                        AddOcclusionComponents();
+                        InitializeOcclusionSettings();
+#endif
         }
 
         /// <summary>
@@ -104,6 +106,7 @@ namespace Styly.XRRig
         /// <param name="settings"></param>
         public void ConfigureOcclusionSettings(OcclusionSettings settings)
         {
+#if !UNITY_EDITOR
             switch (settings)
             {
                 case OcclusionSettings.Disabled:
@@ -147,6 +150,7 @@ namespace Styly.XRRig
                     arOcclusionManager.requestedOcclusionPreferenceMode = UnityEngine.XR.ARSubsystems.OcclusionPreferenceMode.PreferEnvironmentOcclusion;
                     break;
             }
+#endif
         }
     }
 }
