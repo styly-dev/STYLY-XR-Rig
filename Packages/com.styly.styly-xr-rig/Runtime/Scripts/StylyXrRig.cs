@@ -43,6 +43,7 @@ namespace Styly.XRRig
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
 
+        // In order to avoid build errors when PolySpatial is not installed, cast to VolumeCameraWindowConfiguration here.
         private VolumeCameraWindowConfiguration BoundedVolumeCamera => BoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
         private VolumeCameraWindowConfiguration UnBoundedVolumeCamera => UnBoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
 
