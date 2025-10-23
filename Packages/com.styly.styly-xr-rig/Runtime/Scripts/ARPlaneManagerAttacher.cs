@@ -12,7 +12,7 @@ namespace Styly.XRRig
         [SerializeField]
         GameObject PlanePrefab;
 
-        void Awake()
+        void Start()
         {
             AttachARPlaneManagerToXrOrigin();
         }

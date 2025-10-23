@@ -32,7 +32,7 @@ namespace Styly.XRRig
         [SerializeField]
         private XRHandTrackingEvents m_AndroidXRRightHandTrackingEvents;
         
-        void Awake()
+        void Start()
         {
             // Clear jointsUpdated persistent/runtime listeners before execution starts
             ClearJointsUpdatedListeners();

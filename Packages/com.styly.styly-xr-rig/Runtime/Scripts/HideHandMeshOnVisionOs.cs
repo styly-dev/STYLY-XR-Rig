@@ -20,7 +20,7 @@ namespace Styly.XRRig
         [SerializeField]
         private GameObject RightPinchVisual;
 
-        void Awake()
+        void Start()
         {
             if (Utils.IsVisionOS())
             {

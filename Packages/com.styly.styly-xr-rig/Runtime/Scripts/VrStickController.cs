@@ -51,15 +51,13 @@ namespace Styly.XRRig
 
         private const float ButtonPressedThreshold = 0.5f;
 
-        void Awake()
+
+        void Start()
         {
             // Use Main Camera if not explicitly specified
             if (headTransform == null && Camera.main != null)
                 headTransform = Camera.main.transform;
-        }
-
-        void Start()
-        {
+            
             // Remove redundant assignment as it's already done in Awake
             // Only find and assign moveTarget with proper null checking
             var stylyXrRig = FindFirstObjectByType<Styly.XRRig.StylyXrRig>();

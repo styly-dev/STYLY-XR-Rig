@@ -13,7 +13,7 @@ namespace Styly.XRRig
         // Default mesh prefab to attach ARMeshManager
         public MeshFilter DefaultMeshPrefab;
 
-        void Awake()
+        void Start()
         {
             AttachARMeshManagerToXrOrigin();
         }

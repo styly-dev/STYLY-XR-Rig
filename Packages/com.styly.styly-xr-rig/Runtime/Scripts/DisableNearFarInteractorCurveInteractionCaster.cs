@@ -8,7 +8,7 @@ public class DisableNearFarInteractorCurveInteractionCaster : MonoBehaviour
     [SerializeField]
     CurveInteractionCaster rightNearFarInteractorCurveInteractionCaster;
 
-    void Awake()
+    void Start()
     {
         leftNearFarInteractorCurveInteractionCaster.castDistance = 0f;
         rightNearFarInteractorCurveInteractionCaster.castDistance = 0f;
