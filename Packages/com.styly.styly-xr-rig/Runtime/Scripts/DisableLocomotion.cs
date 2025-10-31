@@ -10,7 +10,7 @@ namespace Styly.XRRig
         [SerializeField]
         private GameObject locomotionObject;
 
-        void Awake()
+        void Start()
         {
             locomotionObject.SetActive(false);
             Debug.Log("Locomotion is disabled");

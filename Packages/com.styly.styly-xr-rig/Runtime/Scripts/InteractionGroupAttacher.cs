@@ -16,7 +16,7 @@ namespace Styly.XRRig
                 [SerializeField]
                 private GameObject AttachTo;
 
-                void Awake()
+                void Start()
                 {
 #if UNITY_VISIONOS && USE_POLYSPATIAL
                 AttachInteractionGroups();

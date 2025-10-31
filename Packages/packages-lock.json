@@ -9,9 +9,9 @@
         "com.unity.nuget.newtonsoft-json": "3.2.1",
         "com.unity.xr.interaction.toolkit": "3.0.8",
         "com.unity.xr.hands": "1.5.1",
-        "com.unity.xr.arfoundation": "6.1.1",
-        "com.unity.visualscripting": "1.9.6",
-        "com.unity.xr.management": "4.5.1"
+        "com.unity.xr.arfoundation": "6.3.0",
+        "com.unity.visualscripting": "1.9.8",
+        "com.unity.xr.management": "4.5.2"
       }
     },
     "com.unity.burst": {
@@ -256,8 +256,8 @@
       }
     },
     "com.unity.visualscripting": {
-      "version": "1.9.7",
-      "depth": 0,
+      "version": "1.9.8",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.ugui": "1.0.0",
@@ -266,7 +266,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.arfoundation": {
-      "version": "6.1.1",
+      "version": "6.3.0",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -332,7 +332,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.5.1",
+      "version": "4.5.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {

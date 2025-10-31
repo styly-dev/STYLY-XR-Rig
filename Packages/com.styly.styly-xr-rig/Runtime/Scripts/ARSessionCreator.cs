@@ -8,7 +8,7 @@ namespace Styly.XRRig
     /// </summary>
     public class ARSessionCreator : MonoBehaviour
     {
-        private void Awake()
+        private void Start()
         {
             CreateARSession();
         }

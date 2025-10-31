@@ -7,7 +7,7 @@ namespace Styly.XRRig
     {
         [SerializeField] private InputActionAsset xriActions;
 
-        void Awake()
+        void Start()
         {
             var leftSelect = Find("XRI Left Interaction/Select");
             if (leftSelect != null)
