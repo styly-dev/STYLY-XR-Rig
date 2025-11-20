@@ -22,7 +22,7 @@ namespace Styly.XRRig.SetupSdk
             void Step1()  // Enable the OpenXR Loader
             {
 #if USE_XREAL
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader));
+            EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader).ToString());
 #endif
                 EditorApplication.delayCall += Step2;
             }
