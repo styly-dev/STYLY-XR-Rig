@@ -1,22 +1,22 @@
 {
   "name": "com.styly.styly-xr-rig",
-  "version": "0.4.10",
+  "version": "0.4.11",
   "displayName": "STYLY XR Rig",
   "unity": "6000.0",
   "description": "STYLY XR Rig",
   "author": {
     "name": "STYLY, Inc.",
     "email": "info@styly.inc",
-    "url": "https://styly.cc/"
+    "url": "https://styly.inc/"
   },
   "dependencies": {
     "com.unity.xr.openxr": "1.14.3",
     "com.unity.nuget.newtonsoft-json": "3.2.1",
-    "com.unity.xr.interaction.toolkit": "3.0.8",
-    "com.unity.xr.hands": "1.5.1",
-    "com.unity.xr.arfoundation": "6.1.1",
-    "com.unity.visualscripting": "1.9.6",
-    "com.unity.xr.management": "4.5.1"
+    "com.unity.xr.interaction.toolkit": "3.3.0",
+    "com.unity.xr.hands": "1.7.0",
+    "com.unity.xr.arfoundation": "6.3.0",
+    "com.unity.visualscripting": "1.9.8",
+    "com.unity.xr.management": "4.5.2"
   },
   "samples": []
 }

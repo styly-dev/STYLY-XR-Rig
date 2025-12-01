@@ -11,7 +11,7 @@ namespace Styly.XRRig
         private Camera XrRigCamera = null;
         private AudioListener XrRigAudioListener = null;
 
-        void Awake()
+        void Start()
         {
             // Find MainCamera and AudioListener attached to the STYLY-XR-Rig.
             FindMainCameraAndAudioListenerOfXrRig();

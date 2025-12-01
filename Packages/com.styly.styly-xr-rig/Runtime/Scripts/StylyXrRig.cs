@@ -9,41 +9,43 @@ namespace Styly.XRRig
     {
         [SerializeField] private bool passthroughMode = true;
         private PassthroughManager passthroughManager;
+        private SmartphoneARCameraManager smartphoneArCameraManager;
 
         public bool PassthroughMode => passthroughManager != null ? passthroughManager.PassthroughMode : passthroughMode;
 
         public void SwitchToVR(float duration = 1)
         {
-            if (passthroughManager != null)
-            {
-                passthroughManager.SwitchToVR(duration);
-            }
+            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration); }
+            if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR); }
         }
 
         public void SwitchToMR(float duration = 1)
         {
-            if (passthroughManager != null)
-            {
-                passthroughManager.SwitchToMR(duration);
-            }
+            if (passthroughManager != null) { passthroughManager.SwitchToMR(duration); }
+            if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
-#if UNITY_VISIONOS && USE_POLYSPATIAL
+        [Header("visionOS Settings")]
         [SerializeField]
         private bool UseBoundedModeForVisionOs = false;
         private GameObject VolumeCamera = null;
         [SerializeField]
-        private VolumeCameraWindowConfiguration BoundedVolumeCamera = null;
+        private Object BoundedVolumeCameraObj = null;
         [SerializeField]
-        private VolumeCameraWindowConfiguration UnBoundedVolumeCamera = null;
+        private Object UnBoundedVolumeCameraObj = null;
         [SerializeField]
         private GameObject CameraOffset = null;
         [SerializeField]
         private float CameraHeightInEditor = 1.3f;
 
+#if UNITY_VISIONOS && USE_POLYSPATIAL
         // Parameters of Bounded Guide Frame Gizmo
         private Vector3 DefaultBoundedGuideFrameGizmoSize = new(1, 1, 1);
         private Color BoundedGuideFrameGizmoColor = Color.yellow;
+
+        // In order to avoid build errors when PolySpatial is not installed, cast to VolumeCameraWindowConfiguration here.
+        private VolumeCameraWindowConfiguration BoundedVolumeCamera => BoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
+        private VolumeCameraWindowConfiguration UnBoundedVolumeCamera => UnBoundedVolumeCameraObj as VolumeCameraWindowConfiguration;
 
         void CreateVolumeCamera()
         {
@@ -63,7 +65,6 @@ namespace Styly.XRRig
                 Debug.Log("Created VolumeCamera GameObject");
             }
         }
-
 
         /// <summary>
         /// Set volume camera configuration to VolumeCamera
@@ -164,18 +165,33 @@ namespace Styly.XRRig
         {
             AwakeForVisionOS();
             passthroughManager = GetComponentInChildren<PassthroughManager>(false);
+            smartphoneArCameraManager = GetComponentInChildren<SmartphoneARCameraManager>(false);
         }
 
         void Start()
         {
-            if (passthroughManager == null) return;
-            if (passthroughMode)
+            if (passthroughManager != null)
             {
-                passthroughManager.SwitchToMR(0);
+                if (passthroughMode)
+                {
+                    passthroughManager.SwitchToMR(0);
+                }
+                else
+                {
+                    passthroughManager.SwitchToVR(0);
+                }
             }
-            else
+
+            if (smartphoneArCameraManager != null)
             {
-                passthroughManager.SwitchToVR(0);
+                if (passthroughMode)
+                {
+                    smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR);
+                }
+                else
+                {
+                    smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR);
+                }
             }
         }
     }

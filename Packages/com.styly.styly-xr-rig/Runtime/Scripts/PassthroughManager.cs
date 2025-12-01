@@ -39,6 +39,9 @@ namespace Styly.XRRig
 
         internal void SwitchToVR(float duration = 1)
         {
+            // Skip on Vision OS
+            if (Utils.IsVisionOS()) { return; }
+            
             if (IsRedundant(XRMode.VR)) { return; }
 
             passthroughMode = false;
@@ -63,6 +66,9 @@ namespace Styly.XRRig
 
         internal void SwitchToMR(float duration = 1)
         {
+            // Skip on Vision OS
+            if (Utils.IsVisionOS()) { return; }
+            
             if (IsRedundant(XRMode.MR)) { return; }
 
             passthroughMode = true;
@@ -78,7 +84,7 @@ namespace Styly.XRRig
 
         private void EnableARCamera()
         {
-            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager))
+            if (mainCameraOfStylyXrRig.TryGetComponent<SmartphoneARCameraManager>(out var arCameraManager))
             {
                 arCameraManager.enabled = true;
             }
@@ -98,7 +104,7 @@ namespace Styly.XRRig
 
         private void DisableARCamera()
         {
-            if (mainCameraOfStylyXrRig.TryGetComponent<ARCameraManager>(out var arCameraManager))
+            if (mainCameraOfStylyXrRig.TryGetComponent<SmartphoneARCameraManager>(out var arCameraManager))
             {
                 arCameraManager.enabled = false;
             }
@@ -116,7 +122,7 @@ namespace Styly.XRRig
             }
         }
 
-        void Awake()
+        void Start()
         {
             if (!ResolveMainCamera()) return;
             BuildTargetsAndOverlays();
@@ -135,9 +141,9 @@ namespace Styly.XRRig
             // Set HDR Rendering to false
             mainCameraOfStylyXrRig.allowHDR = false;
             // Add AR Camera Manager if not already present
-            if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraManager>() == null)
+            if (mainCameraOfStylyXrRig.gameObject.GetComponent<SmartphoneARCameraManager>() == null)
             {
-                mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraManager>();
+                mainCameraOfStylyXrRig.gameObject.AddComponent<SmartphoneARCameraManager>();
             }
             // Add AR Camera Background if not already present
             if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraBackground>() == null)

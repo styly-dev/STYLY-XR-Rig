@@ -12,7 +12,7 @@ namespace Styly.XRRig
     /// </summary>
     public class ARTrackedImageManagerAttacher : MonoBehaviour
     {
-        void Awake()
+        void Start()
         {
             AttachARTrackedImageManagerToXrOrigin();
         }

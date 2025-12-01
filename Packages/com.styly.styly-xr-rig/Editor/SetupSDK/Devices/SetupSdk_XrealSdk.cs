@@ -13,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_XrealSdk
     {
-        private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250314/com.xreal.xr.tar.gz";
+        private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250401/com.xreal.xr.tar.gz";
 
         private static void SetUpSdkSettings()
         {
@@ -22,7 +22,7 @@ namespace Styly.XRRig.SetupSdk
             void Step1()  // Enable the OpenXR Loader
             {
 #if USE_XREAL
-            EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader));
+            EnableXRPlugin(BuildTargetGroup.Android, typeof(Unity.XR.XREAL.XREALXRLoader).ToString());
 #endif
                 EditorApplication.delayCall += Step2;
             }
