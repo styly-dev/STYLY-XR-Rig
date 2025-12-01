@@ -10,7 +10,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_MetaOpenXrSdk
     {
-        private static readonly string packageIdentifier = "com.unity.xr.meta-openxr@2.2.0";
+        private static readonly string packageIdentifier = "com.unity.xr.meta-openxr@2.3.0";
 
         private static void SetUpSdkSettings()
         {
