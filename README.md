@@ -1,8 +1,6 @@
 # STYLY-XR-Rig
 
-STYLY-XR-Rig is intended to help creators and STYLY developers to make experiences on multi platforms including Vision Pro.   
-
-This XR Rig is currently used only in [STYLY for Vision Pro](https://apps.apple.com/us/app/styly-for-vision-pro/id6475184828) (not in other STYLY App for other HMDs)  
+STYLY-XR-Rig is intended to help developers to make XR experiences on multiple platforms.   
 
 # How to add STYLY-XR-Rig
 
@@ -17,6 +15,11 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
   
 ![How To Add STYLY XR Rig](https://github.com/styly-dev/STYLY-XR-Rig/assets/387880/e84dde8e-8000-48ec-b5bf-4492d9e6db97)
 
+## Setup device SDK
+Just click target SDK on the menu. The SDK will be downloaded and installed. The appropriate settings are automatically configured. See more details [here](https://github.com/styly-dev/STYLY-XR-Rig/tree/develop/Packages/com.styly.styly-xr-rig/Editor/SetupSDK).
+
+<img width="507" height="243" alt="menu" src="https://github.com/user-attachments/assets/cb953854-8d16-4994-822a-f9c8e6c71293" />
+
 # Features
 - visionOS support
   - Bounded guide gizmo for visionOS Bounded mode (requires PolySpatial)
@@ -29,6 +32,8 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 - Unity Editor development support
   - Camera height is set to 1.3m only on Unity Editor
   - Camera height will be automatically set based on actual devices
+  - WASD movement in the editor mode.
+  - Stick control with VR controllers.
   - XRI interaction works on Editor mode with a mouse without XR Simulator. (Currently supported only on visionOS target)
 - AR Managers are included (disabled on start)
   - XR Interaction Manager
@@ -44,7 +49,6 @@ Right click on the hierarchy window to open the menu. Select `STYLY-XR-Rig` in t
 # Requirements
 - Unity 6000.0 or higher
 - Unity Pro license (optional, required only for PolySpatial features)
-  - This XR-Rig is open source and provides core XRI functionality without any additional dependencies. PolySpatial is an optional dependency that enables additional visionOS-specific features like VisionOSHoverEffect and volume camera configuration, but is only available for Unity Pro developers.
 
 # How the Rig is made
 This section is written for maintenance purpose of this repository.
@@ -63,7 +67,8 @@ Created `XR Origin Hands (XR Rig) Variant` from `Assets/Samples/XR Interaction T
 Renamed the variant to `STYLY XR Rig`
 
 Added scripts and components to the Rig prefab. The changes can be viewed on the prefab overrides menu.
-<img width="844" height="609" alt="STYLY-XR-Rig_Prefab_Overrides" src="https://github.com/user-attachments/assets/81d11240-4257-4260-b9dd-4f03ae14030e" />
 
+<img width="464" height="461" alt="STYLYXRRig" src="https://github.com/user-attachments/assets/83298b52-1c12-4b3e-ae9a-1ace8bbffa9f" />
 
+<img width="862" height="564" alt="STYLYXRRigManager" src="https://github.com/user-attachments/assets/8c8b4925-a231-4fff-afda-5975f0c37443" />
 
