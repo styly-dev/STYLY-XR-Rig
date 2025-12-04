@@ -13,7 +13,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_XrealSdk
     {
-        private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250401/com.xreal.xr.tar.gz";
+        private static readonly string packageIdentifier = "https://public-resource.xreal.com/download/XREALSDK_Release_3.1.0.20251125/com.xreal.xr.tar.gz";
 
         private static void SetUpSdkSettings()
         {
