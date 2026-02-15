@@ -201,15 +201,23 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
-        /// Disables HDR on the STYLY Mobile Render Pipeline Asset.
+        /// Disables HDR on the current Render Pipeline Asset.
         /// Some HMDs (e.g. PICO) require HDR to be off for passthrough to work.
+        /// If the asset resides under Packages/ (read-only), the modification is skipped.
         /// </summary>
         public static void DisableHdrOnStylyPipelineAsset()
         {
-            var rpAsset = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(STYLY_Mobile_RPAsset_path);
+            var rpAsset = GraphicsSettings.defaultRenderPipeline;
             if (rpAsset == null)
             {
-                Debug.LogError($"Failed to load STYLY Mobile Render Pipeline Asset at {STYLY_Mobile_RPAsset_path}");
+                Debug.LogWarning("No Render Pipeline Asset is assigned in GraphicsSettings.");
+                return;
+            }
+
+            var assetPath = AssetDatabase.GetAssetPath(rpAsset);
+            if (assetPath.StartsWith("Packages/"))
+            {
+                Debug.Log($"Render Pipeline Asset is in Packages/ ({assetPath}). Skipping HDR modification.");
                 return;
             }
 
@@ -221,7 +229,7 @@ namespace Styly.XRRig.SetupSdk
                 so.ApplyModifiedProperties();
                 EditorUtility.SetDirty(rpAsset);
                 AssetDatabase.SaveAssets();
-                Debug.Log("Disabled HDR on STYLY Mobile Render Pipeline Asset.");
+                Debug.Log($"Disabled HDR on Render Pipeline Asset ({assetPath}).");
             }
             else
             {
