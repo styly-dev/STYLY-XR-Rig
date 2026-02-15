@@ -59,9 +59,6 @@ namespace Styly.XRRig.SetupSdk
                 // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
                 ApplyStylyPipelineAsset();
 
-                // Disable HDR on the Render Pipeline Asset for passthrough compatibility
-                DisableHdrOnStylyPipelineAsset();
-
                 // Use the new input system only
                 UseNewInputSystemOnly();
 

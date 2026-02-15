@@ -201,43 +201,6 @@ namespace Styly.XRRig.SetupSdk
         }
 
         /// <summary>
-        /// Disables HDR on the current Render Pipeline Asset.
-        /// Some HMDs (e.g. PICO) require HDR to be off for passthrough to work.
-        /// If the asset resides under Packages/ (read-only), the modification is skipped.
-        /// </summary>
-        public static void DisableHdrOnStylyPipelineAsset()
-        {
-            var rpAsset = GraphicsSettings.defaultRenderPipeline;
-            if (rpAsset == null)
-            {
-                Debug.LogWarning("No Render Pipeline Asset is assigned in GraphicsSettings.");
-                return;
-            }
-
-            var assetPath = AssetDatabase.GetAssetPath(rpAsset);
-            if (assetPath.StartsWith("Packages/"))
-            {
-                Debug.Log($"Render Pipeline Asset is in Packages/ ({assetPath}). Skipping HDR modification.");
-                return;
-            }
-
-            var so = new SerializedObject(rpAsset);
-            var hdrProp = so.FindProperty("m_SupportsHDR");
-            if (hdrProp != null)
-            {
-                hdrProp.boolValue = false;
-                so.ApplyModifiedProperties();
-                EditorUtility.SetDirty(rpAsset);
-                AssetDatabase.SaveAssets();
-                Debug.Log($"Disabled HDR on Render Pipeline Asset ({assetPath}).");
-            }
-            else
-            {
-                Debug.LogWarning("m_SupportsHDR property not found on Render Pipeline Asset.");
-            }
-        }
-
-        /// <summary>
         /// Sets the graphics APIs for a specific build target.
         /// </summary>
         /// <param name="target">The build target for which to set the graphics APIs.</param>
