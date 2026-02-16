@@ -138,8 +138,6 @@ namespace Styly.XRRig
             mainCameraOfStylyXrRig.clearFlags = CameraClearFlags.SolidColor;
             // Set Main Camera Background to black with 0 alpha
             mainCameraOfStylyXrRig.backgroundColor = new Color(0, 0, 0, 0);
-            // Set HDR Rendering to false
-            mainCameraOfStylyXrRig.allowHDR = false;
             // Add AR Camera Manager if not already present
             if (mainCameraOfStylyXrRig.gameObject.GetComponent<SmartphoneARCameraManager>() == null)
             {
