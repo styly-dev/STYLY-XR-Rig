@@ -56,8 +56,8 @@ namespace Styly.XRRig.SetupSdk
                 // Set Android Minimum API Level
                 SetAndroidMinimumApiLevel(AndroidSdkVersions.AndroidApiLevel29);
 
-                // Applies the STYLY Mobile Render Pipeline Asset to the GraphicsSettings and QualitySettings.
-                ApplyStylyPipelineAsset();
+                // Applies the STYLY XREAL Render Pipeline Asset (without ARBackgroundRendererFeature)
+                ApplyStylyXrealPipelineAsset();
 
                 // Use the new input system only
                 UseNewInputSystemOnly();
