@@ -27,6 +27,11 @@ namespace Styly.XRRig.SetupSdk
         private static readonly string STYLY_Mobile_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_Mobile_RPAsset.asset";
 
         /// <summary>
+        /// The path to the STYLY XREAL Render Pipeline Asset (without ARBackgroundRendererFeature).
+        /// </summary>
+        private static readonly string STYLY_XREAL_RPAsset_path = "Packages/com.styly.styly-xr-rig/Runtime/Settings/STYLY_XREAL_RPAsset.asset";
+
+        /// <summary>
         /// Waits for a specified number of frames to pass.
         /// </summary>
         public static Task WaitFramesAsync(int frames)
@@ -173,6 +178,24 @@ namespace Styly.XRRig.SetupSdk
             if (rpAsset == null)
             {
                 Debug.LogError($"Failed to load STYLY Mobile Render Pipeline Asset at {STYLY_Mobile_RPAsset_path}");
+                return;
+            }
+
+            // Apply the Render Pipeline Asset to GraphicsSettings and QualitySettings
+            ApplyPipelineAsset(rpAsset);
+        }
+
+        /// <summary>
+        /// Applies the STYLY XREAL Render Pipeline Asset to the GraphicsSettings and QualitySettings.
+        /// This version uses a renderer without ARBackgroundRendererFeature which is incompatible with XREAL.
+        /// </summary>
+        public static void ApplyStylyXrealPipelineAsset()
+        {
+            // Get the STYLY XREAL Render Pipeline Asset
+            var rpAsset = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(STYLY_XREAL_RPAsset_path);
+            if (rpAsset == null)
+            {
+                Debug.LogError($"Failed to load STYLY XREAL Render Pipeline Asset at {STYLY_XREAL_RPAsset_path}");
                 return;
             }
 
