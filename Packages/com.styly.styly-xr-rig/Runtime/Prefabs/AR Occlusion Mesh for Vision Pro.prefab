@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5364421393376329328}
   - component: {fileID: 6185489629530925696}
   m_Layer: 0
-  m_Name: AR Occlusion Mesh
+  m_Name: AR Occlusion Mesh for Vision Pro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
