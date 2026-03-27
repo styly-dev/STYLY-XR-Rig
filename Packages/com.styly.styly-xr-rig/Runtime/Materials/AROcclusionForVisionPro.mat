@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AROcclusion
+  m_Name: AROcclusionForVisionPro
   m_Shader: {fileID: 4800000, guid: 34ae67181a8ce42c3819a1b71c1e7d58, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
