@@ -27,6 +27,8 @@ namespace Styly.XRRig
         private float snapTurnDebounce = 0.25f;
 
         private Transform controlTarget;
+        private Transform cameraTransform;
+        private Transform cameraOffsetTransform;
         private float rotationX = 0f;
         private float rotationY = 0f;
         private float lastSnapTime = -999f;
@@ -36,9 +38,28 @@ namespace Styly.XRRig
             // Set control target (use self if target is null)
             controlTarget = target != null ? target : transform;
 
-            // Preserve current rotation
-            rotationY = controlTarget.eulerAngles.y;
-            rotationX = controlTarget.eulerAngles.x;
+            // Get Main Camera and Camera Offset transforms
+            if (Camera.main != null)
+            {
+                cameraTransform = Camera.main.transform;
+                // Camera Offset is the parent of Main Camera
+                if (cameraTransform.parent != null && cameraTransform.parent != controlTarget)
+                {
+                    cameraOffsetTransform = cameraTransform.parent;
+                }
+            }
+
+            // Preserve current rotation based on camera's world rotation
+            if (cameraTransform != null)
+            {
+                rotationY = cameraTransform.eulerAngles.y;
+                rotationX = cameraTransform.eulerAngles.x;
+            }
+            else
+            {
+                rotationY = controlTarget.eulerAngles.y;
+                rotationX = controlTarget.eulerAngles.x;
+            }
         }
 
         void Update()
@@ -58,15 +79,18 @@ namespace Styly.XRRig
 
             if (keyboard == null) return;
 
+            // Use camera's forward/right to account for Camera Offset rotation
+            Transform directionSource = cameraTransform != null ? cameraTransform : controlTarget;
+
             // XZ plane movement (WASD)
             if (keyboard.wKey.isPressed)
-                moveDirection += controlTarget.forward;
+                moveDirection += directionSource.forward;
             if (keyboard.sKey.isPressed)
-                moveDirection -= controlTarget.forward;
+                moveDirection -= directionSource.forward;
             if (keyboard.aKey.isPressed)
-                moveDirection -= controlTarget.right;
+                moveDirection -= directionSource.right;
             if (keyboard.dKey.isPressed)
-                moveDirection += controlTarget.right;
+                moveDirection += directionSource.right;
 
             // Y axis movement (E/Q)
             if (keyboard.eKey.isPressed)
@@ -101,7 +125,11 @@ namespace Styly.XRRig
                 // Vertical angle limit
                 rotationX = Mathf.Clamp(rotationX, -90f, 90f);
 
-                controlTarget.rotation = Quaternion.Euler(rotationX, rotationY, 0);
+                // Desired camera world rotation
+                Quaternion desiredRotation = Quaternion.Euler(rotationX, rotationY, 0);
+
+                // Rotate around camera position so the view doesn't orbit when Camera Offset has a position
+                RotateControlTargetForCamera(desiredRotation);
             }
         }
 
@@ -131,8 +159,40 @@ namespace Styly.XRRig
 
             if (Mathf.Approximately(direction, 0f)) return;
 
-            controlTarget.Rotate(0f, snapTurnDegrees * direction, 0f, Space.World);
+            rotationY += snapTurnDegrees * direction;
+            Quaternion desiredRotation = Quaternion.Euler(rotationX, rotationY, 0);
+            RotateControlTargetForCamera(desiredRotation);
             lastSnapTime = now;
+        }
+
+        /// <summary>
+        /// Set controlTarget rotation so the camera achieves the desired world rotation,
+        /// adjusting position to rotate around the camera (not the rig root).
+        /// </summary>
+        private void RotateControlTargetForCamera(Quaternion desiredCameraRotation)
+        {
+            if (cameraTransform == null)
+            {
+                controlTarget.rotation = desiredCameraRotation;
+                return;
+            }
+
+            // Remember camera world position before rotation
+            Vector3 cameraWorldPos = cameraTransform.position;
+
+            // Compute controlTarget rotation that achieves desired camera rotation
+            if (cameraOffsetTransform != null)
+            {
+                controlTarget.rotation = desiredCameraRotation * Quaternion.Inverse(cameraOffsetTransform.localRotation);
+            }
+            else
+            {
+                controlTarget.rotation = desiredCameraRotation;
+            }
+
+            // After rotation, camera has moved — shift controlTarget so camera returns to its original position
+            Vector3 cameraNewPos = cameraTransform.position;
+            controlTarget.position += cameraWorldPos - cameraNewPos;
         }
     }
 #else
