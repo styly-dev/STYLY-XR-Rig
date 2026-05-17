@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "STYLY-XR-Rig.sln"
+    "dotnet.defaultSolution": "STYLY-XR-Rig.slnx"
 }

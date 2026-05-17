@@ -41,6 +41,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+*.slnx
 *.suo
 *.tmp
 *.user
@@ -126,3 +127,8 @@ ContentPackages/com.unity.xr-content.xr-sim-environments-*.tgz
 .mcp.json
 .serena/*
 **/.serena/*
+
+# Unity CLI Loop
+**/.uloop/*
+!**/.uloop/settings.permissions.json
+!**/.uloop/settings.tools.json

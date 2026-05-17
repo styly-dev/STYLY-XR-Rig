@@ -1,0 +1,53 @@
+---
+name: uloop-launch
+description: "Launch or restart Unity Editor. Use when Unity needs to be opened or restarted."
+---
+
+# uloop launch
+
+Launch Unity Editor with the correct version for a project.
+
+`uloop launch` is not fire-and-forget. When Unity needs to start or restart, the command waits
+until Unity is actually ready for CLI operations before it exits.
+
+## Usage
+
+```bash
+uloop launch [project-path] [options]
+```
+
+## Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `project-path` | string | Optional. Use only when the target Unity project is not in the current directory. |
+| `-r, --restart` | boolean | Kill running Unity and restart |
+| `-q, --quit` | boolean | Kill an existing Unity process for the project without launching |
+| `-p, --platform <P>` | string | Build target (e.g., StandaloneOSX, Android, iOS) |
+| `--max-depth <N>` | number | Search depth when project-path is omitted (default: 3, -1 for unlimited) |
+
+## Examples
+
+```bash
+# Search for Unity project in current directory and launch
+uloop launch
+
+# Launch specific project
+uloop launch /path/to/project
+
+# Restart Unity (kill existing and relaunch)
+uloop launch -r
+
+# Launch with build target
+uloop launch -p Android
+
+# Quit running Unity without launching
+uloop launch --quit
+```
+
+## Output
+
+- Prints detected Unity version
+- Prints project path
+- If Unity is already running, focuses the existing window
+- If launching, waits until Unity finishes startup and the CLI can connect to the project
