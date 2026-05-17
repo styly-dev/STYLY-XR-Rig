@@ -357,6 +357,16 @@
       },
       "url": "https://packages.unity.com"
     },
+    "io.github.hatayama.uloopmcp": {
+      "version": "3.0.0-beta.11",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "3.2.1",
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://package.openupm.com"
+    },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
       "depth": 0,
