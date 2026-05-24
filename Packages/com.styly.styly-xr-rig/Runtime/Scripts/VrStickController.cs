@@ -28,6 +28,11 @@ namespace Styly.XRRig
         // STYLY XR Rig root will be assigned
         private Transform moveTarget;
 
+        [SerializeField, InspectorName("Move Physical Transform")]
+        private bool movePhysicalTransform = true;
+
+        private Transform physicalTarget;
+
         [Tooltip("Move speed (m/s)")]
         public float moveSpeed = 2.0f;
 
@@ -54,10 +59,8 @@ namespace Styly.XRRig
 
         void Start()
         {
-            // Use Main Camera if not explicitly specified
-            if (headTransform == null && Camera.main != null)
-                headTransform = Camera.main.transform;
-            
+            ResolveCameraTargets();
+
             // Remove redundant assignment as it's already done in Awake
             // Only find and assign moveTarget with proper null checking
             var stylyXrRig = FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
@@ -99,7 +102,7 @@ namespace Styly.XRRig
         {
             if (moveAction.action == null) return;
 
-            if (moveTarget == null)
+            if (!HasActiveMoveTarget())
             {
                 Debug.LogError(MoveTargetNotSetError);
                 return;
@@ -122,8 +125,8 @@ namespace Styly.XRRig
             if (move.sqrMagnitude < 0.0001f) return;
 
             // Forward and right vectors based on head (camera)
-            Vector3 forward = headTransform ? headTransform.forward : transform.forward;
-            Vector3 right = headTransform ? headTransform.right : transform.right;
+            Vector3 forward = headTransform != null ? headTransform.forward : transform.forward;
+            Vector3 right = headTransform != null ? headTransform.right : transform.right;
 
             if (flattenToGroundPlane)
             {
@@ -137,7 +140,7 @@ namespace Styly.XRRig
             }
 
             Vector3 worldMove = forward * move.y + right * move.x;
-            moveTarget.position += worldMove * moveSpeed * Time.deltaTime;
+            ApplyWorldMovement(worldMove * moveSpeed * Time.deltaTime);
         }
 
         void HandleVerticalMove()
@@ -147,7 +150,7 @@ namespace Styly.XRRig
 
             if (!hasUpAction && !hasDownAction) return;
 
-            if (moveTarget == null)
+            if (!HasActiveMoveTarget())
             {
                 Debug.LogError(MoveTargetNotSetError);
                 return;
@@ -206,14 +209,14 @@ namespace Styly.XRRig
             if (verticalDirection.sqrMagnitude < 0.0001f) return;
 
             verticalDirection.Normalize();
-            moveTarget.position += verticalDirection * moveSpeed * Time.deltaTime;
+            ApplyWorldMovement(verticalDirection * moveSpeed * Time.deltaTime);
         }
 
         void HandleSnapTurn()
         {
             if (snapTurnAction.action == null) return;
 
-            if (moveTarget == null)
+            if (!HasActiveMoveTarget())
             {
                 Debug.LogError(MoveTargetNotSetError);
                 return;
@@ -225,7 +228,11 @@ namespace Styly.XRRig
                 // XRI Snap Turn is often mapped to float or Vector2.x
                 // InputAction itself has no valueType, so check from bound control
                 var action = snapTurnAction.action;
-                InputControl control = action.activeControl ?? (action.controls.Count > 0 ? action.controls[0] : null);
+                InputControl control = action.activeControl;
+                if (control == null && action.controls.Count > 0)
+                {
+                    control = action.controls[0];
+                }
                 Type ctrlType = control != null ? control.valueType : null;
 
                 if (ctrlType == typeof(Vector2))
@@ -255,21 +262,116 @@ namespace Styly.XRRig
             if ((risingRight || fallingLeft) && (now - _lastSnapTime >= snapTurnDebounce))
             {
                 float dir = risingRight ? +1f : -1f;
-                // Rotate horizontally (Y axis in world space)
-                moveTarget.Rotate(0f, snapTurnDegrees * dir, 0f, Space.World);
+                ApplyYawRotation(snapTurnDegrees * dir);
                 _lastSnapTime = now;
             }
 
             _prevSnapValue = raw;
         }
 
+        private void ResolveCameraTargets()
+        {
+            if (headTransform == null)
+            {
+                Camera mainCamera = Camera.main;
+                if (mainCamera != null)
+                {
+                    headTransform = mainCamera.transform;
+                }
+            }
+
+            if (physicalTarget == null && headTransform != null)
+            {
+                physicalTarget = headTransform.parent != null ? headTransform.parent : headTransform;
+            }
+        }
+
+        private bool HasActiveMoveTarget()
+        {
+            if (movePhysicalTransform)
+            {
+                ResolveCameraTargets();
+                if (physicalTarget != null)
+                {
+                    return true;
+                }
+            }
+
+            return moveTarget != null;
+        }
+
+        private void ApplyWorldMovement(Vector3 worldDelta)
+        {
+            if (movePhysicalTransform)
+            {
+                ResolveCameraTargets();
+                if (physicalTarget != null)
+                {
+                    MoveTransformByWorldDelta(physicalTarget, worldDelta);
+                    return;
+                }
+            }
+
+            if (moveTarget != null)
+            {
+                moveTarget.position += worldDelta;
+            }
+        }
+
+        private static void MoveTransformByWorldDelta(Transform targetTransform, Vector3 worldDelta)
+        {
+            if (targetTransform == null) return;
+
+            Transform parent = targetTransform.parent;
+            if (parent != null)
+            {
+                targetTransform.localPosition += parent.InverseTransformVector(worldDelta);
+                return;
+            }
+
+            targetTransform.position += worldDelta;
+        }
+
+        private void ApplyYawRotation(float degrees)
+        {
+            if (movePhysicalTransform)
+            {
+                ResolveCameraTargets();
+                if (physicalTarget != null)
+                {
+                    Quaternion desiredWorldRotation = Quaternion.Euler(0f, degrees, 0f) * physicalTarget.rotation;
+                    SetWorldRotationAsLocal(physicalTarget, desiredWorldRotation);
+                    return;
+                }
+            }
+
+            if (moveTarget != null)
+            {
+                // Rotate horizontally (Y axis in world space)
+                moveTarget.Rotate(0f, degrees, 0f, Space.World);
+            }
+        }
+
+        private static void SetWorldRotationAsLocal(Transform targetTransform, Quaternion worldRotation)
+        {
+            if (targetTransform == null) return;
+
+            Transform parent = targetTransform.parent;
+            if (parent != null)
+            {
+                targetTransform.localRotation = Quaternion.Inverse(parent.rotation) * worldRotation;
+                return;
+            }
+
+            targetTransform.localRotation = worldRotation;
+        }
+
 #if UNITY_EDITOR
         void OnValidate()
         {
-            if (headTransform == null && Camera.main != null)
-                headTransform = Camera.main.transform;
+            ResolveCameraTargets();
 
-            if (moveTarget == null)
+            if (!HasActiveMoveTarget())
             {
                 Debug.LogWarning(MoveTargetNotSetError);
             }

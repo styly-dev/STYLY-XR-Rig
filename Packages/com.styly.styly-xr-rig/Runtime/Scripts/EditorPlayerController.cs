@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEditor;
 
 namespace Styly.XRRig
 {
@@ -11,6 +10,9 @@ namespace Styly.XRRig
     public class EditorPlayerController : MonoBehaviour
     {
         [Header("Target")][SerializeField] private Transform target;
+
+        [SerializeField, InspectorName("Move Physical Transform")]
+        private bool movePhysicalTransform = true;
 
         [Header("Movement Settings (WASD + EQ)")]
         [SerializeField]
@@ -29,6 +31,7 @@ namespace Styly.XRRig
         private Transform controlTarget;
         private Transform cameraTransform;
         private Transform cameraOffsetTransform;
+        private Transform physicalTarget;
         private float rotationX = 0f;
         private float rotationY = 0f;
         private float lastSnapTime = -999f;
@@ -42,6 +45,8 @@ namespace Styly.XRRig
             if (Camera.main != null)
             {
                 cameraTransform = Camera.main.transform;
+                physicalTarget = cameraTransform.parent != null ? cameraTransform.parent : cameraTransform;
+
                 // Camera Offset is the parent of Main Camera
                 if (cameraTransform.parent != null && cameraTransform.parent != controlTarget)
                 {
@@ -102,7 +107,7 @@ namespace Styly.XRRig
             if (moveDirection.magnitude > 0)
             {
                 moveDirection.Normalize();
-                controlTarget.position += moveDirection * moveSpeed * Time.deltaTime;
+                ApplyWorldMovement(moveDirection * moveSpeed * Time.deltaTime);
             }
         }
 
@@ -128,8 +133,7 @@ namespace Styly.XRRig
                 // Desired camera world rotation
                 Quaternion desiredRotation = Quaternion.Euler(rotationX, rotationY, 0);
 
-                // Rotate around camera position so the view doesn't orbit when Camera Offset has a position
-                RotateControlTargetForCamera(desiredRotation);
+                ApplyCameraRotation(desiredRotation);
             }
         }
 
@@ -161,8 +165,80 @@ namespace Styly.XRRig
 
             rotationY += snapTurnDegrees * direction;
             Quaternion desiredRotation = Quaternion.Euler(rotationX, rotationY, 0);
-            RotateControlTargetForCamera(desiredRotation);
+            ApplyCameraRotation(desiredRotation);
             lastSnapTime = now;
+        }
+
+        private void ApplyWorldMovement(Vector3 worldDelta)
+        {
+            if (movePhysicalTransform && physicalTarget != null)
+            {
+                MoveTransformByWorldDelta(physicalTarget, worldDelta);
+                return;
+            }
+
+            if (controlTarget != null)
+            {
+                controlTarget.position += worldDelta;
+            }
+        }
+
+        private static void MoveTransformByWorldDelta(Transform targetTransform, Vector3 worldDelta)
+        {
+            if (targetTransform == null) return;
+
+            Transform parent = targetTransform.parent;
+            if (parent != null)
+            {
+                targetTransform.localPosition += parent.InverseTransformVector(worldDelta);
+                return;
+            }
+
+            targetTransform.position += worldDelta;
+        }
+
+        private void ApplyCameraRotation(Quaternion desiredCameraRotation)
+        {
+            if (movePhysicalTransform && physicalTarget != null)
+            {
+                RotatePhysicalTargetForCamera(desiredCameraRotation);
+                return;
+            }
+
+            RotateControlTargetForCamera(desiredCameraRotation);
+        }
+
+        private void RotatePhysicalTargetForCamera(Quaternion desiredCameraRotation)
+        {
+            if (physicalTarget == null)
+            {
+                RotateControlTargetForCamera(desiredCameraRotation);
+                return;
+            }
+
+            if (cameraTransform != null && cameraTransform != physicalTarget && cameraTransform.IsChildOf(physicalTarget))
+            {
+                Quaternion cameraRelativeRotation = Quaternion.Inverse(physicalTarget.rotation) * cameraTransform.rotation;
+                Quaternion desiredPhysicalWorldRotation = desiredCameraRotation * Quaternion.Inverse(cameraRelativeRotation);
+                SetWorldRotationAsLocal(physicalTarget, desiredPhysicalWorldRotation);
+                return;
+            }
+
+            SetWorldRotationAsLocal(physicalTarget, desiredCameraRotation);
+        }
+
+        private static void SetWorldRotationAsLocal(Transform targetTransform, Quaternion worldRotation)
+        {
+            if (targetTransform == null) return;
+
+            Transform parent = targetTransform.parent;
+            if (parent != null)
+            {
+                targetTransform.localRotation = Quaternion.Inverse(parent.rotation) * worldRotation;
+                return;
+            }
+
+            targetTransform.localRotation = worldRotation;
         }
 
         /// <summary>
