@@ -1,4 +1,6 @@
 using System;
+using System.Reflection;
+using Unity.XR.CoreUtils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -31,6 +33,14 @@ namespace Styly.XRRig
         private bool movePhysicalTransform = true;
 
         private Transform physicalTarget;
+        private XROrigin physicalXrOrigin;
+        private bool netSyncReflectionResolved;
+        private Type netSyncManagerType;
+        private PropertyInfo netSyncInstanceProperty;
+        private FieldInfo netSyncXrOriginTransformField;
+        private FieldInfo netSyncPhysicalOffsetPositionField;
+        private FieldInfo netSyncPhysicalOffsetRotationField;
+        private bool hasLoggedNetSyncRebaseError;
 
         [Tooltip("Move speed (m/s)")]
         public float moveSpeed = 2.0f;
@@ -59,14 +69,15 @@ namespace Styly.XRRig
 
         void Start()
         {
-            ResolveCameraTargets();
-
             var stylyXrRig = FindFirstObjectByType<StylyXrRig>();
             if (stylyXrRig != null)
             {
                 moveTarget = stylyXrRig.transform;
             }
-            else if (!HasActiveMoveTarget())
+
+            ResolveCameraTargets();
+
+            if (!HasActiveMoveTarget())
             {
                 LogMoveTargetErrorOnce();
             }
@@ -278,10 +289,45 @@ namespace Styly.XRRig
                 }
             }
 
-            if (physicalTarget == null && headTransform != null)
+            if (physicalTarget == null)
             {
-                physicalTarget = headTransform.parent != null ? headTransform.parent : headTransform;
+                physicalTarget = ResolvePhysicalTarget();
             }
+        }
+
+        private Transform ResolvePhysicalTarget()
+        {
+            // NetSync observes the XR Origin locomotion delta, so prefer the origin over Camera Offset.
+            if (physicalXrOrigin == null && headTransform != null)
+            {
+                physicalXrOrigin = headTransform.GetComponentInParent<XROrigin>();
+            }
+
+            if (physicalXrOrigin == null)
+            {
+                physicalXrOrigin = FindFirstObjectByType<XROrigin>();
+            }
+
+            if (physicalXrOrigin != null)
+            {
+                Transform xrOriginTransform = physicalXrOrigin.transform;
+                if (xrOriginTransform != null)
+                {
+                    return xrOriginTransform;
+                }
+            }
+
+            if (moveTarget != null)
+            {
+                return moveTarget;
+            }
+
+            if (headTransform != null)
+            {
+                return headTransform.parent != null ? headTransform.parent : headTransform;
+            }
+
+            return null;
         }
 
         private bool HasActiveMoveTarget()
@@ -313,7 +359,22 @@ namespace Styly.XRRig
                 ResolveCameraTargets();
                 if (physicalTarget != null)
                 {
+                    if (physicalXrOrigin != null)
+                    {
+                        Camera xrCamera = physicalXrOrigin.Camera;
+                        if (xrCamera != null)
+                        {
+                            Vector3 desiredCameraPosition = xrCamera.transform.position + worldDelta;
+                            if (physicalXrOrigin.MoveCameraToWorldLocation(desiredCameraPosition))
+                            {
+                                RebaseNetSyncPhysicalOrigin();
+                                return;
+                            }
+                        }
+                    }
+
                     MoveTransformByWorldDelta(physicalTarget, worldDelta);
+                    RebaseNetSyncPhysicalOrigin();
                     return;
                 }
             }
@@ -345,8 +406,15 @@ namespace Styly.XRRig
                 ResolveCameraTargets();
                 if (physicalTarget != null)
                 {
+                    if (physicalXrOrigin != null && physicalXrOrigin.RotateAroundCameraUsingOriginUp(degrees))
+                    {
+                        RebaseNetSyncPhysicalOrigin();
+                        return;
+                    }
+
                     Quaternion desiredWorldRotation = Quaternion.Euler(0f, degrees, 0f) * physicalTarget.rotation;
                     SetWorldRotationAsLocal(physicalTarget, desiredWorldRotation);
+                    RebaseNetSyncPhysicalOrigin();
                     return;
                 }
             }
@@ -370,6 +438,96 @@ namespace Styly.XRRig
             }
 
             targetTransform.localRotation = worldRotation;
+        }
+
+        private void RebaseNetSyncPhysicalOrigin()
+        {
+            if (physicalTarget == null) return;
+            if (!TryGetNetSyncManager(out object netSyncManager)) return;
+
+            try
+            {
+                if (netSyncXrOriginTransformField != null && physicalXrOrigin != null)
+                {
+                    Transform xrOriginTransform = physicalXrOrigin.transform;
+                    if (xrOriginTransform != null)
+                    {
+                        netSyncXrOriginTransformField.SetValue(netSyncManager, xrOriginTransform);
+                    }
+                }
+
+                netSyncPhysicalOffsetPositionField.SetValue(netSyncManager, physicalTarget.position);
+                netSyncPhysicalOffsetRotationField.SetValue(netSyncManager, physicalTarget.eulerAngles);
+            }
+            catch (Exception ex)
+            {
+                if (!hasLoggedNetSyncRebaseError)
+                {
+                    Debug.LogWarning($"VrStickController: Failed to rebase STYLY NetSync physical origin: {ex.Message}");
+                    hasLoggedNetSyncRebaseError = true;
+                }
+            }
+        }
+
+        private bool TryGetNetSyncManager(out object netSyncManager)
+        {
+            netSyncManager = null;
+            if (!EnsureNetSyncReflection()) return false;
+
+            object instance = netSyncInstanceProperty.GetValue(null, null);
+            UnityEngine.Object unityInstance = instance as UnityEngine.Object;
+            if (unityInstance == null) return false;
+
+            netSyncManager = instance;
+            return true;
+        }
+
+        private bool EnsureNetSyncReflection()
+        {
+            if (netSyncReflectionResolved)
+            {
+                return netSyncManagerType != null
+                    && netSyncInstanceProperty != null
+                    && netSyncPhysicalOffsetPositionField != null
+                    && netSyncPhysicalOffsetRotationField != null;
+            }
+
+            netSyncReflectionResolved = true;
+            netSyncManagerType = ResolveNetSyncManagerType();
+            if (netSyncManagerType == null) return false;
+
+            BindingFlags staticFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
+            netSyncInstanceProperty = netSyncManagerType.GetProperty("Instance", staticFlags);
+
+            BindingFlags instanceFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            netSyncXrOriginTransformField = netSyncManagerType.GetField("_XrOriginTransform", instanceFlags);
+            netSyncPhysicalOffsetPositionField = netSyncManagerType.GetField("_physicalOffsetPosition", instanceFlags);
+            netSyncPhysicalOffsetRotationField = netSyncManagerType.GetField("_physicalOffsetRotation", instanceFlags);
+
+            return netSyncInstanceProperty != null
+                && netSyncPhysicalOffsetPositionField != null
+                && netSyncPhysicalOffsetRotationField != null;
+        }
+
+        private static Type ResolveNetSyncManagerType()
+        {
+            Type managerType = Type.GetType("Styly.NetSync.NetSyncManager, com.styly.styly-netsync");
+            if (managerType != null)
+            {
+                return managerType;
+            }
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            for (int i = 0; i < assemblies.Length; i++)
+            {
+                managerType = assemblies[i].GetType("Styly.NetSync.NetSyncManager");
+                if (managerType != null)
+                {
+                    return managerType;
+                }
+            }
+
+            return null;
         }
 
 #if UNITY_EDITOR
