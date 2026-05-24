@@ -86,16 +86,18 @@ namespace Styly.XRRig
 
             // Use camera's forward/right to account for Camera Offset rotation
             Transform directionSource = cameraTransform != null ? cameraTransform : controlTarget;
+            Vector3 forward = ProjectDirectionOnGround(directionSource.forward, Vector3.forward);
+            Vector3 right = ProjectDirectionOnGround(directionSource.right, Vector3.right);
 
             // XZ plane movement (WASD)
             if (keyboard.wKey.isPressed)
-                moveDirection += directionSource.forward;
+                moveDirection += forward;
             if (keyboard.sKey.isPressed)
-                moveDirection -= directionSource.forward;
+                moveDirection -= forward;
             if (keyboard.aKey.isPressed)
-                moveDirection -= directionSource.right;
+                moveDirection -= right;
             if (keyboard.dKey.isPressed)
-                moveDirection += directionSource.right;
+                moveDirection += right;
 
             // Y axis movement (E/Q)
             if (keyboard.eKey.isPressed)
@@ -181,6 +183,18 @@ namespace Styly.XRRig
             {
                 controlTarget.position += worldDelta;
             }
+        }
+
+        private static Vector3 ProjectDirectionOnGround(Vector3 direction, Vector3 fallback)
+        {
+            Vector3 projected = Vector3.ProjectOnPlane(direction, Vector3.up);
+            if (projected.sqrMagnitude > 0.0001f)
+            {
+                projected.Normalize();
+                return projected;
+            }
+
+            return fallback;
         }
 
         private static void MoveTransformByWorldDelta(Transform targetTransform, Vector3 worldDelta)

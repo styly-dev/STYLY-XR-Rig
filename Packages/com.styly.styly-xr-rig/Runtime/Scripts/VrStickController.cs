@@ -6,8 +6,7 @@ namespace Styly.XRRig
 {
     public class VrStickController : MonoBehaviour
     {
-        // Error message constant
-        private const string MoveTargetNotSetError = "VrStickController: moveTarget is not set. Please assign the Transform to move in the Inspector.";
+        private const string MoveTargetNotAvailableError = "VrStickController: No movement target is available. Enable a Main Camera for physical movement, or add STYLY XR Rig for virtual movement.";
 
         [Header("Input Actions (assign in Inspector)")]
         [Tooltip("Assign \"XRI Left Locomotion/Move\" from Starter Assets/XRI Default Input Actions")]
@@ -16,10 +15,10 @@ namespace Styly.XRRig
         [Tooltip("Assign \"XRI Right Locomotion/Snap Turn\" from Starter Assets/XRI Default Input Actions")]
         public InputActionProperty snapTurnAction;
 
-        [Tooltip("Assign an Input Action that fires when the X button is pressed to move upward")]
+        [Tooltip("Assign an Input Action that fires when the vertical up button is pressed")]
         public InputActionProperty verticalUpAction;
 
-        [Tooltip("Assign an Input Action that fires when the Y button is pressed to move downward")]
+        [Tooltip("Assign an Input Action that fires when the vertical down button is pressed")]
         public InputActionProperty verticalDownAction;
 
         // Head (Main Camera) will be assigned
@@ -53,6 +52,7 @@ namespace Styly.XRRig
         // Internal state
         float _prevSnapValue = 0f;
         float _lastSnapTime = -999f;
+        private bool hasLoggedMoveTargetError = false;
 
         private const float ButtonPressedThreshold = 0.5f;
 
@@ -61,16 +61,14 @@ namespace Styly.XRRig
         {
             ResolveCameraTargets();
 
-            // Remove redundant assignment as it's already done in Awake
-            // Only find and assign moveTarget with proper null checking
-            var stylyXrRig = FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
+            var stylyXrRig = FindFirstObjectByType<StylyXrRig>();
             if (stylyXrRig != null)
             {
                 moveTarget = stylyXrRig.transform;
             }
-            else
+            else if (!HasActiveMoveTarget())
             {
-                Debug.LogError("VrStickController: No StylyXrRig found in the scene. Please ensure STYLY XR Rig is present.");
+                LogMoveTargetErrorOnce();
             }
         }
 
@@ -104,7 +102,7 @@ namespace Styly.XRRig
 
             if (!HasActiveMoveTarget())
             {
-                Debug.LogError(MoveTargetNotSetError);
+                LogMoveTargetErrorOnce();
                 return;
             }
 
@@ -152,7 +150,7 @@ namespace Styly.XRRig
 
             if (!HasActiveMoveTarget())
             {
-                Debug.LogError(MoveTargetNotSetError);
+                LogMoveTargetErrorOnce();
                 return;
             }
 
@@ -218,7 +216,7 @@ namespace Styly.XRRig
 
             if (!HasActiveMoveTarget())
             {
-                Debug.LogError(MoveTargetNotSetError);
+                LogMoveTargetErrorOnce();
                 return;
             }
 
@@ -300,6 +298,14 @@ namespace Styly.XRRig
             return moveTarget != null;
         }
 
+        private void LogMoveTargetErrorOnce()
+        {
+            if (hasLoggedMoveTargetError) return;
+
+            Debug.LogError(MoveTargetNotAvailableError);
+            hasLoggedMoveTargetError = true;
+        }
+
         private void ApplyWorldMovement(Vector3 worldDelta)
         {
             if (movePhysicalTransform)
@@ -370,11 +376,6 @@ namespace Styly.XRRig
         void OnValidate()
         {
             ResolveCameraTargets();
-
-            if (!HasActiveMoveTarget())
-            {
-                Debug.LogWarning(MoveTargetNotSetError);
-            }
 
             moveSpeed = Mathf.Max(0f, moveSpeed);
             snapTurnDegrees = Mathf.Clamp(snapTurnDegrees, 1f, 180f);
