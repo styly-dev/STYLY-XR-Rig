@@ -1,6 +1,5 @@
 ---
 name: uloop-simulate-mouse-input
-toolName: simulate-mouse-input
 description: "Simulate Mouse.current input in PlayMode through Unity Input System. Use for gameplay clicks, mouse delta, or scroll; use simulate-mouse-ui for EventSystem UI elements."
 context: fork
 ---
