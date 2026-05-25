@@ -22,6 +22,8 @@ GameObject:
   - component: {fileID: 7632155229309427778}
   - component: {fileID: 3688553914472423503}
   - component: {fileID: 611438928132686620}
+  - component: {fileID: 6863693838927418023}
+  - component: {fileID: 6647651339540416453}
   - component: {fileID: 6724786742393489301}
   - component: {fileID: 4092345172134132238}
   m_Layer: 2
@@ -230,6 +232,102 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xriActions: {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f,
     type: 3}
+--- !u!114 &6863693838927418023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8257337966620525994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ad7d9ccec2bb44c4b0797d02ca2e0f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 932545197216251794}
+  moveSpeed: 5
+  lookSensitivity: 8
+  snapTurnDegrees: 45
+--- !u!114 &6647651339540416453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8257337966620525994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b7de3e7974a54b6eaa9f0b6ee1c46c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Move
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 4e95e582-0d91-4def-a08a-e1eed8bf350e
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: 6972639530819350904, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  snapTurnAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Snap Turn
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 1d26668f-5ee9-4af9-a223-6b493eac1c7b
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -8525429354371678379, guid: c348712bda248c246b8c49b3db54643f,
+      type: 3}
+  verticalUpAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Vertical Up
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: ffc71052-9831-42f5-8819-dd4d5beead68
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 6c994190-0fcc-46eb-8819-dc4678f2a3d0
+        m_Path: <XRController>{LeftHand}/{PrimaryButton}
+        m_Interactions: Press
+        m_Processors: 
+        m_Groups: 
+        m_Action: Vertical Up
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  verticalDownAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Vertical Down
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 69b15f27-d810-480e-bac0-3a2bd331c501
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 4e07ffe5-5f5b-41cc-b149-308c0419862a
+        m_Path: <XRController>{LeftHand}/{SecondaryButton}
+        m_Interactions: Press
+        m_Processors: 
+        m_Groups: 
+        m_Action: Vertical Down
+        m_Flags: 0
+      m_Flags: 0
+    m_Reference: {fileID: 0}
+  moveSpeed: 2
+  snapTurnDegrees: 45
 --- !u!114 &6724786742393489301
 MonoBehaviour:
   m_ObjectHideFlags: 0
