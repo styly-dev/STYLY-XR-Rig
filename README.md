@@ -32,6 +32,8 @@ Just click target SDK on the menu. The SDK will be downloaded and installed. The
 - Unity Editor development support
   - Camera height is set to 1.3m only on Unity Editor
   - Camera height will be automatically set based on actual devices
+  - WASD movement in the editor mode.
+  - Stick control with VR controllers.
   - XRI interaction works on Editor mode with a mouse without XR Simulator. (Currently supported only on visionOS target)
 - AR Managers are included (disabled on start)
   - XR Interaction Manager
