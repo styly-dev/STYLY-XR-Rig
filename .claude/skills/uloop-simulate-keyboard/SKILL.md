@@ -1,6 +1,5 @@
 ---
 name: uloop-simulate-keyboard
-toolName: simulate-keyboard
 description: "Simulate keyboard input in PlayMode through Unity Input System. Use for key presses, holds, releases, and game controls such as WASD or Space."
 context: fork
 ---
