@@ -32,17 +32,20 @@ namespace Styly.XRRig
         private bool isTransitioning;
         private bool hasAppliedMode;
         private Coroutine transitionRoutine;
+        private CameraClearFlags _vrClearFlags = CameraClearFlags.Skybox;
 
         // --- Public API ---
         private bool passthroughMode;
         internal bool PassthroughMode => passthroughMode;
 
-        internal void SwitchToVR(float duration = 1)
+        internal void SwitchToVR(float duration = 1, CameraClearFlags clearFlags = CameraClearFlags.Skybox)
         {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
             
             if (IsRedundant(XRMode.VR)) { return; }
+
+            _vrClearFlags = clearFlags;
 
             passthroughMode = false;
             targetMode = XRMode.VR;
@@ -215,7 +218,9 @@ namespace Styly.XRRig
 
                 if (mode == XRMode.VR)
                 {
-                    cam.clearFlags = CameraClearFlags.Skybox;
+                    cam.clearFlags = _vrClearFlags;
+                    var bg = cam.backgroundColor; bg.a = 1.0f;
+                    cam.backgroundColor = bg;
                 }
                 else // MR
                 {

@@ -13,9 +13,9 @@ namespace Styly.XRRig
 
         public bool PassthroughMode => passthroughManager != null ? passthroughManager.PassthroughMode : passthroughMode;
 
-        public void SwitchToVR(float duration = 1)
+        public void SwitchToVR(float duration = 1, CameraClearFlags clearFlags = CameraClearFlags.Skybox)
         {
-            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration); }
+            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration, clearFlags); }
             if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR); }
         }
 
