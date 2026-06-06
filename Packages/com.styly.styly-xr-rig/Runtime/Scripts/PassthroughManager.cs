@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -39,6 +40,11 @@ namespace Styly.XRRig
 
         internal void SwitchToVR(float duration = 1)
         {
+            SwitchToVR(duration, null);
+        }
+
+        internal void SwitchToVR(float duration, Action onBeforeReveal)
+        {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
             
@@ -50,7 +56,7 @@ namespace Styly.XRRig
             CancelInvoke(nameof(DisablePassthroughAPI));
             CancelInvoke(nameof(DisableARCamera));
 
-            StartTransition(XRMode.VR, duration);
+            StartTransition(XRMode.VR, duration, onBeforeReveal);
 
             if (duration <= 0f)
             {
@@ -66,6 +72,11 @@ namespace Styly.XRRig
 
         internal void SwitchToMR(float duration = 1)
         {
+            SwitchToMR(duration, null);
+        }
+
+        internal void SwitchToMR(float duration, Action onBeforeReveal)
+        {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
             
@@ -79,7 +90,7 @@ namespace Styly.XRRig
 
             EnableARCamera();
             EnablePassthroughAPI();
-            StartTransition(XRMode.MR, duration);
+            StartTransition(XRMode.MR, duration, onBeforeReveal);
         }
 
         private void EnableARCamera()
@@ -153,7 +164,7 @@ namespace Styly.XRRig
         }
 
         // --- Core ---
-        private void StartTransition(XRMode next, float duration = 1)
+        private void StartTransition(XRMode next, float duration, Action onBeforeReveal)
         {
             transitionDuration = duration;
             if (!isActiveAndEnabled) return;
@@ -170,6 +181,7 @@ namespace Styly.XRRig
             if (transitionDuration <= 0f)
             {
                 ApplyMode(next);
+                InvokeOnBeforeReveal(onBeforeReveal);
                 currentMode = next;
                 isTransitioning = false;
                 transitionRoutine = null;
@@ -178,18 +190,31 @@ namespace Styly.XRRig
             }
 
             isTransitioning = true;
-            transitionRoutine = StartCoroutine(DoTransition(next)); // Fade → Switch → Fade
+            transitionRoutine = StartCoroutine(DoTransition(next, onBeforeReveal)); // Fade → Switch → Fade
         }
 
-        private IEnumerator DoTransition(XRMode next)
+        private IEnumerator DoTransition(XRMode next, Action onBeforeReveal)
         {
             float half = transitionDuration * 0.5f;
             yield return Fade(0f, 1f, half);
             ApplyMode(next);
+            InvokeOnBeforeReveal(onBeforeReveal);
             yield return Fade(1f, 0f, half);
             SetFadeAlpha(0f);
             isTransitioning = false;
             transitionRoutine = null;
+        }
+
+        private void InvokeOnBeforeReveal(Action onBeforeReveal)
+        {
+            try
+            {
+                onBeforeReveal?.Invoke();
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
 
         private IEnumerator Fade(float from, float to, float duration)

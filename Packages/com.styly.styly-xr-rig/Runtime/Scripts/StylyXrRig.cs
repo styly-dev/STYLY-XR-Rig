@@ -15,13 +15,23 @@ namespace Styly.XRRig
 
         public void SwitchToVR(float duration = 1)
         {
-            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration); }
+            SwitchToVR(duration, null);
+        }
+
+        public void SwitchToVR(float duration, System.Action onBeforeReveal)
+        {
+            if (passthroughManager != null) { passthroughManager.SwitchToVR(duration, onBeforeReveal); }
             if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForVR); }
         }
 
         public void SwitchToMR(float duration = 1)
         {
-            if (passthroughManager != null) { passthroughManager.SwitchToMR(duration); }
+            SwitchToMR(duration, null);
+        }
+
+        public void SwitchToMR(float duration, System.Action onBeforeReveal)
+        {
+            if (passthroughManager != null) { passthroughManager.SwitchToMR(duration, onBeforeReveal); }
             if (smartphoneArCameraManager != null) { smartphoneArCameraManager.ConfigureOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.AutomaticForMR); }
         }
 
