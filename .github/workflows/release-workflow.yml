@@ -74,7 +74,7 @@ jobs:
           echo "This workflow will update the package version from $CURRENT_VERSION to $VERSION"
 
           # Save current version to environment variable for use in Summary
-          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+          printf 'CURRENT_VERSION=%s\n' "$CURRENT_VERSION" >> "$GITHUB_ENV"
 
       - name: Update Unity package.json version
         run: |
@@ -96,10 +96,12 @@ jobs:
         run: |
           git add Packages/com.styly.styly-xr-rig/package.json
 
-          # Check if there are changes to commit
+          # Fail fast if there is nothing to commit: continuing would push/merge
+          # and try to tag a release without an actual version bump (and the
+          # tag may already exist), so stop the workflow here instead.
           if git diff --staged --quiet; then
-            echo "⚠️ Warning: No changes to commit. Version may already be set to $VERSION"
-            exit 0
+            echo "❌ Error: No changes to commit. Version is already set to $VERSION"
+            exit 1
           fi
 
           # Commit changes
@@ -117,8 +119,9 @@ jobs:
           # Fetch all remote branches to ensure latest refs
           git fetch origin
 
-          # Checkout main branch
-          git checkout main
+          # Create/reset a local main that exactly matches origin/main so the
+          # fast-forward merge is deterministic regardless of any stale local main
+          git checkout -B main origin/main
 
           # Fast-forward merge origin/develop into main
           git merge --ff-only origin/develop
