@@ -133,7 +133,7 @@ namespace Styly.XRRig
             }
         }
 
-        void Start()
+        void Awake()
         {
             if (!ResolveMainCamera()) return;
             BuildTargetsAndOverlays();
@@ -279,7 +279,17 @@ namespace Styly.XRRig
         {
             // Find Main Camera of STYLY-XR-Rig
             var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
+            if (STYLYXRRig == null)
+            {
+                Debug.LogError("StylyXrRig not found in the scene.");
+                return false;
+            }
             mainCameraOfStylyXrRig = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"));
+            if (mainCameraOfStylyXrRig == null)
+            {
+                Debug.LogError("MainCamera not found in StylyXrRig.");
+                return false;
+            }
             return true;
         }
 
