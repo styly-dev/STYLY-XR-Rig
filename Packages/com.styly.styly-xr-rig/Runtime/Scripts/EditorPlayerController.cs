@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR.Interaction.Toolkit.Inputs.Simulation;
 
 namespace Styly.XRRig
 {
@@ -36,8 +37,22 @@ namespace Styly.XRRig
         private float rotationY = 0f;
         private float lastSnapTime = -999f;
 
+        void OnEnable()
+        {
+            if (ShouldDisableForXRInteractionSimulator())
+            {
+                enabled = false;
+            }
+        }
+
         void Start()
         {
+            if (ShouldDisableForXRInteractionSimulator())
+            {
+                enabled = false;
+                return;
+            }
+
             // Set control target (use self if target is null)
             controlTarget = target != null ? target : transform;
 
@@ -72,6 +87,17 @@ namespace Styly.XRRig
             HandleMovement();
             HandleRotation();
             HandleSnapTurn();
+        }
+
+        private static bool ShouldDisableForXRInteractionSimulator()
+        {
+            if (XRInteractionSimulator.instance != null && XRInteractionSimulator.instance.isActiveAndEnabled)
+            {
+                return true;
+            }
+
+            var simulator = Object.FindAnyObjectByType<XRInteractionSimulator>(FindObjectsInactive.Exclude);
+            return simulator != null && simulator.isActiveAndEnabled;
         }
 
         /// <summary>
