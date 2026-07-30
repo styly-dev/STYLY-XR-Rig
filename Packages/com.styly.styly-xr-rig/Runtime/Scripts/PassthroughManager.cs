@@ -32,7 +32,6 @@ namespace Styly.XRRig
         private XRMode targetMode = XRMode.VR;
         private bool isTransitioning;
         private bool hasAppliedMode;
-        private bool isInitialized;
         private Coroutine transitionRoutine;
 
         // --- Public API ---
@@ -48,7 +47,6 @@ namespace Styly.XRRig
         {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
-            if (!EnsureInitialized()) { return; }
             
             if (IsRedundant(XRMode.VR)) { return; }
 
@@ -81,7 +79,6 @@ namespace Styly.XRRig
         {
             // Skip on Vision OS
             if (Utils.IsVisionOS()) { return; }
-            if (!EnsureInitialized()) { return; }
             
             if (IsRedundant(XRMode.MR)) { return; }
 
@@ -136,9 +133,11 @@ namespace Styly.XRRig
             }
         }
 
-        void Start()
+        void Awake()
         {
-            EnsureInitialized();
+            if (!ResolveMainCamera()) return;
+            BuildTargetsAndOverlays();
+            SetUpCameraForPassthrough();
         }
 
         public void SetUpCameraForPassthrough()
@@ -276,32 +275,12 @@ namespace Styly.XRRig
         }
 
         // --- Setup ---
-        private bool EnsureInitialized()
-        {
-            if (isInitialized) { return true; }
-            if (!ResolveMainCamera()) { return false; }
-
-            BuildTargetsAndOverlays();
-            SetUpCameraForPassthrough();
-            isInitialized = true;
-            return true;
-        }
-
         private bool ResolveMainCamera()
         {
             // Find Main Camera of STYLY-XR-Rig
             var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
-            if (STYLYXRRig == null)
-            {
-                Debug.LogError("StylyXrRig not found in the scene.");
-                return false;
-            }
-
             mainCameraOfStylyXrRig = STYLYXRRig.transform.GetComponentsInChildren<Camera>().FirstOrDefault(camera => camera.CompareTag("MainCamera"));
-            if (mainCameraOfStylyXrRig != null) { return true; }
-
-            Debug.LogError("MainCamera not found in StylyXrRig.");
-            return false;
+            return true;
         }
 
         private void BuildTargetsAndOverlays()
