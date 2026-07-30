@@ -107,8 +107,6 @@ namespace Styly.XRRig
         public void ConfigureOcclusionSettings(OcclusionSettings settings)
         {
 #if !UNITY_EDITOR
-            if (!EnsureOcclusionManager()) { return; }
-
             switch (settings)
             {
                 case OcclusionSettings.Disabled:
@@ -153,18 +151,6 @@ namespace Styly.XRRig
                     break;
             }
 #endif
-        }
-
-        private bool EnsureOcclusionManager()
-        {
-            if (arOcclusionManager != null) { return true; }
-            if (TryGetComponent(out arOcclusionManager)) { return true; }
-
-            AddOcclusionComponents();
-            if (arOcclusionManager != null) { return true; }
-
-            Debug.LogWarning("AROcclusionManager component not found on the Main Camera.");
-            return false;
         }
     }
 }
