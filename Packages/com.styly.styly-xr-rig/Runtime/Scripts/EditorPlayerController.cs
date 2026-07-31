@@ -50,7 +50,6 @@ namespace Styly.XRRig
             if (ShouldDisableForXRInteractionSimulator())
             {
                 enabled = false;
-                return;
             }
 
             // Set control target (use self if target is null)
