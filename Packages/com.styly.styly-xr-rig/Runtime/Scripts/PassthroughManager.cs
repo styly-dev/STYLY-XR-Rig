@@ -133,7 +133,7 @@ namespace Styly.XRRig
             }
         }
 
-        void Start()
+        void Awake()
         {
             if (!ResolveMainCamera()) return;
             BuildTargetsAndOverlays();
