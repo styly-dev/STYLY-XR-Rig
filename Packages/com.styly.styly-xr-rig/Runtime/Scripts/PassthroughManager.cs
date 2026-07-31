@@ -154,6 +154,11 @@ namespace Styly.XRRig
             {
                 mainCameraOfStylyXrRig.gameObject.AddComponent<SmartphoneARCameraManager>();
             }
+            // ARCameraBackground accesses ARCameraManager during OnEnable, so it must exist first.
+            if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraManager>() == null)
+            {
+                mainCameraOfStylyXrRig.gameObject.AddComponent<ARCameraManager>();
+            }
             // Add AR Camera Background if not already present
             if (mainCameraOfStylyXrRig.gameObject.GetComponent<ARCameraBackground>() == null)
             {
