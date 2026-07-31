@@ -107,6 +107,8 @@ namespace Styly.XRRig
         public void ConfigureOcclusionSettings(OcclusionSettings settings)
         {
 #if !UNITY_EDITOR
+            if (arOcclusionManager == null) { AddOcclusionComponents(); }
+
             switch (settings)
             {
                 case OcclusionSettings.Disabled:
