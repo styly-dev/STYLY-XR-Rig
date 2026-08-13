@@ -21,7 +21,6 @@ namespace Styly.XRRig
     public class PassthroughManager : MonoBehaviour
     {
         private enum XRMode { VR, MR }
-        internal enum PassthroughResumeAction { None, Pause, Start }
         private Camera mainCameraOfStylyXrRig;
         private float transitionDuration;
         private Color fadeColor = Color.black;
@@ -413,37 +412,19 @@ namespace Styly.XRRig
                 return;
             }
 
-            var isExtensionEnabled = PassthroughFeature.isExtensionEnable;
-            if (!isExtensionEnabled) return;
+            if (!PassthroughFeature.isExtensionEnable) return;
 
-            switch (GetPassthroughResumeAction(
-                        isExtensionEnabled,
-                        PassthroughFeature.EnableVideoSeeThrough))
+            if (PassthroughFeature.EnableVideoSeeThrough)
             {
-                case PassthroughResumeAction.Pause:
-                    // The PICO camera subsystem can restart native VST before this callback
-                    // without updating EnableVideoSeeThrough. Reapply the requested off state.
-                    PassthroughFeature.PassthroughPause();
-                    break;
-                case PassthroughResumeAction.Start:
-                    PassthroughFeature.PassthroughStart();
-                    break;
+                PassthroughFeature.PassthroughStart();
+            }
+            else
+            {
+                // The PICO camera subsystem can restart native VST before this callback
+                // without updating EnableVideoSeeThrough. Reapply the requested off state.
+                PassthroughFeature.PassthroughPause();
             }
 #endif
-        }
-
-        internal static PassthroughResumeAction GetPassthroughResumeAction(
-            bool isExtensionEnabled,
-            bool isVideoSeeThroughEnabled)
-        {
-            if (!isExtensionEnabled)
-            {
-                return PassthroughResumeAction.None;
-            }
-
-            return isVideoSeeThroughEnabled
-                ? PassthroughResumeAction.Start
-                : PassthroughResumeAction.Pause;
         }
     }
 }
