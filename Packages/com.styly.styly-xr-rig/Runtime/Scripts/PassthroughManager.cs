@@ -413,8 +413,11 @@ namespace Styly.XRRig
                 return;
             }
 
+            var isExtensionEnabled = PassthroughFeature.isExtensionEnable;
+            if (!isExtensionEnabled) return;
+
             switch (GetPassthroughResumeAction(
-                        PassthroughFeature.isExtensionEnable,
+                        isExtensionEnabled,
                         PassthroughFeature.EnableVideoSeeThrough))
             {
                 case PassthroughResumeAction.Pause:
