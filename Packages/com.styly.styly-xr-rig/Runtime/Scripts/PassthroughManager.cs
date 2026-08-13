@@ -21,6 +21,7 @@ namespace Styly.XRRig
     public class PassthroughManager : MonoBehaviour
     {
         private enum XRMode { VR, MR }
+        internal enum PassthroughResumeAction { None, Pause, Start }
         private Camera mainCameraOfStylyXrRig;
         private float transitionDuration;
         private Color fadeColor = Color.black;
@@ -402,10 +403,44 @@ namespace Styly.XRRig
         private void OnApplicationPause(bool pause)
         {
 #if USE_PICO
-            if (!PassthroughFeature.isExtensionEnable) return;
-            if (pause) PassthroughFeature.PassthroughPause();
-            else PassthroughFeature.PassthroughStart();
+            if (pause)
+            {
+                if (PassthroughFeature.isExtensionEnable)
+                {
+                    PassthroughFeature.PassthroughPause();
+                }
+
+                return;
+            }
+
+            switch (GetPassthroughResumeAction(
+                        PassthroughFeature.isExtensionEnable,
+                        PassthroughFeature.EnableVideoSeeThrough))
+            {
+                case PassthroughResumeAction.Pause:
+                    // The PICO camera subsystem can restart native VST before this callback
+                    // without updating EnableVideoSeeThrough. Reapply the requested off state.
+                    PassthroughFeature.PassthroughPause();
+                    break;
+                case PassthroughResumeAction.Start:
+                    PassthroughFeature.PassthroughStart();
+                    break;
+            }
 #endif
+        }
+
+        internal static PassthroughResumeAction GetPassthroughResumeAction(
+            bool isExtensionEnabled,
+            bool isVideoSeeThroughEnabled)
+        {
+            if (!isExtensionEnabled)
+            {
+                return PassthroughResumeAction.None;
+            }
+
+            return isVideoSeeThroughEnabled
+                ? PassthroughResumeAction.Start
+                : PassthroughResumeAction.Pause;
         }
     }
 }
