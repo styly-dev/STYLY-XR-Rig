@@ -363,8 +363,11 @@ namespace Styly.XRRig
             // Check if OpenXR Passthrough feature is enabled
             if (PassthroughFeature.isExtensionEnable)
             {
-                // Create full screen layer + Start is processed internally
-                PassthroughFeature.EnableVideoSeeThrough = true; // => createFullScreenLayer() → passthroughStart()
+                PassthroughFeature.EnableVideoSeeThrough = true;
+
+                // After resuming in VR, the PICO SDK keeps its internal pause flag set.
+                // In that state EnableVideoSeeThrough creates the layer without starting it.
+                PassthroughFeature.PassthroughStart();
             }
 #endif
         }
@@ -402,9 +405,28 @@ namespace Styly.XRRig
         private void OnApplicationPause(bool pause)
         {
 #if USE_PICO
+            if (pause)
+            {
+                if (PassthroughFeature.isExtensionEnable)
+                {
+                    PassthroughFeature.PassthroughPause();
+                }
+
+                return;
+            }
+
             if (!PassthroughFeature.isExtensionEnable) return;
-            if (pause) PassthroughFeature.PassthroughPause();
-            else PassthroughFeature.PassthroughStart();
+
+            if (PassthroughFeature.EnableVideoSeeThrough)
+            {
+                PassthroughFeature.PassthroughStart();
+            }
+            else
+            {
+                // The PICO camera subsystem can restart native VST before this callback
+                // without updating EnableVideoSeeThrough. Reapply the requested off state.
+                PassthroughFeature.PassthroughPause();
+            }
 #endif
         }
     }
