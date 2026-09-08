@@ -10,7 +10,7 @@ namespace Styly.XRRig.SetupSdk
 {
     public class SetupSdk_AndroidXR
     {
-        private static readonly string packageIdentifier = "com.unity.xr.androidxr-openxr@1.0.1";
+        private static readonly string packageIdentifier = "com.unity.xr.androidxr-openxr@1.4.1";
 
         private static void SetUpSdkSettings()
         {
@@ -98,11 +98,12 @@ namespace Styly.XRRig.SetupSdk
 
             // ==== Extra settings for Android XR ====
 
-            // ToDo 1
-            // [Android XR: AR Camera] AR Camera Manager component should be enabled for Passthrough to function correctly.
-            // https://docs.unity3d.com/Packages/com.unity.xr.androidxr-openxr@1.0/manual/features/camera.html
+            // Note: AR Camera Manager / AR Camera Background are added at runtime by
+            // Styly.XRRig.PassthroughManager.SetUpCameraForPassthrough() for all devices,
+            // so Passthrough works without extra setup here.
+            // https://docs.unity3d.com/Packages/com.unity.xr.androidxr-openxr@1.4/manual/features/camera.html
 
-            // ToDo 2
+            // ToDo
             // For functionalities not provided by the above package, Google offers additional extensions.
             // https://github.com/android/android-xr-unity-package
 
