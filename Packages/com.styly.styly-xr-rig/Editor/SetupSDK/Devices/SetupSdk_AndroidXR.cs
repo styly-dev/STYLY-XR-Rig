@@ -36,6 +36,7 @@ namespace Styly.XRRig.SetupSdk
                 EnableOpenXrFeatures(BuildTargetGroup.Android, new string[]
                 {
                 "com.unity.openxr.feature.androidxr-support",
+                "com.unity.openxr.feature.input.handtracking",
                 "com.unity.openxr.feature.arfoundation-androidxr-anchor",
                 "com.unity.openxr.feature.arfoundation-androidxr-camera",
                 "com.unity.openxr.feature.arfoundation-androidxr-face",
