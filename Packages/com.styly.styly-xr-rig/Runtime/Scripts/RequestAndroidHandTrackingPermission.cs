@@ -21,11 +21,30 @@ namespace Styly.XRRig
         private static void RequestPermission()
         {
 #if UNITY_ANDROID && !UNITY_EDITOR
-            if (!Permission.HasUserAuthorizedPermission(HandTrackingPermission))
+            if (Permission.HasUserAuthorizedPermission(HandTrackingPermission))
             {
-                Permission.RequestUserPermission(HandTrackingPermission);
+                return;
             }
+
+            var callbacks = new PermissionCallbacks();
+            callbacks.PermissionGranted += OnGranted;
+            callbacks.PermissionDenied += OnDenied;
+            callbacks.PermissionDeniedAndDontAskAgain += OnDenied;
+            Permission.RequestUserPermissions(new[] { HandTrackingPermission }, callbacks);
 #endif
         }
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        private static void OnGranted(string permissionName)
+        {
+            Debug.Log($"Hand tracking permission granted: {permissionName}");
+        }
+
+        private static void OnDenied(string permissionName)
+        {
+            Debug.LogWarning($"Hand tracking permission denied ({permissionName}). Hands will not be " +
+                "tracked until this is granted in the device's Android app settings.");
+        }
+#endif
     }
 }
