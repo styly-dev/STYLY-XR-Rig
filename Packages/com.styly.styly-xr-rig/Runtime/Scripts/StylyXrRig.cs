@@ -8,11 +8,6 @@ namespace Styly.XRRig
     public class StylyXrRig : MonoBehaviour
     {
         [SerializeField] private bool passthroughMode = true;
-        [Header("PICO LBE Settings")]
-        [SerializeField, Tooltip("After PICO Enterprise Service and Floor tracking are ready, recenter once when LBE is enabled. Disabled by default; validate on the target headset.")]
-        private bool recenterPicoLbeOnStartup = false;
-        [SerializeField, Min(1f), Tooltip("Maximum unscaled seconds to wait for PICO LBE startup recenter preparation.")]
-        private float picoLbeRecenterTimeoutSeconds = 15f;
         private PicoLbeRecenterRequest picoLbeRecenterRequest;
 
         private PassthroughManager passthroughManager;
@@ -183,9 +178,11 @@ namespace Styly.XRRig
             AwakeForVisionOS();
             passthroughManager = GetComponentInChildren<PassthroughManager>(false);
             smartphoneArCameraManager = GetComponentInChildren<SmartphoneARCameraManager>(false);
-            picoLbeRecenterRequest = PicoLbeStartupRecenter.Begin(
-                recenterPicoLbeOnStartup && isActiveAndEnabled, Time.realtimeSinceStartupAsDouble, picoLbeRecenterTimeoutSeconds,
-                message => Debug.Log("[STYLY XR Rig] PICO LBE startup recenter: " + message, this));
+            if (isActiveAndEnabled)
+            {
+                picoLbeRecenterRequest = PicoLbeStartupRecenter.Begin(Time.realtimeSinceStartupAsDouble,
+                    message => Debug.Log("[STYLY XR Rig] PICO LBE startup recenter: " + message, this));
+            }
             if (picoLbeRecenterRequest != null)
                 StartCoroutine(PreparePicoLbeRecenter());
         }

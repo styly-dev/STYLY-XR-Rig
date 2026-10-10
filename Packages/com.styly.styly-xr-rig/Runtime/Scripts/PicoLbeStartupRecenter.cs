@@ -4,32 +4,37 @@ using UnityEngine;
 
 namespace Styly.XRRig
 {
-    // The optional PICO assembly supplies the backend before any scene Awake runs.
-    internal static class PicoLbeStartupRecenter
+    /// <summary>Controls automatic PICO LBE recentering during application startup.</summary>
+    public static class PicoLbeStartupRecenter
     {
+        private const double PreparationTimeoutSeconds = 15;
+        // The optional PICO assembly supplies the backend before any scene Awake runs.
         internal static Func<IPicoLbeRecenterBackend> BackendFactory;
         private static bool attempted;
+
+        /// <summary>
+        /// Enabled by default for each app session. Set to false on the Unity main thread
+        /// in a BeforeSceneLoad callback to prevent Enterprise Service initialization.
+        /// Disabling during preparation cancels it on the next tick; re-enabling does
+        /// not restart a cancelled or completed attempt.
+        /// </summary>
+        public static bool Enabled { get; set; } = true;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         internal static void ResetSession()
         {
+            Enabled = true;
             BackendFactory = null;
             attempted = false;
         }
 
-        internal static PicoLbeRecenterRequest Begin(bool enabled, double now, double timeout, Action<string> log)
+        internal static PicoLbeRecenterRequest Begin(double now, Action<string> log)
         {
-            if (!enabled || attempted)
+            if (!Enabled || attempted || BackendFactory == null)
                 return null;
 
             attempted = true;
-            if (BackendFactory == null)
-            {
-                log("Skipped: PICO LBE startup recenter requires an Android player with the PICO OpenXR SDK.");
-                return null;
-            }
-
-            return new PicoLbeRecenterRequest(BackendFactory(), now, timeout, log);
+            return new PicoLbeRecenterRequest(BackendFactory(), now, PreparationTimeoutSeconds, log);
         }
     }
 
@@ -72,6 +77,12 @@ namespace Styly.XRRig
         {
             if (Finished)
                 return;
+
+            if (!PicoLbeStartupRecenter.Enabled)
+            {
+                Finish(Phase.Cancelled, "Disabled through PicoLbeStartupRecenter.Enabled.");
+                return;
+            }
 
             if (now >= deadline)
             {
