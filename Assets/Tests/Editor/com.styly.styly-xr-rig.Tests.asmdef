@@ -1,0 +1,6 @@
+{
+    "name": "com.styly.styly-xr-rig.Tests",
+    "references": ["com.styly.styly-xr-rig"],
+    "includePlatforms": ["Editor"],
+    "optionalUnityReferences": ["TestAssemblies"]
+}

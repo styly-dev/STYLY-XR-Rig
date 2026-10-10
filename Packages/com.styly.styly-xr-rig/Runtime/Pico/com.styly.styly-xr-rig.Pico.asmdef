@@ -1,0 +1,18 @@
+{
+    "name": "com.styly.styly-xr-rig.Pico",
+    "references": [
+        "com.styly.styly-xr-rig",
+        "PICO.TobSupport",
+        "Unity.XR.OpenXR"
+    ],
+    "includePlatforms": ["Android"],
+    "defineConstraints": ["USE_PICO"],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.openxr.picoxr",
+            "expression": "",
+            "define": "USE_PICO"
+        }
+    ],
+    "autoReferenced": true
+}

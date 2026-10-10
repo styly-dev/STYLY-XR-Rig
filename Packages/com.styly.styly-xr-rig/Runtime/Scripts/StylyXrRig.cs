@@ -8,6 +8,8 @@ namespace Styly.XRRig
     public class StylyXrRig : MonoBehaviour
     {
         [SerializeField] private bool passthroughMode = true;
+        private PicoLbeRecenterRequest picoLbeRecenterRequest;
+
         private PassthroughManager passthroughManager;
         private SmartphoneARCameraManager smartphoneArCameraManager;
 
@@ -176,6 +178,30 @@ namespace Styly.XRRig
             AwakeForVisionOS();
             passthroughManager = GetComponentInChildren<PassthroughManager>(false);
             smartphoneArCameraManager = GetComponentInChildren<SmartphoneARCameraManager>(false);
+            if (isActiveAndEnabled)
+            {
+                picoLbeRecenterRequest = PicoLbeStartupRecenter.Begin(Time.realtimeSinceStartupAsDouble,
+                    message => Debug.Log("[STYLY XR Rig] PICO LBE startup recenter: " + message, this));
+            }
+            if (picoLbeRecenterRequest != null)
+                StartCoroutine(PreparePicoLbeRecenter());
+        }
+
+        private System.Collections.IEnumerator PreparePicoLbeRecenter()
+        {
+            // Let scene initialization finish before invoking any platform API.
+            yield return null;
+            while (!picoLbeRecenterRequest.Finished)
+            {
+                picoLbeRecenterRequest.Tick(Time.realtimeSinceStartupAsDouble);
+                yield return null;
+            }
+        }
+
+        private void OnDisable()
+        {
+            if (picoLbeRecenterRequest != null)
+                picoLbeRecenterRequest.Cancel();
         }
 
         void Start()

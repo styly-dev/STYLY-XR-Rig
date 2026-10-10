@@ -29,6 +29,7 @@ Just click target SDK on the menu. The SDK will be downloaded and installed. The
   - Interaction Group will be automatically attached
 - OpenXR Mixed Reality support
   - Video pass through will be enabled on OpenXR environment
+  - Automatic PICO LBE startup recenter after Enterprise Service and Floor tracking are ready. No PICO SDK is required for other platforms. See the [code opt-out and limitations](Packages/com.styly.styly-xr-rig/Documentation~/pico-lbe-startup-recenter.md).
 - Unity Editor development support
   - Camera height is set to 1.3m only on Unity Editor
   - Camera height will be automatically set based on actual devices
