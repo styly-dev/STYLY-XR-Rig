@@ -39,12 +39,45 @@ namespace Styly.XRRig
         [Header("AR Camera Settings for smartphones")]
         [SerializeField] private OcclusionMode occlusionMode = OcclusionMode.AutomaticForVRAndMR;
         private UnityEngine.XR.ARFoundation.AROcclusionManager arOcclusionManager;
+        private OcclusionSettings requestedSettings;
+        private bool hasRequestedSettings;
+
+        void OnEnable()
+        {
+            RequestAndroidXRPermissions.Granted += OnPermissionGranted;
+            if (hasRequestedSettings) { ApplyOcclusionSettings(requestedSettings); }
+        }
+
+        void OnDisable()
+        {
+            RequestAndroidXRPermissions.Granted -= OnPermissionGranted;
+            if (RequestAndroidXRPermissions.IsAndroidXR && arOcclusionManager != null)
+            {
+                arOcclusionManager.enabled = false;
+            }
+        }
+
+        private void OnPermissionGranted(string permission)
+        {
+            if (permission == RequestAndroidXRPermissions.SceneUnderstandingFine && hasRequestedSettings)
+            {
+                ApplyOcclusionSettings(requestedSettings);
+            }
+        }
+
+        void OnApplicationFocus(bool hasFocus)
+        {
+            // Also handle permission changes made in Android settings while the app was suspended.
+            if (hasFocus && isActiveAndEnabled && hasRequestedSettings && RequestAndroidXRPermissions.IsAndroidXR)
+            {
+                ApplyOcclusionSettings(requestedSettings);
+            }
+        }
 
         void Start()
         {
 #if !UNITY_EDITOR
-                        AddOcclusionComponents();
-                        InitializeOcclusionSettings();
+            InitializeOcclusionSettings();
 #endif
         }
 
@@ -54,8 +87,15 @@ namespace Styly.XRRig
         private void AddOcclusionComponents()
         {
             // Find the Main Camera in STYLY XR Rig
-            var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
-            var mainCamera = STYLYXRRig.GetComponentsInChildren<Camera>().FirstOrDefault(c => c.gameObject.name == "Main Camera");
+            var mainCamera = GetComponent<Camera>();
+            if (mainCamera == null)
+            {
+                var rig = GameObject.FindFirstObjectByType<StylyXrRig>();
+                if (rig != null)
+                {
+                    mainCamera = rig.GetComponentsInChildren<Camera>().FirstOrDefault(c => c.gameObject.name == "Main Camera");
+                }
+            }
             if (mainCamera != null)
             {
                 // Add ARCameraManager component
@@ -64,8 +104,13 @@ namespace Styly.XRRig
                 // Add ARCameraBackground component
                 var arCameraBackground = mainCamera.gameObject.GetOrAddComponent<UnityEngine.XR.ARFoundation.ARCameraBackground>();
 
-                // Add AROcclusionManager component
-                arOcclusionManager = mainCamera.gameObject.GetOrAddComponent<UnityEngine.XR.ARFoundation.AROcclusionManager>();
+                arOcclusionManager = mainCamera.GetComponent<UnityEngine.XR.ARFoundation.AROcclusionManager>();
+                // AddComponent immediately invokes OnEnable on an active camera. Delay creation
+                // until permission is granted; disabling the component afterwards is too late.
+                if (arOcclusionManager == null && ShouldEnableOcclusion())
+                {
+                    arOcclusionManager = mainCamera.gameObject.AddComponent<UnityEngine.XR.ARFoundation.AROcclusionManager>();
+                }
 
                 Debug.Log("AR Camera components are attached to Main Camera");
             }
@@ -107,7 +152,25 @@ namespace Styly.XRRig
         public void ConfigureOcclusionSettings(OcclusionSettings settings)
         {
 #if !UNITY_EDITOR
+            ApplyOcclusionSettings(settings);
+#endif
+        }
+
+        internal void ApplyOcclusionSettings(OcclusionSettings settings)
+        {
+            requestedSettings = settings;
+            hasRequestedSettings = true;
+            RequestAndroidXRPermissions.RequestPermissions();
             if (arOcclusionManager == null) { AddOcclusionComponents(); }
+            if (arOcclusionManager == null) { return; }
+
+            if (RequestAndroidXRPermissions.IsAndroidXR)
+            {
+                // Android XR 1.4.1 ignores requestedEnvironmentDepthMode. Control the
+                // subsystem lifetime instead, including when switching from MR to VR.
+                arOcclusionManager.enabled = ShouldEnableOcclusion();
+                if (!arOcclusionManager.enabled) { return; }
+            }
 
             switch (settings)
             {
@@ -152,7 +215,17 @@ namespace Styly.XRRig
                     arOcclusionManager.requestedOcclusionPreferenceMode = UnityEngine.XR.ARSubsystems.OcclusionPreferenceMode.PreferEnvironmentOcclusion;
                     break;
             }
-#endif
+        }
+
+        private bool ShouldEnableOcclusion()
+        {
+            if (!RequestAndroidXRPermissions.IsAndroidXR) { return true; }
+
+            bool needsEnvironmentDepth = requestedSettings == OcclusionSettings.AutomaticForMR
+                || requestedSettings == OcclusionSettings.BothHumanAndEnvironment
+                || requestedSettings == OcclusionSettings.EnvironmentOnly;
+            return needsEnvironmentDepth
+                && RequestAndroidXRPermissions.IsGranted(RequestAndroidXRPermissions.SceneUnderstandingFine);
         }
     }
 }
