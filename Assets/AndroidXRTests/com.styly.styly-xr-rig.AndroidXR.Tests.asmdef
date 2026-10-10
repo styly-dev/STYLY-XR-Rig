@@ -1,0 +1,10 @@
+{
+    "name": "com.styly.styly-xr-rig.AndroidXR.Tests",
+    "references": [
+        "com.styly.styly-xr-rig",
+        "Unity.XR.ARFoundation",
+        "Unity.XR.ARSubsystems",
+        "Unity.XR.Management"
+    ],
+    "optionalUnityReferences": ["TestAssemblies"]
+}
