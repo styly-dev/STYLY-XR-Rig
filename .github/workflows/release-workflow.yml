@@ -5,7 +5,7 @@ on:
     inputs:
       info:
         description: |
-          This workflow will set the version for the Unity package, commit the version change to develop, merge develop into main and create a release draft.
+          This workflow will set the version for the Unity package, commit the version change to develop, merge develop into main and create a release draft with a signed UPM package.
         required: false
         type: boolean
       version:
@@ -17,9 +17,16 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: release
+  cancel-in-progress: false
+
 jobs:
   set-version-and-release:
     runs-on: ubuntu-latest
+    outputs:
+      release_commit: ${{ steps.release.outputs.release_commit }}
+      release_tag: ${{ steps.release.outputs.release_tag }}
 
     steps:
       - name: Checkout repository
@@ -28,6 +35,26 @@ jobs:
           ref: develop
           fetch-depth: 0  # Full history for merge operations
           token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check signing configuration
+        env:
+          UPM_SERVICE_ACCOUNT_KEY_ID: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
+          UPM_SERVICE_ACCOUNT_KEY_SECRET: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
+          UPM_ORG_ID: ${{ secrets.UPM_ORG_ID }}
+        run: |
+          set -euo pipefail
+          for NAME in UPM_SERVICE_ACCOUNT_KEY_ID UPM_SERVICE_ACCOUNT_KEY_SECRET UPM_ORG_ID; do
+            if [[ -z "${!NAME}" ]]; then
+              echo "Error: missing repository secret: $NAME"
+              exit 1
+            fi
+          done
+          curl -fsSL https://raw.githubusercontent.com/openupm/openupm/master/data/packages/com.styly.styly-xr-rig.yml \
+            -o "$RUNNER_TEMP/openupm.yml"
+          if ! grep -Eq '^trackingMode: githubRelease[[:space:]]*$' "$RUNNER_TEMP/openupm.yml"; then
+            echo 'Error: merge the OpenUPM githubRelease metadata migration before releasing'
+            exit 1
+          fi
 
       - name: Validate version format
         env:
@@ -133,6 +160,12 @@ jobs:
           git push origin main
           echo "✅ Pushed changes to main branch"
 
+      - name: Record release source
+        id: release
+        run: |
+          printf 'release_commit=%s\n' "$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          printf 'release_tag=v%s\n' "$VERSION" >> "$GITHUB_OUTPUT"
+
       - name: Create Release Draft
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -144,7 +177,7 @@ jobs:
           # Create release draft using GitHub CLI with auto-generated notes
           gh release create "$TAG_NAME" \
             --draft \
-            --target main \
+            --target "$(git rev-parse HEAD)" \
             --title "$TAG_NAME" \
             --generate-notes
 
@@ -186,7 +219,7 @@ jobs:
               echo "### 🚀 Next Steps"
               echo ""
               echo "**Review Release Draft**"
-              echo "   - [Edit Release Draft](https://github.com/${{ github.repository }}/releases)"
+              echo "   - Wait for the sign-release job to succeed, then [edit and publish the draft](https://github.com/${{ github.repository }}/releases)."
             else
               echo "## ❌ Status: Failed"
               echo ""
@@ -211,3 +244,15 @@ jobs:
             echo "---"
             echo "*Generated at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')*"
           } >> $GITHUB_STEP_SUMMARY
+
+  sign-release:
+    needs: set-version-and-release
+    uses: styly-dev/STYLY-NetSync/.github/workflows/sign-upm-package.yml@a721211f0bbe93506af160c1156c3869414cc79f
+    with:
+      package-path: Packages/com.styly.styly-xr-rig
+      release-commit: ${{ needs.set-version-and-release.outputs.release_commit }}
+      release-tag: ${{ needs.set-version-and-release.outputs.release_tag }}
+    secrets:
+      UPM_SERVICE_ACCOUNT_KEY_ID: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_ID }}
+      UPM_SERVICE_ACCOUNT_KEY_SECRET: ${{ secrets.UPM_SERVICE_ACCOUNT_KEY_SECRET }}
+      UPM_ORG_ID: ${{ secrets.UPM_ORG_ID }}
