@@ -237,6 +237,31 @@ public class AndroidXROcclusionPermissionTests
         Assert.That(permissions.RequestCalls, Is.EqualTo(1));
     }
 
+    [Test]
+    public void ConfigurationWhileDisabledDoesNotRestartOcclusion()
+    {
+        permissions.Allowed.Add(RequestAndroidXRPermissions.SceneUnderstandingFine);
+        cameraManager.ApplyOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.EnvironmentOnly);
+        cameraManager.enabled = false;
+        Assert.That(subsystem.running, Is.False);
+        cameraManager.ApplyOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.EnvironmentOnly);
+        Assert.That(subsystem.running, Is.False, "Configuration must wait for camera manager OnEnable.");
+        Assert.That(PermissionTestProvider.StartCalls, Is.EqualTo(1));
+        cameraManager.enabled = true;
+        Assert.That(subsystem.running, Is.True);
+    }
+
+    [Test]
+    public void FirstConfigurationWhileDisabledDoesNotCreateOcclusion()
+    {
+        permissions.Allowed.Add(RequestAndroidXRPermissions.SceneUnderstandingFine);
+        cameraManager.enabled = false;
+        cameraManager.ApplyOcclusionSettings(SmartphoneARCameraManager.OcclusionSettings.EnvironmentOnly);
+        Assert.That(PermissionTestProvider.StartCalls, Is.Zero, "A disabled manager must not create and start occlusion.");
+        cameraManager.enabled = true;
+        Assert.That(subsystem.running, Is.True);
+    }
+
     private sealed class FakePermissions : IAndroidXRPermissions
     {
         public bool IsAndroidXR { get; set; } = true;

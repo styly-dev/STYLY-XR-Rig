@@ -160,6 +160,8 @@ namespace Styly.XRRig
         {
             requestedSettings = settings;
             hasRequestedSettings = true;
+            // Remember configuration while disabled; OnEnable applies it when active again.
+            if (RequestAndroidXRPermissions.IsAndroidXR && !isActiveAndEnabled) { return; }
             RequestAndroidXRPermissions.RequestPermissions();
             if (arOcclusionManager == null) { AddOcclusionComponents(); }
             if (arOcclusionManager == null) { return; }
