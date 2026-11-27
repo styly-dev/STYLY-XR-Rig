@@ -93,7 +93,7 @@ namespace Styly.XRRig.SetupSdk
 
             void Step7() // Additional Settings
             {
-                // Nothing to do
+                UpgradeControllerMaterials();
             }
 
             // ==== Extra settings for Android XR ====
@@ -106,6 +106,29 @@ namespace Styly.XRRig.SetupSdk
             // For functionalities not provided by the above package, Google offers additional extensions.
             // https://github.com/android/android-xr-unity-package
 
+        }
+
+        // The XRI Starter Assets controller materials use the Built-in Standard shader and render
+        // pink under the STYLY URP asset. Switch them to URP/Lit, keeping their color and texture.
+        private static void UpgradeControllerMaterials()
+        {
+            const string samplesFolder = "Assets/Samples/XR Interaction Toolkit";
+            var urpLit = Shader.Find("Universal Render Pipeline/Lit");
+            if (urpLit == null || !AssetDatabase.IsValidFolder(samplesFolder)) { return; }
+
+            foreach (string guid in AssetDatabase.FindAssets("t:Material Controller_", new[] { samplesFolder }))
+            {
+                var material = AssetDatabase.LoadAssetAtPath<Material>(AssetDatabase.GUIDToAssetPath(guid));
+                if (material == null || material.shader.name != "Standard") { continue; }
+
+                var color = material.color;
+                var texture = material.mainTexture;
+                material.shader = urpLit;
+                material.SetColor("_BaseColor", color);
+                material.SetTexture("_BaseMap", texture);
+                EditorUtility.SetDirty(material);
+            }
+            AssetDatabase.SaveAssets();
         }
 
         #region CommonCode
