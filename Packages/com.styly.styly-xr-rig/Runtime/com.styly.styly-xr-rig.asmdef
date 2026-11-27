@@ -42,6 +42,11 @@
             "name": "com.unity.xr.openxr.picoxr",
             "expression": "",
             "define": "USE_PICO"
+        },
+        {
+            "name": "com.unity.xr.androidxr-openxr",
+            "expression": "",
+            "define": "USE_ANDROIDXR"
         }
     ],
     "noEngineReferences": false
