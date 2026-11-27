@@ -95,7 +95,7 @@ namespace Styly.XRRig.SetupSdk
 
             void Step7() // Additional Settings
             {
-                UpgradeControllerMaterials();
+                // Nothing to do
             }
 
             // ==== Extra settings for Android XR ====
@@ -109,30 +109,6 @@ namespace Styly.XRRig.SetupSdk
             // For functionalities not provided by the above package, Google offers additional extensions.
             // https://github.com/android/android-xr-unity-package
 
-        }
-
-        // XRI sample controllers ship with Built-in Standard materials. Convert only
-        // those imported sample assets when selecting the rig's URP configuration.
-        internal static int UpgradeControllerMaterials()
-        {
-            int upgraded = 0;
-            foreach (string guid in AssetDatabase.FindAssets("Controller_ t:Material"))
-            {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                if (!path.StartsWith("Assets/Samples/XR Interaction Toolkit/", System.StringComparison.Ordinal)
-                    || !path.Contains("/Starter Assets/Materials/")) { continue; }
-
-                var material = AssetDatabase.LoadAssetAtPath<Material>(path);
-                if (material == null || material.shader == null || material.shader.name != "Standard") { continue; }
-                if (material.name != "Controller_Grey" && material.name != "Controller_White") { continue; }
-
-                new UnityEditor.Rendering.Universal.StandardUpgrader("Standard").Upgrade(
-                    material, UnityEditor.Rendering.MaterialUpgrader.UpgradeFlags.None);
-                EditorUtility.SetDirty(material);
-                upgraded++;
-            }
-            if (upgraded > 0) { AssetDatabase.SaveAssets(); }
-            return upgraded;
         }
 
         #region CommonCode

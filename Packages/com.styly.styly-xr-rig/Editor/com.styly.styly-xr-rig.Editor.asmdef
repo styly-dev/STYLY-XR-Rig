@@ -12,9 +12,7 @@
         "GUID:4ddd23ea56a3a40f0aa0036d1624a53e",
         "GUID:2b1cc58b5fab727499169f06e9336a3b",
         "GUID:d1451cc2aec4ed743adcac8be3b46381",
-        "GUID:b98de7ff63394bdca25fc3bdddff73bf",
-        "Unity.RenderPipelines.Core.Editor",
-        "Unity.RenderPipelines.Universal.Editor"
+        "GUID:b98de7ff63394bdca25fc3bdddff73bf"
     ],
     "includePlatforms": [
         "Editor"

@@ -12,11 +12,11 @@
 | [VIVE OpenXR](Devices/SetupSdk_ViveOpenXrPlugin.cs) | 29 | OpenGLES3 | MultiPass | OpenXRLoader | `com.htc.vive.openxr.featureset.vivexr` | vive.openxr.feature.compositionlayer, vive.openxr.feature.hand.tracking, vive.openxr.feature.passthrough, vivefocus3 | handinteraction, vive.openxr.feature.focus3controller | `com.htc.upm.vive.openxr@2.5.1` |
 | [XREAL](Devices/SetupSdk_XrealSdk.cs) | 29 | OpenGLES3 | SinglePassInstanced | XREALXRLoader | N/A | N/A | N/A | `https://public-resource.xreal.com/download/XREALSDK_Release_3.0.0.20250314/com.xreal.xr.tar.gz` |
 
-Android XR setup enables the Oculus Touch profile for physical controllers and upgrades the imported XRI sample controller materials from Standard to URP/Lit.
+Android XR setup enables the Oculus Touch profile for physical controllers.
 
 ### Android XR runtime permissions
 
-The rig requests hand-tracking and scene-understanding permissions once per launch when an Android XR provider is active. Environment occlusion starts only after scene-understanding permission is granted and stops in VR or Human-only mode. Permission changes made in Android settings are applied when the app regains focus. Other Android providers, including ARCore, do not use these permission checks.
+The rig requests hand-tracking and scene-understanding permissions once per launch in builds that include the Android XR package. Environment occlusion starts only after scene-understanding permission is granted and stops in VR or Human-only mode. Permission changes made in Android settings are applied when the app regains focus. Builds without the Android XR package, including ARCore, skip these checks.
 
 If you add an `AROcclusionManager` to your scene manually, keep it disabled initially so it cannot start before the rig checks permission. The rig creates its own manager only when permission and the selected occlusion mode allow it.
 

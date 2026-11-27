@@ -87,15 +87,8 @@ namespace Styly.XRRig
         private void AddOcclusionComponents()
         {
             // Find the Main Camera in STYLY XR Rig
-            var mainCamera = GetComponent<Camera>();
-            if (mainCamera == null)
-            {
-                var rig = GameObject.FindFirstObjectByType<StylyXrRig>();
-                if (rig != null)
-                {
-                    mainCamera = rig.GetComponentsInChildren<Camera>().FirstOrDefault(c => c.gameObject.name == "Main Camera");
-                }
-            }
+            var STYLYXRRig = GameObject.FindFirstObjectByType<Styly.XRRig.StylyXrRig>();
+            var mainCamera = STYLYXRRig.GetComponentsInChildren<Camera>().FirstOrDefault(c => c.gameObject.name == "Main Camera");
             if (mainCamera != null)
             {
                 // Add ARCameraManager component
@@ -156,13 +149,12 @@ namespace Styly.XRRig
 #endif
         }
 
-        internal void ApplyOcclusionSettings(OcclusionSettings settings)
+        private void ApplyOcclusionSettings(OcclusionSettings settings)
         {
             requestedSettings = settings;
             hasRequestedSettings = true;
             // Remember configuration while disabled; OnEnable applies it when active again.
             if (RequestAndroidXRPermissions.IsAndroidXR && !isActiveAndEnabled) { return; }
-            RequestAndroidXRPermissions.RequestPermissions();
             if (arOcclusionManager == null) { AddOcclusionComponents(); }
             if (arOcclusionManager == null) { return; }
 
